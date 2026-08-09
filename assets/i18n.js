@@ -58,7 +58,6 @@ de: {
   "schule.title": "Die Schule",
   "schule.p1": "Die Iqraa-Schule wird vom Arabisch-Deutschen-Verein e.V. in Beckum getragen. Wir unterrichten Kinder in der arabischen Sprache.",
   "schule.p2": "Der Unterricht richtet sich an Kinder, die in Deutschland aufwachsen und Arabisch zu Hause hören, es aber nicht lesen und schreiben können. Wir fangen bei den Buchstaben an.",
-  "schule.platzhalter": "Hier können noch zwei bis drei Sätze über die Schule stehen — etwa seit wann es sie gibt, wer unterrichtet und wie viele Gruppen es gibt. Text bitte an den Verein geben.",
 
   "unterricht.eyebrow": "Termine",
   "unterricht.title": "Unterricht & Zeiten",
@@ -257,7 +256,6 @@ en: {
   "schule.title": "The school",
   "schule.p1": "The Iqraa School is run by Arabisch-Deutscher-Verein e.V. in Beckum. We teach children the Arabic language.",
   "schule.p2": "The lessons are for children growing up in Germany who hear Arabic at home but cannot read or write it. We start with the letters.",
-  "schule.platzhalter": "Two or three sentences about the school can go here — when it started, who teaches, how many groups there are. Text to be supplied by the association.",
 
   "unterricht.eyebrow": "Schedule",
   "unterricht.title": "Lessons & times",
@@ -457,7 +455,6 @@ ar: {
   "schule.title": "عن المدرسة",
   "schule.p1": "مدرسة إقرأ تابعة لجمعية إقرأ العربية الألمانية في مدينة بيكوم. نحن نعلّم الأطفال اللغة العربية.",
   "schule.p2": "الدروس موجّهة للأطفال الذين يكبرون في ألمانيا ويسمعون العربية في البيت، لكنهم لا يقرؤونها ولا يكتبونها. نبدأ معهم من الحروف.",
-  "schule.platzhalter": "يمكن إضافة جملتين أو ثلاث عن المدرسة هنا — منذ متى بدأت، ومن يُدرّس فيها، وكم عدد المجموعات. النص يُرجى تزويده من الجمعية.",
 
   "unterricht.eyebrow": "المواعيد",
   "unterricht.title": "الدروس والأوقات",
