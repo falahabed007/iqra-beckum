@@ -1,0 +1,18 @@
+# Betriebssystem
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Editoren
+.vscode/
+.idea/
+
+# Werkzeuge
+node_modules/
+*.log
+
+# Zettel zum Weiterreichen, gehoert nicht auf die Webseite
+BEREITSTELLUNG.txt
+
+# Logo in Originalgroesse - Sicherungskopie, die Seite nutzt logo.png
+assets/logo-original.png

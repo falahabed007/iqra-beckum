@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iqraa-Schule Beckum — Arabischunterricht für Kinder ab 6 Jahren</title>
+<meta name="description" content="Arabischunterricht in Beckum, jeden Sonntag von 12 bis 14 Uhr für Kinder ab 6 Jahren. 100 € pro Halbjahr. Jetzt online anmelden.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Iqraa-Schule für Arabischunterricht — Beckum">
+<meta property="og:description" content="Jeden Sonntag von 12 bis 14 Uhr, für Kinder ab 6 Jahren. Jetzt online anmelden.">
+<meta property="og:image" content="assets/logo.png">
+<meta property="og:locale" content="de_DE">
+<meta name="theme-color" content="#1B6B4F">
+
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/logo.png">
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="assets/site.css">
+
+<!-- Reihenfolge ist wichtig: erst Daten, dann Texte, dann Verhalten. -->
+<script src="assets/config.js" defer></script>
+<script src="assets/i18n.js" defer></script>
+<script src="assets/site.js" defer></script>
+
+<!--
+  HINWEIS ZUM DEUTSCHEN TEXT IN DIESER DATEI
+  Jeder Text steht doppelt: als Schluessel (data-i18n) und als deutscher
+  Text direkt im HTML. Der Text im HTML ist nur die Rueckfallebene - er
+  sorgt dafuer, dass die Seite auch ohne JavaScript lesbar ist, dass
+  Suchmaschinen Inhalt finden und dass beim Laden nichts leer aufblitzt.
+  Sobald JavaScript laeuft, kommen ALLE Texte aus assets/i18n.js.
+  Aenderungen also immer in i18n.js vornehmen (und hier nachziehen).
+-->
+</head>
+
+<body data-page="index">
+
+<a class="skip" href="#inhalt" data-i18n="skip">Zum Inhalt springen</a>
+
+<!-- ====================================================================
+     Kopfbereich
+     ==================================================================== -->
+<header class="site-header">
+  <div class="wrap header-inner">
+
+    <a class="brand" href="index.html">
+      <img class="brand-logo" src="assets/logo.png" alt="" width="46" height="46">
+      <span class="brand-text">
+        <span class="brand-ar" lang="ar" dir="rtl">مدرسة إقرأ</span>
+        <span class="brand-de" data-i18n="brand.sub">Arabischunterricht Beckum</span>
+      </span>
+    </a>
+
+    <nav class="site-nav" id="hauptnavigation" data-i18n-aria="nav.label" aria-label="Hauptnavigation">
+      <ul>
+        <li><a href="#schule"     data-i18n="nav.schule">Die Schule</a></li>
+        <li><a href="#unterricht" data-i18n="nav.unterricht">Unterricht</a></li>
+        <li><a href="#beitrag"    data-i18n="nav.beitrag">Beitrag</a></li>
+        <li><a href="#anmeldung"  data-i18n="nav.anmeldung">Anmeldung</a></li>
+        <li><a href="#kontakt"    data-i18n="nav.kontakt">Kontakt</a></li>
+      </ul>
+    </nav>
+
+    <div class="lang-switch" role="group" data-i18n-aria="lang.label" aria-label="Sprache wählen">
+      <button type="button" data-lang="de" aria-pressed="true"  data-i18n-title="lang.de" title="Auf Deutsch anzeigen">DE</button>
+      <button type="button" data-lang="en" aria-pressed="false" data-i18n-title="lang.en" title="Show in English">EN</button>
+      <button type="button" data-lang="ar" aria-pressed="false" data-i18n-title="lang.ar" title="عرض بالعربية" lang="ar">ع</button>
+    </div>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="hauptnavigation"
+            data-i18n-aria="nav.menu" aria-label="Menü öffnen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+
+  </div>
+</header>
+
+
+<main id="inhalt">
+
+<!-- ====================================================================
+     Kopfbild
+     ==================================================================== -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <p class="eyebrow" data-i18n="hero.eyebrow">Arabisch-Deutscher IQRA e.V. Beckum</p>
+      <h1>
+        <span class="hero-ar" lang="ar" dir="rtl">مدرسة إقرأ لتعليم اللغة العربية</span>
+        <span class="hero-lat" data-i18n="hero.title">Iqraa-Schule für Arabischunterricht</span>
+      </h1>
+      <p class="lead" data-i18n="hero.lead">Jeden Sonntag lernen Kinder ab 6 Jahren bei uns Arabisch: lesen, schreiben und sprechen. Der Unterricht findet in Beckum statt.</p>
+      <p class="hero-actions">
+        <a class="btn btn-primary" href="#anmeldung" data-i18n="hero.cta1">Kind anmelden</a>
+        <a class="btn btn-ghost" href="#unterricht" data-i18n="hero.cta2">Unterricht ansehen</a>
+      </p>
+    </div>
+    <div class="hero-mark">
+      <img src="assets/logo.png" width="230" height="230"
+           data-i18n-alt="hero.logoAlt" alt="Logo des Arabisch-Deutschen IQRA e.V. Beckum">
+    </div>
+  </div>
+
+  <div class="factstrip">
+    <div class="wrap">
+      <ul>
+        <li>
+          <span class="fact-label" data-i18n="fact.zeit.label">Unterricht</span>
+          <span class="fact-value" data-i18n="fact.zeit.value">Sonntags 12–14 Uhr</span>
+        </li>
+        <li>
+          <span class="fact-label" data-i18n="fact.alter.label">Für Kinder</span>
+          <span class="fact-value" data-i18n="fact.alter.value">ab 6 Jahren</span>
+        </li>
+        <li>
+          <span class="fact-label" data-i18n="fact.beitrag.label">Beitrag</span>
+          <span class="fact-value" data-i18n="fact.beitrag.value">100 € pro Halbjahr</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- ====================================================================
+     Die Schule
+     ==================================================================== -->
+<section class="section" id="schule">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="schule.eyebrow">Über uns</p>
+    <h2 class="section-title"><span data-i18n="schule.title">Die Schule</span></h2>
+    <div class="prose">
+      <p data-i18n="schule.p1">Die Iqraa-Schule wird vom Arabisch-Deutschen IQRA e.V. in Beckum getragen. Wir unterrichten Kinder in der arabischen Sprache.</p>
+      <p data-i18n="schule.p2">Der Unterricht richtet sich an Kinder, die in Deutschland aufwachsen und Arabisch zu Hause hören, es aber nicht lesen und schreiben können. Wir fangen bei den Buchstaben an.</p>
+      <p><span class="platzhalter" data-i18n="schule.platzhalter">Hier können noch zwei bis drei Sätze über die Schule stehen — etwa seit wann es sie gibt, wer unterrichtet und wie viele Gruppen es gibt. Text bitte an den Verein geben.</span></p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ====================================================================
+     Unterricht & Zeiten
+     ==================================================================== -->
+<section class="section section--warm section--muster" id="unterricht">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="unterricht.eyebrow">Termine</p>
+    <h2 class="section-title"><span data-i18n="unterricht.title">Unterricht &amp; Zeiten</span></h2>
+
+    <div class="cards">
+      <div class="card card--wide card--accent">
+        <p class="card-meta" data-i18n="unterricht.wann.meta">Wann</p>
+        <h3 data-i18n="unterricht.wann.title">Jeden Sonntag, 12:00 bis 14:00 Uhr</h3>
+        <p data-i18n="unterricht.wann.text">Der Unterricht läuft während der Schulzeit durchgehend. In den Ferien findet kein Unterricht statt.</p>
+      </div>
+
+      <div class="card card--alter">
+        <p class="card-meta" data-i18n="unterricht.wer.meta">Für wen</p>
+        <h3 data-i18n="unterricht.wer.title">Kinder ab 6 Jahren</h3>
+        <p data-i18n="unterricht.wer.text">Vorkenntnisse sind nicht nötig. Wir beginnen mit dem arabischen Alphabet.</p>
+      </div>
+
+      <div class="card">
+        <p class="card-meta" data-i18n="unterricht.wo.meta">Wo</p>
+        <h3 data-i18n="unterricht.wo.title">In Beckum</h3>
+        <p data-cfg-ort><span class="platzhalter">BITTE ERGÄNZEN</span></p>
+        <p class="field-hint" data-i18n="unterricht.wo.text">Die genaue Adresse tragen wir hier ein, sobald sie vorliegt.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ====================================================================
+     Beitrag
+     ==================================================================== -->
+<section class="section" id="beitrag">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="beitrag.eyebrow">Kosten</p>
+    <h2 class="section-title"><span data-i18n="beitrag.title">Beitrag</span></h2>
+
+    <p class="betrag" data-i18n="beitrag.betrag">100 €</p>
+    <p class="betrag-sub" data-i18n="beitrag.betragSub">für das erste Halbjahr</p>
+
+    <div class="prose prose--nach-betrag">
+      <p data-i18n="beitrag.p1">Der Beitrag kann bar bezahlt oder über die Münsterlandkarte abgerechnet werden. Welchen Weg Sie wählen, geben Sie bei der Anmeldung an.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3 data-i18n="beitrag.bar.title">Bar bezahlen</h3>
+        <p data-i18n="beitrag.bar.text">Sie bezahlen sonntags vor Ort. Der Verein stellt Ihnen dafür eine Quittung aus.</p>
+      </div>
+      <div class="card card--wide">
+        <h3 data-i18n="beitrag.karte.title">Münsterlandkarte</h3>
+        <p data-i18n="beitrag.karte.text">Bringen Sie die Karte zum ersten Unterricht mit. Wir kopieren beide Seiten und prüfen, ob genug Guthaben vorhanden ist.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ====================================================================
+     Wichtige Hinweise — nummeriert wie auf dem Papierformular
+     ==================================================================== -->
+<section class="section section--warm" id="hinweise">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="hinweise.eyebrow">Bitte beachten</p>
+    <h2 class="section-title"><span data-i18n="hinweise.title">Wichtige Hinweise</span></h2>
+
+    <ol class="hinweise">
+      <li>
+        <h3 data-i18n="hinweise.1.title">Ferien</h3>
+        <p data-i18n="hinweise.1.text">Die Ferien der Schule richten sich nach dem staatlichen Schulsystem.</p>
+      </li>
+      <li>
+        <h3 data-i18n="hinweise.2.title">Bücher</h3>
+        <p data-i18n="hinweise.2.text">Es können weitere Kosten entstehen, wenn Ihr Kind noch keine passenden Bücher hat.</p>
+      </li>
+      <li>
+        <h3 data-i18n="hinweise.3.title">Allergien</h3>
+        <p data-i18n="hinweise.3.text">Bitte teilen Sie uns mit, ob Ihr Kind Allergien hat. Geben Sie an, wogegen es allergisch ist und ob besondere Vorkehrungen nötig sind.</p>
+      </li>
+      <li>
+        <h3 data-i18n="hinweise.4.title">Fotos</h3>
+        <p data-i18n="hinweise.4.text">Während des Unterrichts werden Fotos von den Kindern gemacht. Diese Fotos können in unserem Hausflur und auf unseren Social-Media-Kanälen veröffentlicht werden. Dafür brauchen wir Ihr Einverständnis — bei der Anmeldung können Sie zustimmen oder ablehnen.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+
+<!-- ====================================================================
+     Anmeldung
+     ==================================================================== -->
+<section class="section" id="anmeldung">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="anmeldung.eyebrow">Anmeldung</p>
+    <h2 class="section-title"><span data-i18n="anmeldung.title">Kind anmelden</span></h2>
+
+    <div class="form-intro">
+      <p data-i18n="anmeldung.intro">Füllen Sie das Formular aus, wir melden uns anschließend über WhatsApp bei Ihnen. Felder mit einem Stern sind Pflichtfelder.</p>
+      <p>
+        <a class="btn btn-ghost" href="assets/anmeldeformular.pdf" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16"/>
+          </svg>
+          <span data-i18n="anmeldung.pdf">Formular als PDF herunterladen</span>
+        </a>
+      </p>
+      <p class="field-hint" data-i18n="anmeldung.pdfHint">Sie können das Formular auch ausdrucken und sonntags mitbringen.</p>
+    </div>
+
+    <!-- Bestätigung nach erfolgreichem Absenden -->
+    <div class="form-erfolg" id="form-erfolg" role="status">
+      <h3 data-i18n="form.erfolg.title">Anmeldung ist bei uns angekommen</h3>
+      <p data-i18n="form.erfolg.text">Vielen Dank. Wir melden uns über WhatsApp unter der Nummer, die Sie angegeben haben.</p>
+      <p><button class="btn btn-ghost" type="button" id="form-nochmal" data-i18n="form.erfolg.neu">Weiteres Kind anmelden</button></p>
+    </div>
+
+    <form class="anmeldung-form" id="anmeldung-form" novalidate>
+
+      <!-- ---------- Kind ---------- -->
+      <fieldset>
+        <legend data-i18n="form.kind.legend">Daten vom Kind</legend>
+        <div class="form-grid">
+          <div class="field">
+            <label for="kind-vorname"><span data-i18n="form.kind.vorname">Vorname</span><span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="kind-vorname" name="kindVorname" autocomplete="off" required>
+            <p class="field-error" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="kind-nachname"><span data-i18n="form.kind.nachname">Nachname</span><span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="kind-nachname" name="kindNachname" autocomplete="off" required>
+            <p class="field-error" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="kind-geburtsdatum"><span data-i18n="form.kind.geburtsdatum">Geburtsdatum</span><span class="req" aria-hidden="true">*</span></label>
+            <input type="date" id="kind-geburtsdatum" name="kindGeburtsdatum" required>
+            <p class="field-error" role="alert"></p>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- ---------- Elternteil ---------- -->
+      <fieldset>
+        <legend data-i18n="form.eltern.legend">Daten eines Elternteils</legend>
+        <div class="form-grid">
+          <div class="field">
+            <label for="eltern-vorname"><span data-i18n="form.eltern.vorname">Vorname</span><span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="eltern-vorname" name="elternVorname" autocomplete="given-name" required>
+            <p class="field-error" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="eltern-nachname"><span data-i18n="form.eltern.nachname">Nachname</span><span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="eltern-nachname" name="elternNachname" autocomplete="family-name" required>
+            <p class="field-error" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="eltern-telefon"><span data-i18n="form.eltern.telefon">Telefonnummer</span><span class="req" aria-hidden="true">*</span></label>
+            <input type="tel" id="eltern-telefon" name="telefon" autocomplete="tel" inputmode="tel" dir="ltr" required>
+            <p class="field-error" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="eltern-whatsapp"><span data-i18n="form.eltern.whatsapp">WhatsApp</span><span class="req" aria-hidden="true">*</span></label>
+            <input type="tel" id="eltern-whatsapp" name="whatsapp" inputmode="tel" dir="ltr" required>
+            <p class="field-error" role="alert"></p>
+          </div>
+          <div class="field field--full">
+            <label class="choice" for="whatsapp-gleich">
+              <input type="checkbox" id="whatsapp-gleich" checked>
+              <span class="choice-text" data-i18n="form.eltern.whatsappSame">WhatsApp-Nummer ist dieselbe wie die Telefonnummer</span>
+            </label>
+          </div>
+          <div class="field field--full">
+            <label for="eltern-email" data-i18n="form.eltern.email">E-Mail-Adresse</label>
+            <input type="email" id="eltern-email" name="email" autocomplete="email" dir="ltr">
+            <p class="field-hint" data-i18n="form.eltern.emailHint">Freiwillig — nur, damit Sie eine Bestätigung der Anmeldung bekommen.</p>
+            <p class="field-error" role="alert"></p>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- ---------- Zahlung ---------- -->
+      <fieldset>
+        <legend data-i18n="form.zahlung.legend">Zahlung</legend>
+        <div class="field">
+          <p class="fieldset-label" id="zahlung-frage">
+            <span data-i18n="form.zahlung.frage">Wie möchten Sie bezahlen?</span><span class="req" aria-hidden="true">*</span>
+          </p>
+          <div class="choice-list" role="radiogroup" aria-labelledby="zahlung-frage">
+            <label class="choice" for="zahlung-bar">
+              <input type="radio" name="zahlung" id="zahlung-bar" value="bar">
+              <span class="choice-text">
+                <span data-i18n="form.zahlung.bar">Bar bezahlen</span>
+                <small data-i18n="form.zahlung.barSub">100 € für das erste Halbjahr, sonntags vor Ort, mit Quittung</small>
+              </span>
+            </label>
+            <label class="choice" for="zahlung-karte">
+              <input type="radio" name="zahlung" id="zahlung-karte" value="muensterlandkarte">
+              <span class="choice-text">
+                <span data-i18n="form.zahlung.karte">Über die Münsterlandkarte</span>
+                <small data-i18n="form.zahlung.karteSub">Abrechnung über das Bildungs- und Teilhabepaket</small>
+              </span>
+            </label>
+          </div>
+          <p class="field-error" role="alert"></p>
+          <div class="zahlhinweis" id="zahlung-hinweis" data-i18n="form.zahlung.karteHinweis">Bitte bringen Sie die Münsterlandkarte zum ersten Unterricht mit. Wir kopieren beide Seiten und prüfen das Guthaben vor Ort.</div>
+        </div>
+
+        <!-- Erscheint nur, wenn oben die Münsterlandkarte gewählt wurde -->
+        <div class="field kartenfeld" id="kartennummer-feld">
+          <label for="kartennummer">
+            <span data-i18n="form.zahlung.nummer">Nummer der Münsterlandkarte</span><span class="req" aria-hidden="true">*</span>
+          </label>
+          <input type="text" id="kartennummer" name="kartennummer" maxlength="12" autocomplete="off" dir="ltr">
+          <p class="field-hint" data-i18n="form.zahlung.nummerHint">Sie steht auf der Vorderseite der Karte, höchstens 12 Zeichen.</p>
+          <p class="field-error" role="alert"></p>
+        </div>
+      </fieldset>
+
+      <!-- ---------- Allergien und Fotos ---------- -->
+      <fieldset>
+        <legend data-i18n="form.sonstiges.legend">Allergien und Fotos</legend>
+
+        <div class="field field--full field--abstand">
+          <label for="allergien" data-i18n="form.allergien">Allergien</label>
+          <textarea id="allergien" name="allergien" rows="3"></textarea>
+          <p class="field-hint" data-i18n="form.allergienHint">Wogegen ist Ihr Kind allergisch, und sind besondere Vorkehrungen nötig? Leer lassen, wenn keine Allergien bestehen.</p>
+        </div>
+
+        <div class="field">
+          <p class="fieldset-label" id="fotos-frage">
+            <span data-i18n="form.foto.frage">Dürfen wir Fotos Ihres Kindes machen und veröffentlichen?</span><span class="req" aria-hidden="true">*</span>
+          </p>
+          <div class="choice-list" role="radiogroup" aria-labelledby="fotos-frage">
+            <label class="choice" for="fotos-ja">
+              <input type="radio" name="fotos" id="fotos-ja" value="ja">
+              <span class="choice-text" data-i18n="form.foto.ja">Ja, ich bin einverstanden, dass Fotos meines Kindes gemacht und veröffentlicht werden.</span>
+            </label>
+            <label class="choice" for="fotos-nein">
+              <input type="radio" name="fotos" id="fotos-nein" value="nein">
+              <span class="choice-text" data-i18n="form.foto.nein">Nein, ich bin nicht einverstanden, dass Fotos meines Kindes gemacht und veröffentlicht werden.</span>
+            </label>
+          </div>
+          <p class="field-error" role="alert"></p>
+        </div>
+      </fieldset>
+
+      <!-- ---------- Datenschutz ---------- -->
+      <div class="field">
+        <label class="choice" for="datenschutz-ok">
+          <input type="checkbox" id="datenschutz-ok" required>
+          <span class="choice-text" data-i18n-html="form.datenschutz">Ich habe die <a href="datenschutz.html#anmeldung">Datenschutzerklärung</a> gelesen und bin damit einverstanden, dass die angegebenen Daten zur Bearbeitung der Anmeldung verarbeitet werden.</span>
+        </label>
+        <p class="field-error" role="alert"></p>
+      </div>
+
+      <!-- Für Menschen unsichtbar, fängt automatisierte Eintragungen ab -->
+      <div class="hp" aria-hidden="true">
+        <label for="hp-feld">Ort</label>
+        <input type="text" id="hp-feld" name="ort" tabindex="-1" autocomplete="off">
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit" id="form-submit" data-i18n="form.submit">Anmeldung absenden</button>
+        <span class="form-status" id="form-status" role="status" aria-live="polite"></span>
+      </div>
+
+      <!-- Wird nur sichtbar, wenn das Absenden fehlschlägt -->
+      <div class="form-fehler" id="form-fehler" role="alert">
+        <h3 data-i18n="form.fehler.title">Das Absenden hat nicht geklappt</h3>
+        <p data-i18n="form.fehler.text">Ihre Eingaben stehen noch im Formular. Sie können es gleich noch einmal versuchen oder die Anmeldung direkt über WhatsApp schicken:</p>
+        <p><a class="btn btn-ghost" id="form-fehler-wa" href="#" target="_blank" rel="noopener" data-i18n="form.fehler.whatsapp">Anmeldung per WhatsApp senden</a></p>
+      </div>
+
+    </form>
+  </div>
+</section>
+
+
+<!-- ====================================================================
+     Kontakt
+     ==================================================================== -->
+<section class="section section--warm section--muster" id="kontakt">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="kontakt.eyebrow">Kontakt</p>
+    <h2 class="section-title"><span data-i18n="kontakt.title">So erreichen Sie uns</span></h2>
+
+    <div class="kontakt-grid">
+      <div>
+        <p class="lead" data-i18n="kontakt.text">Bei Fragen rufen Sie uns an oder schreiben Sie uns über WhatsApp. Am schnellsten antworten wir sonntags.</p>
+      </div>
+
+      <ul class="kontakt-liste">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6.6 3h-2A1.6 1.6 0 003 4.6C3 13.1 10.9 21 19.4 21a1.6 1.6 0 001.6-1.6v-2a1 1 0 00-.8-1l-3.2-.6a1 1 0 00-1 .4l-1 1.3a14 14 0 01-5.5-5.5l1.3-1a1 1 0 00.4-1l-.6-3.2a1 1 0 00-1-.8z"/>
+          </svg>
+          <span>
+            <span class="k-label" data-i18n="kontakt.telefon">Telefon</span>
+            <span class="k-wert"><a data-cfg-href="tel" href="#" class="ltr" data-cfg="telefon">0177 5883033</a></span>
+          </span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3.5 20.5l1.3-4.2A8.3 8.3 0 1112 20.3a8.4 8.4 0 01-4-1l-4.5 1.2z"/>
+            <path d="M8.6 8.2c.2-.5.4-.5.6-.5h.6c.2 0 .5 0 .7.5l.7 1.7c.1.3 0 .5-.1.7l-.5.6c-.1.2-.2.3 0 .6a6.6 6.6 0 003 2.7c.3.1.5.1.7-.1l.6-.7c.2-.2.4-.2.6-.1l1.6.8c.3.1.4.3.4.5v.6c0 .4-.4.9-.9 1.1-.5.2-1.2.3-2 .1a10 10 0 01-6.2-5.3c-.5-1.1-.5-2.2-.1-2.9z"/>
+          </svg>
+          <span>
+            <span class="k-label" data-i18n="kontakt.whatsapp">WhatsApp</span>
+            <span class="k-wert"><a data-cfg-href="wa" href="#" target="_blank" rel="noopener" class="ltr" data-cfg="telefon">0177 5883033</a></span>
+          </span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3.5 6l8.5 6.5L20.5 6"/>
+          </svg>
+          <span>
+            <span class="k-label" data-i18n="kontakt.email">E-Mail</span>
+            <span class="k-wert"><a data-cfg-href="mail" href="#" class="ltr" data-cfg="email">iqraaschulebeckum@gmail.com</a></span>
+          </span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 21s7-5.7 7-11a7 7 0 10-14 0c0 5.3 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/>
+          </svg>
+          <span>
+            <span class="k-label" data-i18n="kontakt.ort">Unterrichtsort</span>
+            <span class="k-wert"><a data-cfg-href="maps" target="_blank" rel="noopener" data-cfg-ort><span class="platzhalter">BITTE ERGÄNZEN</span></a></span>
+          </span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.2 2"/>
+          </svg>
+          <span>
+            <span class="k-label" data-i18n="kontakt.zeiten">Unterrichtszeit</span>
+            <span class="k-wert" data-i18n="kontakt.zeitenWert">Sonntags 12:00–14:00 Uhr</span>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+
+<!-- ====================================================================
+     Fußbereich
+     ==================================================================== -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <img src="assets/logo.png" alt="" width="52" height="52" onerror="this.style.display='none'">
+        <span>
+          <span class="footer-name" data-i18n="footer.name">Iqraa-Schule für Arabischunterricht</span><br>
+          <small data-i18n="footer.traeger">Arabisch-Deutscher IQRA e.V. Beckum</small>
+        </span>
+      </div>
+
+      <ul class="footer-links">
+        <li><a href="#anmeldung" data-i18n="footer.anmeldung">Anmeldung</a></li>
+        <li><a href="impressum.html" data-keep-lang="impressum.html" data-i18n="footer.impressum">Impressum</a></li>
+        <li><a href="datenschutz.html" data-keep-lang="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a></li>
+      </ul>
+
+      <div>
+        <a data-cfg-href="tel" href="#" class="ltr" data-cfg="telefon">0177 5883033</a><br>
+        <a data-cfg-href="mail" href="#" class="ltr" data-cfg="email">iqraaschulebeckum@gmail.com</a>
+      </div>
+
+    </div>
+
+    <p class="footer-note">
+      <span>&copy; <span data-jahr>2026</span> <span data-cfg="impressum.verein">Arabisch-Deutscher IQRA e.V. Beckum</span>. <span data-i18n="footer.rechte">Alle Rechte vorbehalten.</span></span>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
