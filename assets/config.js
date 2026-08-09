@@ -33,14 +33,14 @@ window.CONFIG = {
 
   /* ---------- Impressum — PFLICHT vor dem Livegang ---------- */
   impressum: {
-    verein:         "Arabisch-Deutscher IQRA e.V. Beckum",
-    anschrift:      "",   // BITTE ERGAENZEN — Strasse, PLZ Ort
-    vertreten:      "",   // BITTE ERGAENZEN — Vorstand nach § 26 BGB, Vor- und Nachname
-    register:       "",   // BITTE ERGAENZEN — z.B. "Amtsgericht Beckum, VR 1234"
-    verantwortlich: ""    // BITTE ERGAENZEN — Name und Anschrift, meist wie Vorstand
+    verein:         "Arabisch-Deutscher-Verein e.V. Beckum",
+    anschrift:      "Nordwall 14, 59269 Beckum",
+    vertreten:      "Ahmed Ammura (1. Vorsitzender) und Khaled Sharafi (2. Vorsitzender)",
+    register:       "Amtsgericht Münster, VR 5079",
+    verantwortlich: "Ahmed Ammura, Nordwall 14, 59269 Beckum"
   },
 
   /* ---------- Sonstiges ---------- */
   domain: "adv-beckum.de",
-  standDatenschutz: ""    // BITTE ERGAENZEN — z.B. "August 2026"
+  standDatenschutz: "August 2026"
 };
