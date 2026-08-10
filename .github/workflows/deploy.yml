@@ -9,6 +9,10 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  # deploy-pages sucht das hochgeladene Artefakt ueber die Actions-API.
+  # Ohne dieses Recht bekommt es eine leere Liste zurueck und bricht mit
+  # "No artifacts named github-pages were found" ab.
+  actions: read
 
 concurrency:
   group: "pages"
