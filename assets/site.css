@@ -447,9 +447,18 @@ legend{
 }
 .zahlhinweis.is-visible{ display:block; }
 
-/* Kartennummer - erscheint zusammen mit dem Hinweis darueber */
-.kartenfeld{ display:none; margin-top:1rem; max-inline-size:22rem; }
-.kartenfeld.is-visible{ display:block; }
+/* Felder, die erst nach einer Auswahl erscheinen (Gruppe, Kartennummer,
+   Allergietext). Eine Mechanik fuer alle drei. */
+.bedingt{ display:none; margin-top:1rem; }
+.bedingt.is-visible{ display:block; }
+.bedingt--schmal{ max-inline-size:22rem; }
+
+/* Dauerhafter Hinweis oben im Anmeldeformular */
+.formhinweis{
+  margin-top:.9rem; padding:.85em 1em;
+  background:var(--green-pale); border-inline-start:4px solid var(--green);
+  font-size:.94rem;
+}
 
 /* Honigtopf gegen automatisierte Eintraege - fuer Menschen unsichtbar,
    fuer einfache Ausfuellprogramme aber ganz normal vorhanden.

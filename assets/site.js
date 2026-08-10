@@ -236,33 +236,59 @@
     if (waGleich) waGleich.addEventListener("change", waSpiegeln);
     if (telFeld) telFeld.addEventListener("input", waSpiegeln);
 
-    /* --- Hinweis und Kartennummer ein- und ausblenden --- */
+    /* --- Felder, die erst nach einer Auswahl erscheinen ---
+       Drei Stellen im Formular funktionieren gleich: eine Ja/Nein- oder
+       Entweder-oder-Frage klappt ein zusaetzliches Feld auf, das dann
+       ausgefuellt werden muss. Statt dreimal dieselbe Logik steht hier
+       eine Beschreibung, aus der sich alles Weitere ergibt. */
     var karteHinweis = eins("#zahlung-hinweis");
-    var kartenFeld = eins("#kartennummer-feld");
-    var kartenNummer = eins("#kartennummer");
 
-    function karteGewaehlt() {
-      var r = eins('input[name="zahlung"]:checked', form);
-      return !!r && r.value === "muensterlandkarte";
+    var bedingte = [
+      { gruppe: "ehemalig",     wert: "ja",                huelle: eins("#gruppe-feld"),       feld: eins("#gruppe") },
+      { gruppe: "zahlung",      wert: "muensterlandkarte", huelle: eins("#kartennummer-feld"), feld: eins("#kartennummer") },
+      { gruppe: "hatAllergien", wert: "ja",                huelle: eins("#allergien-feld"),    feld: eins("#allergien") }
+    ];
+
+    function istGewaehlt(b) {
+      var r = eins('input[name="' + b.gruppe + '"]:checked', form);
+      return !!r && r.value === b.wert;
     }
 
-    function karteSpiegeln() {
-      var an = karteGewaehlt();
-      if (karteHinweis) karteHinweis.classList.toggle("is-visible", an);
-      if (kartenFeld) kartenFeld.classList.toggle("is-visible", an);
-      // Bar bezahlt: eine vorher eingetippte Nummer darf nicht mitgeschickt werden.
-      if (!an && kartenNummer) {
-        kartenNummer.value = "";
-        fehlerLoeschen(kartenNummer);
+    /** Der Inhalt eines aufgeklappten Feldes - zugeklappt immer leer. */
+    function bedingterWert(gruppenName) {
+      for (var i = 0; i < bedingte.length; i++) {
+        var b = bedingte[i];
+        if (b.gruppe !== gruppenName) continue;
+        return (b.feld && istGewaehlt(b)) ? b.feld.value.trim() : "";
+      }
+      return "";
+    }
+
+    function bedingteSpiegeln() {
+      bedingte.forEach(function (b) {
+        var an = istGewaehlt(b);
+        if (b.huelle) b.huelle.classList.toggle("is-visible", an);
+        // Zugeklappt wird geleert: Was nicht sichtbar ist, darf auch nicht
+        // mitgeschickt werden - etwa eine Kartennummer bei Barzahlung.
+        if (!an && b.feld) {
+          b.feld.value = "";
+          fehlerLoeschen(b.feld);
+        }
+      });
+      // Der Hinweis zur Muensterlandkarte haengt an derselben Auswahl.
+      if (karteHinweis) {
+        karteHinweis.classList.toggle("is-visible", istGewaehlt(bedingte[1]));
       }
     }
 
-    alle('input[name="zahlung"]', form).forEach(function (r) {
-      r.addEventListener("change", karteSpiegeln);
+    bedingte.forEach(function (b) {
+      alle('input[name="' + b.gruppe + '"]', form).forEach(function (r) {
+        r.addEventListener("change", bedingteSpiegeln);
+      });
     });
     // Nach dem Zurueckblaettern stellt der Browser die Auswahl wieder her,
     // ohne "change" auszuloesen - deshalb einmal von Hand angleichen.
-    karteSpiegeln();
+    bedingteSpiegeln();
 
     /* --- Pruefung --- */
     function fehlerZeigen(feld, meldung) {
@@ -281,7 +307,7 @@
       feld.removeAttribute("aria-invalid");
     }
 
-    alle("input, textarea", form).forEach(function (feld) {
+    alle("input, select, textarea", form).forEach(function (feld) {
       feld.addEventListener("input", function () { fehlerLoeschen(feld); });
       feld.addEventListener("change", function () { fehlerLoeschen(feld); });
     });
@@ -307,22 +333,27 @@
         if (!ersterFehler) ersterFehler = mail;
       }
 
-      // Auswahlgruppen
-      ["zahlung", "fotos"].forEach(function (name) {
+      // Auswahlgruppen - in der Reihenfolge, in der sie im Formular stehen,
+      // damit der Sprung zum ersten Fehler von oben nach unten laeuft.
+      ["ehemalig", "zahlung", "hatAllergien", "fotos"].forEach(function (name) {
         var gruppe = alle('input[name="' + name + '"]', form);
         if (!gruppe.length) return;
-        var gewaehlt = gruppe.some(function (r) { return r.checked; });
-        if (!gewaehlt) {
+
+        if (!gruppe.some(function (r) { return r.checked; })) {
           fehlerZeigen(gruppe[0], t("form.fehltAuswahl"));
           if (!ersterFehler) ersterFehler = gruppe[0];
-        } else if (name === "zahlung" && karteGewaehlt() && kartenNummer && !kartenNummer.value.trim()) {
-          // Die Kartennummer wird nur verlangt, wenn ueber die Karte gezahlt wird.
-          fehlerZeigen(kartenNummer, t("form.fehlt"));
-          if (!ersterFehler) ersterFehler = kartenNummer;
-          fehlerLoeschen(gruppe[0]);
-        } else {
-          fehlerLoeschen(gruppe[0]);
+          return;
         }
+        fehlerLoeschen(gruppe[0]);
+
+        // Ein Feld, das diese Auswahl aufgeklappt hat, ist dann Pflicht.
+        bedingte.forEach(function (b) {
+          if (b.gruppe !== name || !b.feld || !istGewaehlt(b)) return;
+          if (!b.feld.value.trim()) {
+            fehlerZeigen(b.feld, t("form.fehlt"));
+            if (!ersterFehler) ersterFehler = b.feld;
+          }
+        });
       });
 
       // Datenschutz-Haken
@@ -352,9 +383,12 @@
         telefon:          telFeld ? telFeld.value.trim() : "",
         whatsapp:         waFeld ? waFeld.value.trim() : "",
         email:            eins("#eltern-email").value.trim(),
+        ehemalig:         gewaehlt("ehemalig"),
+        gruppe:           bedingterWert("ehemalig"),
         zahlung:          gewaehlt("zahlung"),
-        kartennummer:     karteGewaehlt() && kartenNummer ? kartenNummer.value.trim() : "",
-        allergien:        eins("#allergien").value.trim(),
+        kartennummer:     bedingterWert("zahlung"),
+        hatAllergien:     gewaehlt("hatAllergien"),
+        allergien:        bedingterWert("hatAllergien"),
         fotos:            gewaehlt("fotos"),
         sprache:          aktuell,
         seite:            window.location.href,
@@ -368,6 +402,7 @@
     function whatsappText(d) {
       var zahlung = d.zahlung === "bar" ? t("form.zahlung.bar") : t("form.zahlung.karte");
       var fotos = d.fotos === "ja" ? t("form.foto.ja") : t("form.foto.nein");
+      var jaNein = function (wert) { return wert === "ja" ? t("form.ja") : t("form.nein"); };
       var zeilen = [
         t("anmeldung.title") + " — " + t("hero.title"),
         "",
@@ -375,17 +410,26 @@
         t("form.kind.vorname") + ": " + d.kindVorname,
         t("form.kind.nachname") + ": " + d.kindNachname,
         t("form.kind.geburtsdatum") + ": " + d.kindGeburtsdatum,
+        t("form.ehemalig.frage") + " " + jaNein(d.ehemalig)
+      ];
+      if (d.gruppe) zeilen.push(t("form.ehemalig.gruppe") + " " + t("form.ehemalig.gruppe" + d.gruppe));
+
+      zeilen.push(
         "",
         t("form.eltern.legend"),
         t("form.eltern.vorname") + ": " + d.elternVorname,
         t("form.eltern.nachname") + ": " + d.elternNachname,
         t("form.eltern.telefon") + ": " + d.telefon,
         t("form.eltern.whatsapp") + ": " + d.whatsapp
-      ];
+      );
       if (d.email) zeilen.push(t("form.eltern.email") + ": " + d.email);
+
       zeilen.push("", t("form.zahlung.legend") + ": " + zahlung);
       if (d.kartennummer) zeilen.push(t("form.zahlung.nummer") + ": " + d.kartennummer);
-      if (d.allergien) zeilen.push(t("form.allergien") + ": " + d.allergien);
+
+      zeilen.push("", t("form.allergien.frage") + " " + jaNein(d.hatAllergien));
+      if (d.allergien) zeilen.push(t("form.allergien.text") + " " + d.allergien);
+
       zeilen.push("", fotos);
       return "https://wa.me/" + (CFG.whatsapp || "") + "?text=" + encodeURIComponent(zeilen.join("\n"));
     }
@@ -463,7 +507,7 @@
       nochmal.addEventListener("click", function () {
         form.reset();
         waSpiegeln();
-        karteSpiegeln();
+        bedingteSpiegeln();
         alle(".field.has-error", form).forEach(function (f) { f.classList.remove("has-error"); });
         geoeffnetUm = Date.now();
         form.hidden = false;

@@ -50,11 +50,21 @@ var MINDESTDAUER = 3;
  *  maxlength="12" in index.html passen. */
 var MAX_KARTENNUMMER = 12;
 
+/** Die Gruppen der Iqraa-Schule, fuer Tabelle und E-Mail ausgeschrieben. */
+var GRUPPEN = {
+  '1': 'Gruppe 1 — Frau Janan',
+  '2': 'Gruppe 2 — Frau Dua',
+  '3': 'Gruppe 3 — Herr Yaser',
+  '4': 'Gruppe 4 — Dr. Feras Hasan'
+};
+
 var SPALTEN = [
   'Eingegangen am',
   'Kind Vorname',
   'Kind Nachname',
   'Geburtsdatum',
+  'Schon dagewesen',
+  'Gruppe',
   'Elternteil Vorname',
   'Elternteil Nachname',
   'Telefon',
@@ -113,7 +123,7 @@ function doPost(e) {
     // --- Pflichtangaben ----------------------------------------------
     var pflicht = ['kindVorname', 'kindNachname', 'kindGeburtsdatum',
                    'elternVorname', 'elternNachname', 'telefon', 'whatsapp',
-                   'zahlung', 'fotos'];
+                   'ehemalig', 'zahlung', 'hatAllergien', 'fotos'];
     for (var i = 0; i < pflicht.length; i++) {
       if (!String(d[pflicht[i]] || '').trim()) {
         return antwort({ ok: false, fehler: 'Feld fehlt: ' + pflicht[i] });
@@ -129,6 +139,16 @@ function doPost(e) {
       if (String(d.kartennummer).trim().length > MAX_KARTENNUMMER) {
         return antwort({ ok: false, fehler: 'Kartennummer ist zu lang.' });
       }
+    }
+
+    // Ehemalige Schueler gehoeren einer der bekannten Gruppen an.
+    if (d.ehemalig === 'ja' && !gruppenText(d)) {
+      return antwort({ ok: false, fehler: 'Feld fehlt: gruppe' });
+    }
+
+    // Bei "ja" wollen wir auch wissen, wogegen.
+    if (d.hatAllergien === 'ja' && !allergietext(d)) {
+      return antwort({ ok: false, fehler: 'Feld fehlt: allergien' });
     }
 
     var sprache = ['de', 'en', 'ar'].indexOf(d.sprache) > -1 ? d.sprache : 'de';
@@ -182,7 +202,8 @@ function blatt() {
     kopfzeileFormatieren(b);
     b.setFrozenRows(1);
     b.setColumnWidth(1, 140);   // Eingegangen am
-    b.setColumnWidth(12, 260);  // Allergien
+    b.setColumnWidth(6, 190);   // Gruppe
+    b.setColumnWidth(14, 260);  // Allergien
   } else {
     spaltenAngleichen(b);
   }
@@ -199,21 +220,43 @@ function kopfzeileFormatieren(b) {
 
 
 /**
- * Bringt eine Tabelle, die noch nach dem alten Aufbau angelegt wurde, auf den
- * heutigen Stand. Die Spalte "Kartennummer" kam erst spaeter dazu; sie wird
- * hier an der richtigen Stelle EINGEFUEGT statt hinten angehaengt, damit die
- * schon vorhandenen Zeilen nicht gegenueber der Kopfzeile verrutschen.
+ * Bringt eine Tabelle, die nach einem aelteren Aufbau angelegt wurde, auf den
+ * heutigen Stand. Neue Spalten werden an der richtigen Stelle EINGEFUEGT statt
+ * hinten angehaengt - sonst wuerden die schon vorhandenen Zeilen gegenueber der
+ * Kopfzeile verrutschen und die alten Anmeldungen waeren unlesbar.
  */
 function spaltenAngleichen(b) {
-  var vorhanden = b.getRange(1, 1, 1, b.getLastColumn()).getValues()[0];
-  if (vorhanden.indexOf('Kartennummer') > -1) return;   // schon aktuell
+  var vorhanden = b.getRange(1, 1, 1, b.getLastColumn()).getValues()[0]
+                   .map(function (w) { return String(w).trim(); });
 
-  var stelle = vorhanden.indexOf('Zahlungsweise');
-  if (stelle < 0) return;   // fremder Aufbau - lieber nichts anfassen
+  // Ein voellig fremder Aufbau wird nicht angefasst.
+  if (vorhanden.indexOf(SPALTEN[0]) < 0) return;
 
-  b.insertColumnAfter(stelle + 1);
-  b.getRange(1, stelle + 2).setValue('Kartennummer');
-  kopfzeileFormatieren(b);
+  var geaendert = false;
+
+  for (var i = 0; i < SPALTEN.length; i++) {
+    if (vorhanden.indexOf(SPALTEN[i]) > -1) continue;
+
+    // Hinter welche bereits vorhandene Spalte gehoert die neue?
+    var davor = -1;
+    for (var j = i - 1; j >= 0; j--) {
+      davor = vorhanden.indexOf(SPALTEN[j]);
+      if (davor > -1) break;
+    }
+
+    if (davor < 0) {
+      b.insertColumnBefore(1);
+      b.getRange(1, 1).setValue(SPALTEN[i]);
+      vorhanden.splice(0, 0, SPALTEN[i]);
+    } else {
+      b.insertColumnAfter(davor + 1);
+      b.getRange(1, davor + 2).setValue(SPALTEN[i]);
+      vorhanden.splice(davor + 1, 0, SPALTEN[i]);
+    }
+    geaendert = true;
+  }
+
+  if (geaendert) kopfzeileFormatieren(b);
 }
 
 
@@ -225,6 +268,8 @@ function inTabelleSchreiben(d, sprache) {
     d.kindVorname,
     d.kindNachname,
     alsDatum(d.kindGeburtsdatum),
+    d.ehemalig === 'ja' ? 'ja' : 'nein',
+    gruppenText(d),
     d.elternVorname,
     d.elternNachname,
     "'" + String(d.telefon).trim(),   // Hochkomma: Sheets soll die
@@ -233,7 +278,7 @@ function inTabelleSchreiben(d, sprache) {
     zahlungText(d.zahlung, 'de'),
     // Hochkomma: eine Kartennummer mit fuehrender Null bleibt so erhalten
     kartennummer(d) ? "'" + kartennummer(d) : '',
-    d.allergien || '',
+    allergietext(d),
     d.fotos === 'ja' ? 'ja' : 'nein',
     sprache
   ]);
@@ -262,18 +307,25 @@ function mailAnVerein(d, sprache) {
   var zeilen = [
     ['Kind', name],
     ['Geburtsdatum', datumLesbar(d.kindGeburtsdatum)],
+    ['Schon dagewesen', d.ehemalig === 'ja' ? 'ja' : 'nein']
+  ];
+
+  if (gruppenText(d)) zeilen.push(['Bisherige Gruppe', gruppenText(d)]);
+
+  zeilen = zeilen.concat([
     ['Elternteil', d.elternVorname + ' ' + d.elternNachname],
     ['Telefon', d.telefon],
     ['WhatsApp', d.whatsapp],
     ['E-Mail', d.email || '—'],
     ['Zahlung', zahlungText(d.zahlung, 'de')]
-  ];
+  ]);
 
   // Eine Nummer gibt es nur bei Zahlung ueber die Muensterlandkarte.
   if (kartennummer(d)) zeilen.push(['Kartennummer', kartennummer(d)]);
 
+  zeilen.push(['Allergien', allergietext(d) || 'keine']);
+
   zeilen.push(
-    ['Allergien', d.allergien || '— keine angegeben —'],
     ['Fotos erlaubt', d.fotos === 'ja' ? 'ja' : 'NEIN'],
     ['Sprache des Formulars', { de: 'Deutsch', en: 'Englisch', ar: 'Arabisch' }[sprache]]
   );
@@ -322,7 +374,7 @@ function mailAnEltern(d, sprache) {
       gruss: 'Guten Tag ' + d.elternVorname + ' ' + d.elternNachname + ',',
       dank: 'vielen Dank für die Anmeldung von ' + name + '.',
       info: 'Wir haben die Anmeldung erhalten und melden uns über WhatsApp bei Ihnen.',
-      eckdaten: 'Unterricht: sonntags von 12:00 bis 14:00 Uhr. Beitrag: 100 € für das erste Halbjahr.',
+      eckdaten: 'Unterricht: sonntags von 12:00 bis 14:30 Uhr. Beitrag: 100 € für das erste Halbjahr.',
       gruss2: 'Herzliche Grüße',
       absender: 'Iqraa-Schule für Arabischunterricht\nArabisch-Deutscher IQRA e.V. Beckum'
     },
@@ -331,7 +383,7 @@ function mailAnEltern(d, sprache) {
       gruss: 'Hello ' + d.elternVorname + ' ' + d.elternNachname + ',',
       dank: 'thank you for registering ' + name + '.',
       info: 'We have received the registration and will contact you on WhatsApp.',
-      eckdaten: 'Lessons: Sundays from 12:00 to 14:00. Fee: €100 for the first half-year.',
+      eckdaten: 'Lessons: Sundays from 12:00 to 14:30. Fee: €100 for the first half-year.',
       gruss2: 'Kind regards',
       absender: 'Iqraa School for Arabic Lessons\nArabisch-Deutscher IQRA e.V. Beckum'
     },
@@ -340,7 +392,7 @@ function mailAnEltern(d, sprache) {
       gruss: 'السلام عليكم ' + d.elternVorname + ' ' + d.elternNachname + '،',
       dank: 'شكراً لكم على تسجيل ' + name + '.',
       info: 'لقد وصلنا طلب التسجيل، وسنتواصل معكم عبر الواتس اب.',
-      eckdaten: 'الدروس: كل يوم أحد من الساعة 12:00 إلى الساعة 14:00. الرسوم: 100 يورو لنصف السنة الأولى.',
+      eckdaten: 'الدروس: كل يوم أحد من الساعة 12:00 إلى الساعة 14:30. الرسوم: 100 يورو لنصف السنة الأولى.',
       gruss2: 'مع أطيب التحيات',
       absender: 'مدرسة إقرأ لتعليم اللغة العربية\nجمعية إقرأ العربية الألمانية — بيكوم'
     }
@@ -393,6 +445,18 @@ function kartennummer(d) {
   return String(d.kartennummer || '').trim().slice(0, MAX_KARTENNUMMER);
 }
 
+/** Die Gruppe ausgeschrieben - nur bei ehemaligen Schuelern. */
+function gruppenText(d) {
+  if (d.ehemalig !== 'ja') return '';
+  return GRUPPEN[String(d.gruppe || '').trim()] || '';
+}
+
+/** Der Allergietext - nur, wenn die Frage mit ja beantwortet wurde. */
+function allergietext(d) {
+  if (d.hatAllergien !== 'ja') return '';
+  return String(d.allergien || '').trim();
+}
+
 function datumLesbar(iso) {
   var teile = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/);
   return teile ? teile[3] + '.' + teile[2] + '.' + teile[1] : iso;
@@ -429,8 +493,9 @@ function testAnmeldung() {
         kindVorname: 'Test', kindNachname: 'Kind', kindGeburtsdatum: '2018-03-12',
         elternVorname: 'Test', elternNachname: 'Elternteil',
         telefon: '0177 5883033', whatsapp: '0177 5883033', email: '',
+        ehemalig: 'ja', gruppe: '3',
         zahlung: 'muensterlandkarte', kartennummer: 'ML0012345678',
-        allergien: 'keine', fotos: 'ja',
+        hatAllergien: 'ja', allergien: 'Nuesse', fotos: 'ja',
         sprache: 'de', dauer: 30, hp: ''
       })
     }

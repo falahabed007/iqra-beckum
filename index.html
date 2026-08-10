@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Iqraa-Schule Beckum — Arabischunterricht für Kinder ab 6 Jahren</title>
-<meta name="description" content="Arabischunterricht in Beckum, jeden Sonntag von 12 bis 14 Uhr für Kinder ab 6 Jahren. 100 € pro Halbjahr. Jetzt online anmelden.">
+<meta name="description" content="Arabischunterricht in Beckum, jeden Sonntag von 12 bis 14:30 Uhr für Kinder ab 6 Jahren. 100 € pro Halbjahr. Jetzt online anmelden.">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Iqraa-Schule für Arabischunterricht — Beckum">
-<meta property="og:description" content="Jeden Sonntag von 12 bis 14 Uhr, für Kinder ab 6 Jahren. Jetzt online anmelden.">
+<meta property="og:description" content="Jeden Sonntag von 12 bis 14:30 Uhr, für Kinder ab 6 Jahren. Jetzt online anmelden.">
 <meta property="og:image" content="assets/logo.png">
 <meta property="og:locale" content="de_DE">
 <meta name="theme-color" content="#1B6B4F">
@@ -109,7 +109,7 @@
       <ul>
         <li>
           <span class="fact-label" data-i18n="fact.zeit.label">Unterricht</span>
-          <span class="fact-value" data-i18n="fact.zeit.value">Sonntags 12–14 Uhr</span>
+          <span class="fact-value" data-i18n="fact.zeit.value">Sonntags 12–14:30 Uhr</span>
         </li>
         <li>
           <span class="fact-label" data-i18n="fact.alter.label">Für Kinder</span>
@@ -151,7 +151,7 @@
     <div class="cards">
       <div class="card card--wide card--accent">
         <p class="card-meta" data-i18n="unterricht.wann.meta">Wann</p>
-        <h3 data-i18n="unterricht.wann.title">Jeden Sonntag, 12:00 bis 14:00 Uhr</h3>
+        <h3 data-i18n="unterricht.wann.title">Jeden Sonntag, 12:00 bis 14:30 Uhr</h3>
         <p data-i18n="unterricht.wann.text">Der Unterricht läuft während der Schulzeit durchgehend. In den Ferien findet kein Unterricht statt.</p>
       </div>
 
@@ -240,15 +240,7 @@
 
     <div class="form-intro">
       <p data-i18n="anmeldung.intro">Füllen Sie das Formular aus, wir melden uns anschließend über WhatsApp bei Ihnen. Felder mit einem Stern sind Pflichtfelder.</p>
-      <p>
-        <a class="btn btn-ghost" href="assets/anmeldeformular.pdf" download>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16"/>
-          </svg>
-          <span data-i18n="anmeldung.pdf">Formular als PDF herunterladen</span>
-        </a>
-      </p>
-      <p class="field-hint" data-i18n="anmeldung.pdfHint">Sie können das Formular auch ausdrucken und sonntags mitbringen.</p>
+      <p class="formhinweis" data-i18n="anmeldung.latein">Bitte tragen Sie alle Angaben in lateinischen (englischen) Buchstaben ein.</p>
     </div>
 
     <!-- Bestätigung nach erfolgreichem Absenden -->
@@ -279,6 +271,36 @@
             <input type="date" id="kind-geburtsdatum" name="kindGeburtsdatum" required>
             <p class="field-error" role="alert"></p>
           </div>
+        </div>
+
+        <div class="field field--abstand">
+          <p class="fieldset-label" id="ehemalig-frage">
+            <span data-i18n="form.ehemalig.frage">War Ihr Kind schon einmal bei uns im Unterricht?</span><span class="req" aria-hidden="true">*</span>
+          </p>
+          <div class="choice-list" role="radiogroup" aria-labelledby="ehemalig-frage">
+            <label class="choice" for="ehemalig-ja">
+              <input type="radio" name="ehemalig" id="ehemalig-ja" value="ja">
+              <span class="choice-text" data-i18n="form.ja">Ja</span>
+            </label>
+            <label class="choice" for="ehemalig-nein">
+              <input type="radio" name="ehemalig" id="ehemalig-nein" value="nein">
+              <span class="choice-text" data-i18n="form.nein">Nein</span>
+            </label>
+          </div>
+          <p class="field-error" role="alert"></p>
+        </div>
+
+        <!-- Erscheint nur, wenn oben "Ja" gewählt wurde -->
+        <div class="field bedingt bedingt--schmal" id="gruppe-feld">
+          <label for="gruppe"><span data-i18n="form.ehemalig.gruppe">In welcher Gruppe war Ihr Kind?</span><span class="req" aria-hidden="true">*</span></label>
+          <select id="gruppe" name="gruppe">
+            <option value=""  data-i18n="form.ehemalig.wahl">Bitte wählen</option>
+            <option value="1" data-i18n="form.ehemalig.gruppe1">Gruppe 1 — Frau Janan</option>
+            <option value="2" data-i18n="form.ehemalig.gruppe2">Gruppe 2 — Frau Dua</option>
+            <option value="3" data-i18n="form.ehemalig.gruppe3">Gruppe 3 — Herr Yaser</option>
+            <option value="4" data-i18n="form.ehemalig.gruppe4">Gruppe 4 — Dr. Feras Hasan</option>
+          </select>
+          <p class="field-error" role="alert"></p>
         </div>
       </fieldset>
 
@@ -349,7 +371,7 @@
         </div>
 
         <!-- Erscheint nur, wenn oben die Münsterlandkarte gewählt wurde -->
-        <div class="field kartenfeld" id="kartennummer-feld">
+        <div class="field bedingt bedingt--schmal" id="kartennummer-feld">
           <label for="kartennummer">
             <span data-i18n="form.zahlung.nummer">Nummer der Münsterlandkarte</span><span class="req" aria-hidden="true">*</span>
           </label>
@@ -363,10 +385,29 @@
       <fieldset>
         <legend data-i18n="form.sonstiges.legend">Allergien und Fotos</legend>
 
-        <div class="field field--full field--abstand">
-          <label for="allergien" data-i18n="form.allergien">Allergien</label>
+        <div class="field field--abstand">
+          <p class="fieldset-label" id="allergien-frage">
+            <span data-i18n="form.allergien.frage">Hat Ihr Kind Allergien?</span><span class="req" aria-hidden="true">*</span>
+          </p>
+          <div class="choice-list" role="radiogroup" aria-labelledby="allergien-frage">
+            <label class="choice" for="allergien-ja">
+              <input type="radio" name="hatAllergien" id="allergien-ja" value="ja">
+              <span class="choice-text" data-i18n="form.ja">Ja</span>
+            </label>
+            <label class="choice" for="allergien-nein">
+              <input type="radio" name="hatAllergien" id="allergien-nein" value="nein">
+              <span class="choice-text" data-i18n="form.nein">Nein</span>
+            </label>
+          </div>
+          <p class="field-error" role="alert"></p>
+        </div>
+
+        <!-- Erscheint nur, wenn oben "Ja" gewählt wurde -->
+        <div class="field field--full bedingt field--abstand" id="allergien-feld">
+          <label for="allergien"><span data-i18n="form.allergien.text">Wogegen ist Ihr Kind allergisch?</span><span class="req" aria-hidden="true">*</span></label>
           <textarea id="allergien" name="allergien" rows="3"></textarea>
-          <p class="field-hint" data-i18n="form.allergienHint">Wogegen ist Ihr Kind allergisch, und sind besondere Vorkehrungen nötig? Leer lassen, wenn keine Allergien bestehen.</p>
+          <p class="field-hint" data-i18n="form.allergienHint">Bitte geben Sie auch an, ob besondere Vorkehrungen nötig sind.</p>
+          <p class="field-error" role="alert"></p>
         </div>
 
         <div class="field">
@@ -476,7 +517,7 @@
           </svg>
           <span>
             <span class="k-label" data-i18n="kontakt.zeiten">Unterrichtszeit</span>
-            <span class="k-wert" data-i18n="kontakt.zeitenWert">Sonntags 12:00–14:00 Uhr</span>
+            <span class="k-wert" data-i18n="kontakt.zeitenWert">Sonntags 12:00–14:30 Uhr</span>
           </span>
         </li>
       </ul>
