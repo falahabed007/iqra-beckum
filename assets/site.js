@@ -290,6 +290,58 @@
     // ohne "change" auszuloesen - deshalb einmal von Hand angleichen.
     bedingteSpiegeln();
 
+    /* --- Bestaetigungsfenster nach dem Absenden --- */
+    var danke = eins("#danke");
+    var dankeZu = eins("#danke-zu");
+    var dankeSpam = eins("#danke-spam");
+    var fokusVorher = null;
+
+    function dankeZeigen(mitEmail) {
+      if (!danke) return;
+      if (dankeSpam) {
+        // Ohne E-Mail-Adresse waere der Hinweis auf den Spam-Ordner sinnlos.
+        // Der Schluessel wird mitgesetzt, damit ein Sprachwechsel bei
+        // offenem Fenster den richtigen Satz nachzieht.
+        var schluessel = mitEmail ? "form.danke.spam" : "form.danke.spamOhne";
+        dankeSpam.setAttribute("data-i18n", schluessel);
+        dankeSpam.textContent = t(schluessel);
+      }
+      fokusVorher = document.activeElement;
+      danke.hidden = false;
+      document.body.style.overflow = "hidden";
+      if (dankeZu) dankeZu.focus();
+    }
+
+    function dankeSchliessen() {
+      if (!danke || danke.hidden) return;
+      danke.hidden = true;
+      document.body.style.overflow = "";
+
+      // Zurueck zum Ausloeser. Nach dem Absenden ist der Absendeknopf aber
+      // mitsamt dem Formular verborgen - dann uebernimmt der Erfolgskasten,
+      // damit der Fokus nicht am Seitenanfang landet.
+      var ziel = (fokusVorher && fokusVorher.offsetParent) ? fokusVorher : erfolgKasten;
+      if (!ziel || !ziel.focus) return;
+      if (ziel === erfolgKasten) ziel.setAttribute("tabindex", "-1");
+      ziel.focus();
+    }
+
+    if (dankeZu) dankeZu.addEventListener("click", dankeSchliessen);
+    if (danke) {
+      danke.addEventListener("click", function (e) {
+        if (e.target === danke) dankeSchliessen();   // Klick neben das Fenster
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" || e.keyCode === 27) dankeSchliessen();
+      });
+    }
+
+    /* --- Nur lateinische Schrift ---
+       Erlaubt sind die lateinischen Unicode-Bloecke, also auch ä, ö, ü, ß
+       und franzoesische Akzente, dazu Ziffern, Satz- und Leerzeichen.
+       Arabisch, Kyrillisch und alles andere faellt durch. */
+    var NICHT_LATEIN = /[^\s\u0020-\u024F\u1E00-\u1EFF\u2010-\u2027]/;
+
     /* --- Pruefung --- */
     function fehlerZeigen(feld, meldung) {
       var huelle = feld.closest(".field");
@@ -323,6 +375,16 @@
           if (!ersterFehler) ersterFehler = feld;
         } else {
           fehlerLoeschen(feld);
+        }
+      });
+
+      // Schrift: alles, was von Hand getippt wird, muss lateinisch sein.
+      // Das Honigtopf-Feld bleibt aussen vor - es soll nichts melden.
+      alle('input[type="text"], textarea', form).forEach(function (feld) {
+        if (feld.id === "hp-feld" || !feld.value.trim()) return;
+        if (NICHT_LATEIN.test(feld.value)) {
+          fehlerZeigen(feld, t("form.nurLatein"));
+          if (!ersterFehler) ersterFehler = feld;
         }
       });
 
@@ -451,7 +513,7 @@
       // Ohne eingerichteten Endpoint laeuft die Anmeldung ueber WhatsApp.
       if (!CFG.anmeldungEndpoint) {
         window.open(whatsappText(d), "_blank", "noopener");
-        zeigeErfolg();
+        zeigeErfolg(d);
         return;
       }
 
@@ -470,7 +532,7 @@
       })
         .then(function (r) { return r.json().catch(function () { return { ok: r.ok }; }); })
         .then(function (antwort) {
-          if (antwort && antwort.ok) { zeigeErfolg(); }
+          if (antwort && antwort.ok) { zeigeErfolg(d); }
           else { zeigeFehler(d); }
         })
         .catch(function () { zeigeFehler(d); })
@@ -481,15 +543,16 @@
         });
     });
 
-    function zeigeErfolg() {
+    function zeigeErfolg(d) {
       form.hidden = true;
       if (fehlerKasten) fehlerKasten.classList.remove("is-visible");
       if (erfolgKasten) {
         erfolgKasten.classList.add("is-visible");
-        erfolgKasten.setAttribute("tabindex", "-1");
-        erfolgKasten.focus();
         erfolgKasten.scrollIntoView({ block: "center" });
       }
+      // Das Fenster uebernimmt den Fokus, deshalb bekommt der Kasten
+      // darunter ihn nicht - sonst wuerden sich beide darum streiten.
+      dankeZeigen(!!(d && d.email));
     }
 
     function zeigeFehler(d) {

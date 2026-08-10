@@ -58,6 +58,18 @@ var GRUPPEN = {
   '4': 'Gruppe 4 — Dr. Feras Hasan'
 };
 
+/**
+ * Nur lateinische Schrift. Erlaubt sind die lateinischen Unicode-Bloecke -
+ * also auch Umlaute und Akzente -, dazu Ziffern, Satz- und Leerzeichen.
+ * Muss zur gleichnamigen Pruefung in assets/site.js passen; auf die
+ * Pruefung im Browser allein darf man sich nie verlassen.
+ */
+var NICHT_LATEIN = /[^\s\u0020-\u024F\u1E00-\u1EFF\u2010-\u2027]/;
+
+/** Die Felder, die von Hand getippt werden und deshalb geprueft werden. */
+var LATEIN_FELDER = ['kindVorname', 'kindNachname', 'elternVorname',
+                     'elternNachname', 'allergien', 'kartennummer'];
+
 var SPALTEN = [
   'Eingegangen am',
   'Kind Vorname',
@@ -127,6 +139,14 @@ function doPost(e) {
     for (var i = 0; i < pflicht.length; i++) {
       if (!String(d[pflicht[i]] || '').trim()) {
         return antwort({ ok: false, fehler: 'Feld fehlt: ' + pflicht[i] });
+      }
+    }
+
+    // Schrift: was von Hand getippt wurde, muss lateinisch sein.
+    for (var k = 0; k < LATEIN_FELDER.length; k++) {
+      var inhalt = String(d[LATEIN_FELDER[k]] || '');
+      if (inhalt && NICHT_LATEIN.test(inhalt)) {
+        return antwort({ ok: false, fehler: 'Nicht lateinisch: ' + LATEIN_FELDER[k] });
       }
     }
 

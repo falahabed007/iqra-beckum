@@ -562,5 +562,21 @@
   </div>
 </footer>
 
+
+<!-- ====================================================================
+     Bestätigung nach dem Absenden. Liegt bewusst außerhalb des
+     Formulars, damit es über der ganzen Seite liegen kann.
+     ==================================================================== -->
+<div class="modal" id="danke" role="dialog" aria-modal="true" aria-labelledby="danke-titel" hidden>
+  <div class="modal-box">
+    <h3 id="danke-titel" data-i18n="form.danke.title">Ihre Anmeldung ist bei uns eingegangen</h3>
+    <p data-i18n="form.danke.text">Vielen Dank für die Anmeldung Ihres Kindes. Wir prüfen Ihre Angaben und melden uns in Kürze bei Ihnen.</p>
+    <p class="modal-spam" id="danke-spam" data-i18n="form.danke.spam">Unsere Bestätigung erhalten Sie per E-Mail. Sollte sie nicht im Posteingang erscheinen, sehen Sie bitte auch im Spam-Ordner nach.</p>
+    <p class="modal-aktion">
+      <button class="btn btn-primary" type="button" id="danke-zu" data-i18n="form.danke.ok">Schließen</button>
+    </p>
+  </div>
+</div>
+
 </body>
 </html>

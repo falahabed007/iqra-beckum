@@ -453,6 +453,35 @@ legend{
 .bedingt.is-visible{ display:block; }
 .bedingt--schmal{ max-inline-size:22rem; }
 
+/* Bestaetigungsfenster nach dem Absenden.
+   z-index ueber dem Kopfbereich (100) und dem Sprunglink (999). */
+.modal{
+  position:fixed; inset:0; z-index:1000;
+  display:flex; align-items:center; justify-content:center;
+  padding:20px;
+  background:rgba(26,22,20,.55);
+}
+.modal[hidden]{ display:none; }
+
+.modal-box{
+  background:var(--paper);
+  inline-size:100%; max-inline-size:31rem;
+  max-block-size:88vh; overflow-y:auto;
+  border-top:4px solid var(--green);
+  box-shadow:0 18px 50px rgba(0,0,0,.28);
+  padding:26px 28px;
+}
+.modal-box h3{
+  font-family:var(--head); font-size:1.2rem;
+  color:var(--green-dark); margin-bottom:.55rem;
+}
+.modal-box p{ margin-bottom:1rem; }
+.modal-spam{
+  background:var(--green-pale); border-inline-start:4px solid var(--green);
+  padding:.8em 1em; font-size:.94rem;
+}
+.modal-aktion{ margin:1.2rem 0 0; }
+
 /* Dauerhafter Hinweis oben im Anmeldeformular */
 .formhinweis{
   margin-top:.9rem; padding:.85em 1em;
