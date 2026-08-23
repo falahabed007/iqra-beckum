@@ -610,7 +610,13 @@
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(d)
       })
-        .then(function (r) { return r.json().catch(function () { return { ok: r.ok }; }); })
+        .then(function (r) {
+          // Nur eine JSON-Antwort mit ok:true zaehlt als Erfolg. Antwortet
+          // Apps Script mit einer HTML-Fehlerseite, lautet der HTTP-Status
+          // trotzdem 200 - "r.ok" waere also true und wir haetten der
+          // Familie einen Erfolg gemeldet, den es nicht gab.
+          return r.json().catch(function () { return { ok: false }; });
+        })
         .then(function (antwort) {
           if (antwort && antwort.ok) { zeigeErfolg(d); }
           else { zeigeFehler(d); }
@@ -813,7 +819,13 @@
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(d)
       })
-        .then(function (r) { return r.json().catch(function () { return { ok: r.ok }; }); })
+        .then(function (r) {
+          // Nur eine JSON-Antwort mit ok:true zaehlt als Erfolg. Antwortet
+          // Apps Script mit einer HTML-Fehlerseite, lautet der HTTP-Status
+          // trotzdem 200 - "r.ok" waere also true und wir haetten der
+          // Familie einen Erfolg gemeldet, den es nicht gab.
+          return r.json().catch(function () { return { ok: false }; });
+        })
         .then(function (antwort) {
           if (antwort && antwort.ok) { zeigeErfolg(); } else { zeigeFehler(); }
         })

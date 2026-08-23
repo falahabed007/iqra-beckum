@@ -371,9 +371,15 @@ function inTabelleSchreiben(d, sprache) {
     d.widerruf === 'ja' ? 'ja verlangt' : 'nein'
   ]);
 
+  // Reine Kosmetik. Hat eine Spalte in Google Sheets einen festen
+  // Datentyp bekommen ("typisierte Spalte"), lehnt setNumberFormat ab und
+  // wirft. Das darf eine schon geschriebene Anmeldung nicht kippen - sonst
+  // steht die Zeile in der Tabelle, aber es geht keine E-Mail raus.
   var zeile = b.getLastRow();
-  b.getRange(zeile, 1).setNumberFormat('dd.mm.yyyy hh:mm');
-  b.getRange(zeile, 4).setNumberFormat('dd.mm.yyyy');
+  versucheStill(function () {
+    b.getRange(zeile, 1).setNumberFormat('dd.mm.yyyy hh:mm');
+    b.getRange(zeile, 4).setNumberFormat('dd.mm.yyyy');
+  });
 }
 
 
@@ -662,7 +668,11 @@ function kuendigungInTabelle(d, sprache, eingang) {
     beendigungText(d, 'de'),
     sprache
   ]);
-  b.getRange(b.getLastRow(), 1).setNumberFormat('dd.mm.yyyy hh:mm:ss');
+  // Siehe inTabelleSchreiben: das Format ist Beiwerk, die Kuendigung nicht.
+  var zeile = b.getLastRow();
+  versucheStill(function () {
+    b.getRange(zeile, 1).setNumberFormat('dd.mm.yyyy hh:mm:ss');
+  });
 }
 
 
