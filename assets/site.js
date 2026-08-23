@@ -24,6 +24,25 @@
   function alle(sel, wurzel) { return Array.prototype.slice.call((wurzel || document).querySelectorAll(sel)); }
   function eins(sel, wurzel) { return (wurzel || document).querySelector(sel); }
 
+  /** Die Schule nimmt Kinder erst ab diesem Alter auf. Muss zu MINDESTALTER
+   *  in apps-script/Code.gs passen. */
+  var MINDESTALTER = 6;
+
+  /**
+   * Der spaeteste Geburtstag, mit dem ein Kind heute alt genug ist, als
+   * "JJJJ-MM-TT". Wer spaeter geboren ist, ist noch zu jung - und ein Datum
+   * in der Zukunft faellt damit gleich mit durch.
+   *
+   * Bewusst Ortszeit statt toISOString(): letzteres rechnet in UTC und laege
+   * abends in Deutschland einen Tag daneben.
+   */
+  function spaetestesGeburtsdatum() {
+    var d = new Date();
+    d.setFullYear(d.getFullYear() - MINDESTALTER);
+    var zwei = function (n) { return (n < 10 ? "0" : "") + n; };
+    return d.getFullYear() + "-" + zwei(d.getMonth() + 1) + "-" + zwei(d.getDate());
+  }
+
   /* --- Nur lateinische Schrift ---
      Erlaubt sind die lateinischen Unicode-Bloecke, also auch ä, ö, ü, ß
      und franzoesische Akzente, dazu Ziffern, Satz- und Leerzeichen.
@@ -254,9 +273,11 @@
 
     var geoeffnetUm = Date.now();
 
-    // Ein Geburtsdatum in der Zukunft ergibt keinen Sinn.
+    // Der Kalender laesst gar nicht erst ein Datum zu, mit dem das Kind
+    // juenger als MINDESTALTER waere. Das ersetzt die Pruefung unten nicht -
+    // das Feld laesst sich auch von Hand befuellen.
     var geburtstag = eins("#kind-geburtsdatum");
-    if (geburtstag) geburtstag.max = new Date().toISOString().slice(0, 10);
+    if (geburtstag) geburtstag.max = spaetestesGeburtsdatum();
 
     var statusZeile = eins("#form-status");
     var erfolgKasten = eins("#form-erfolg");
@@ -403,6 +424,13 @@
           fehlerLoeschen(feld);
         }
       });
+
+      // Alter: die Schule nimmt Kinder erst ab MINDESTALTER Jahren auf.
+      // ISO-Datumsangaben lassen sich als Text vergleichen.
+      if (geburtstag && geburtstag.value && geburtstag.value > spaetestesGeburtsdatum()) {
+        fehlerZeigen(geburtstag, t("form.kind.zuJung"));
+        if (!ersterFehler) ersterFehler = geburtstag;
+      }
 
       // Schrift: alles, was von Hand getippt wird, muss lateinisch sein.
       // Das Honigtopf-Feld bleibt aussen vor - es soll nichts melden.

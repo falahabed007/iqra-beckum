@@ -57,6 +57,10 @@ var MINDESTDAUER = 3;
  *  assets/site.js passen. */
 var LAENGE_KARTENNUMMER = 12;
 
+/** Die Schule nimmt Kinder erst ab diesem Alter auf. Muss zu MINDESTALTER
+ *  in assets/site.js passen. */
+var MINDESTALTER = 6;
+
 /** Die Gruppen der Iqraa-Schule, fuer Tabelle und E-Mail ausgeschrieben. */
 var GRUPPEN = {
   '1': 'Gruppe 1 — Frau Janan',
@@ -168,6 +172,16 @@ function doPost(e) {
       if (!String(d[pflicht[i]] || '').trim()) {
         return antwort({ ok: false, fehler: 'Feld fehlt: ' + pflicht[i] });
       }
+    }
+
+    // Alter: die Schule nimmt Kinder erst ab MINDESTALTER Jahren auf.
+    // Der Kalender im Browser laesst nichts anderes zu, das Feld liesse sich
+    // aber von Hand befuellen - deshalb hier noch einmal.
+    if (!altGenug(d.kindGeburtsdatum)) {
+      return antwort({
+        ok: false,
+        fehler: 'Kind ist jünger als ' + MINDESTALTER + ' Jahre.'
+      });
     }
 
     // Schrift: was von Hand getippt wurde, muss lateinisch sein.
@@ -351,6 +365,21 @@ function inTabelleSchreiben(d, sprache) {
   var zeile = b.getLastRow();
   b.getRange(zeile, 1).setNumberFormat('dd.mm.yyyy hh:mm');
   b.getRange(zeile, 4).setNumberFormat('dd.mm.yyyy');
+}
+
+
+/**
+ * Ist das Kind heute alt genug? Erwartet "JJJJ-MM-TT" aus dem Datumsfeld
+ * des Browsers; ein unlesbares Datum faellt durch. Ein Datum in der Zukunft
+ * scheitert damit ebenfalls.
+ */
+function altGenug(iso) {
+  var teile = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!teile) return false;
+  var grenze = new Date();
+  grenze.setFullYear(grenze.getFullYear() - MINDESTALTER);
+  var geburt = new Date(Number(teile[1]), Number(teile[2]) - 1, Number(teile[3]));
+  return geburt <= grenze;
 }
 
 
