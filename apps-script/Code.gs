@@ -371,14 +371,25 @@ function inTabelleSchreiben(d, sprache) {
     d.widerruf === 'ja' ? 'ja verlangt' : 'nein'
   ]);
 
-  // Reine Kosmetik. Hat eine Spalte in Google Sheets einen festen
-  // Datentyp bekommen ("typisierte Spalte"), lehnt setNumberFormat ab und
-  // wirft. Das darf eine schon geschriebene Anmeldung nicht kippen - sonst
-  // steht die Zeile in der Tabelle, aber es geht keine E-Mail raus.
+  // Die Zeile sofort festschreiben, bevor irgendetwas anderes passiert.
+  SpreadsheetApp.flush();
+
+  // Das Zahlenformat ist reine Kosmetik und darf die Anmeldung nicht kippen.
+  //
+  // Hat eine Spalte in Google Sheets einen festen Datentyp bekommen
+  // ("typisierte Spalte"), lehnt Sheets setNumberFormat ab. Der Fehler
+  // faellt aber NICHT beim Aufruf an: Apps Script sammelt Aenderungen und
+  // schreibt sie erst am Ende der Ausfuehrung - also nach dem return aus
+  // doPost. Ein try/catch um den Aufruf greift dort nicht mehr, und Google
+  // liefert statt unserer JSON-Antwort eine HTML-Fehlerseite aus.
+  //
+  // Deshalb steht das flush() INNERHALB der Absicherung: so faellt ein
+  // Fehler noch hier an, wo er aufgefangen werden kann.
   var zeile = b.getLastRow();
   versucheStill(function () {
     b.getRange(zeile, 1).setNumberFormat('dd.mm.yyyy hh:mm');
     b.getRange(zeile, 4).setNumberFormat('dd.mm.yyyy');
+    SpreadsheetApp.flush();
   });
 }
 
@@ -669,9 +680,11 @@ function kuendigungInTabelle(d, sprache, eingang) {
     sprache
   ]);
   // Siehe inTabelleSchreiben: das Format ist Beiwerk, die Kuendigung nicht.
+  SpreadsheetApp.flush();
   var zeile = b.getLastRow();
   versucheStill(function () {
     b.getRange(zeile, 1).setNumberFormat('dd.mm.yyyy hh:mm:ss');
+    SpreadsheetApp.flush();
   });
 }
 
