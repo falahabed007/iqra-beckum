@@ -9,9 +9,22 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/fonts.css">
 <link rel="stylesheet" href="assets/site.css">
+
+<!-- Reihenfolge ist wichtig: erst Daten, dann Texte, dann die Rechtstexte,
+     zuletzt das Verhalten. i18n-legal.js haengt sich in window.I18N ein und
+     muss deshalb nach i18n.js und vor site.js stehen. -->
 <script src="assets/config.js" defer></script>
 <script src="assets/i18n.js" defer></script>
+<script src="assets/i18n-legal.js" defer></script>
 <script src="assets/site.js" defer></script>
+
+<!--
+  HINWEIS ZUM DEUTSCHEN TEXT IN DIESER DATEI
+  Der deutsche Text steht hier nur als Rueckfallebene - er sorgt dafuer,
+  dass die Seite auch ohne JavaScript lesbar bleibt. Sobald JavaScript
+  laeuft, kommen ALLE Texte aus assets/i18n-legal.js. Aenderungen also
+  immer dort vornehmen.
+-->
 </head>
 
 <body data-page="datenschutz">
@@ -23,15 +36,15 @@
     <a class="brand" href="index.html" data-keep-lang="index.html">
       <img class="brand-logo" src="assets/logo.png" alt="" width="46" height="46">
       <span class="brand-text">
-        <span class="brand-ar" lang="ar" dir="rtl">مدرسة إقرأ</span>
+        <span class="brand-ar" lang="ar" dir="rtl">&#1605;&#1583;&#1585;&#1587;&#1577; &#1573;&#1602;&#1585;&#1571;</span>
         <span class="brand-de" data-i18n="brand.sub">Arabischunterricht Beckum</span>
       </span>
     </a>
 
-    <div class="lang-switch" role="group" data-i18n-aria="lang.label" aria-label="Sprache wählen">
+    <div class="lang-switch" role="group" data-i18n-aria="lang.label" aria-label="Sprache w&auml;hlen">
       <button type="button" data-lang="de" aria-pressed="true"  data-i18n-title="lang.de" title="Auf Deutsch anzeigen">DE</button>
       <button type="button" data-lang="en" aria-pressed="false" data-i18n-title="lang.en" title="Show in English">EN</button>
-      <button type="button" data-lang="ar" aria-pressed="false" data-i18n-title="lang.ar" title="عرض بالعربية" lang="ar">ع</button>
+      <button type="button" data-lang="ar" aria-pressed="false" data-i18n-title="lang.ar" title="&#1593;&#1585;&#1590; &#1576;&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;" lang="ar">&#1593;</button>
     </div>
   </div>
 </header>
@@ -44,66 +57,129 @@
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M15 5l-7 7 7 7"/>
       </svg>
-      <span data-i18n="legal.zurueck">Zurück zur Startseite</span>
+      <span data-i18n="legal.zurueck">Zur&uuml;ck zur Startseite</span>
     </a>
 
     <h1 class="section-title"><span data-i18n="ds.title">Datenschutzerklärung</span></h1>
 
     <div class="prose">
-
       <p class="rechtshinweis">
         <span data-i18n="legal.massgeblich">Rechtlich maßgeblich ist die deutsche Fassung dieser Seite. Die englische und die arabische Übersetzung dienen dem besseren Verständnis.</span>
         <br>
-        <small><span data-i18n="ds.stand">Stand dieser Erklärung: bei Veröffentlichung eintragen.</span>
+        <small><span data-i18n="ds.stand">Stand:</span>
         <span data-cfg="standDatenschutz">August 2026</span></small>
       </p>
 
-      <h2 data-i18n="ds.1.title">Wer für die Datenverarbeitung verantwortlich ist</h2>
-      <p data-i18n="ds.1.text">Verantwortlich im Sinne der Datenschutz-Grundverordnung (DSGVO) ist der Arabisch-Deutsche-Verein e.V. Beckum. Die vollständigen Kontaktdaten finden Sie im Impressum.</p>
-      <p><a href="impressum.html" data-keep-lang="impressum.html" data-i18n="footer.impressum">Impressum</a></p>
+      <h2 data-i18n="ds.1.title">1. Verantwortlicher</h2>
+      <div data-i18n-html="ds.1.body"><p>Verantwortlicher für die Verarbeitung personenbezogener Daten im Zusammenhang mit der Website, der Anmeldung und der Durchführung der Iqraa-Schule ist:</p></div>
+      <dl>
+        <dt data-i18n="imp.verein">Verein</dt>
+        <dd><span data-cfg="impressum.verein">Arabisch-Deutscher-Verein e.V. Beckum</span></dd>
+        <dt data-i18n="imp.anschrift">Anschrift</dt>
+        <dd><span data-cfg="impressum.anschrift">Nordwall 14, 59269 Beckum</span>, <span data-i18n="imp.land">Deutschland</span></dd>
+        <dt data-i18n="imp.vertreten">Vertretungsberechtigter Vorstand</dt>
+        <dd><span data-cfg="impressum.vertreten">Ahmed Ammura (1. Vorsitzender) und Khaled Sharafi (2. Vorsitzender)</span></dd>
+        <dt data-i18n="imp.telefon">Telefon</dt>
+        <dd><a data-cfg-href="tel" href="#" class="ltr" data-cfg="telefon">0177 5883033</a></dd>
+        <dt data-i18n="imp.email">E-Mail</dt>
+        <dd><a data-cfg-href="mail" href="#" class="ltr" data-cfg="email">iqraaschulebeckum@gmail.com</a></dd>
+      </dl>
 
-      <h2 data-i18n="ds.2.title">Aufruf dieser Webseite</h2>
-      <p data-i18n="ds.2.text">Diese Seite wird bei GitHub Pages gehostet (GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA). Beim Aufruf der Seite überträgt Ihr Browser technisch notwendige Daten an GitHub, darunter Ihre IP-Adresse, Datum und Uhrzeit des Zugriffs sowie Angaben zu Browser und Betriebssystem. Diese Verarbeitung dient dem sicheren und stabilen Betrieb der Seite; Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Wir selbst haben keinen Zugriff auf diese Protokolldaten.</p>
+      <h2 data-i18n="ds.2.title">2. Allgemeine Grundsätze</h2>
+      <div data-i18n-html="ds.2.body"><p>Wir nehmen den Schutz personenbezogener Daten ernst.</p><p>Wir verarbeiten personenbezogene Daten nur, soweit dies nach den geltenden datenschutzrechtlichen Vorschriften zulässig ist.</p><p>Dabei beachten wir insbesondere die Grundsätze der Rechtmäßigkeit, Transparenz, Zweckbindung, Datenminimierung, Richtigkeit, Speicherbegrenzung sowie Integrität und Vertraulichkeit.</p><p>Wir verarbeiten grundsätzlich nur solche personenbezogenen Daten, die für die jeweiligen Zwecke erforderlich sind.</p></div>
 
-      <!-- Auf diesen Abschnitt verweist das Häkchen im Anmeldeformular -->
-      <h2 id="anmeldung" data-i18n="ds.3.title">Anmeldeformular</h2>
-      <p data-i18n="ds.3.intro">Wenn Sie Ihr Kind über das Formular auf dieser Seite anmelden, verarbeiten wir die folgenden Angaben:</p>
-      <ul>
-        <li data-i18n="ds.3.liste1">Vorname, Nachname und Geburtsdatum des Kindes</li>
-        <li data-i18n="ds.3.liste2">Vorname, Nachname, Telefonnummer und WhatsApp-Nummer eines Elternteils, auf Wunsch zusätzlich die E-Mail-Adresse</li>
-        <li data-i18n="ds.3.liste3">die gewünschte Zahlungsweise</li>
-        <li data-i18n="ds.3.liste4">Angaben zu Allergien Ihres Kindes, sofern Sie welche eintragen</li>
-        <li data-i18n="ds.3.liste5">Ihre Entscheidung zur Veröffentlichung von Fotos</li>
-      </ul>
+      <h2 data-i18n="ds.3.title">3. Besuch der Website</h2>
+      <div data-i18n-html="ds.3.body"><p>Unsere Website wird über GitHub Pages bereitgestellt.</p><p>Beim Aufruf der Website können technisch erforderliche Daten verarbeitet werden. Hierzu können insbesondere gehören:</p><ul><li>IP-Adresse,</li><li>Datum und Uhrzeit des Zugriffs,</li><li>angeforderte Internetadresse,</li><li>Browsertyp und Browserversion,</li><li>Betriebssystem,</li><li>technische Informationen über das verwendete Endgerät.</li></ul><p>Diese Daten können zur Gewährleistung der Sicherheit, Stabilität und technischen Bereitstellung der Website verarbeitet werden.</p><p>Die Rechtsgrundlage ist, soweit die gesetzlichen Voraussetzungen vorliegen, Art. 6 Abs. 1 lit. f DSGVO.</p><p>GitHub ist ein Dienst der GitHub, Inc. und gehört zur Microsoft-Unternehmensgruppe.</p></div>
 
-      <h3 data-i18n="ds.3.zweck.title">Zweck und Rechtsgrundlage</h3>
-      <p data-i18n="ds.3.zweck.text">Wir verarbeiten diese Daten ausschließlich, um die Anmeldung zu bearbeiten, den Unterricht zu organisieren und mit Ihnen Kontakt aufzunehmen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Anbahnung und Durchführung des Vertragsverhältnisses über die Kursteilnahme). Angaben zu Allergien sind Gesundheitsdaten im Sinne von Art. 9 DSGVO; wir verarbeiten sie ausschließlich auf Grundlage Ihrer ausdrücklichen Einwilligung nach Art. 9 Abs. 2 lit. a DSGVO, die Sie mit dem Absenden des Formulars erteilen. Ihre Entscheidung über Fotos beruht ebenfalls auf Ihrer Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO.</p>
+      <h2 data-i18n="ds.4.title">4. Hosting und externe technische Dienste</h2>
+      <div data-i18n-html="ds.4.body"><p>Für die Bereitstellung einzelner Funktionen unserer Website können externe technische Dienste eingesetzt werden.</p><p>Soweit externe Anbieter personenbezogene Daten in unserem Auftrag verarbeiten, erfolgt dies auf Grundlage der jeweils erforderlichen datenschutzrechtlichen Vereinbarungen.</p><p>Bei technischen Dienstleistern kann eine Verarbeitung personenbezogener Daten außerhalb der Europäischen Union bzw. des Europäischen Wirtschaftsraums nicht vollständig ausgeschlossen werden.</p><p>In solchen Fällen werden die gesetzlichen Anforderungen der Art. 44 ff. DSGVO berücksichtigt.</p></div>
 
-      <h3 data-i18n="ds.3.empfaenger.title">Empfänger der Daten</h3>
-      <p data-i18n="ds.3.empfaenger.text">Die Übermittlung des Formulars erfolgt über Google Apps Script. Die Anmeldung wird an unser E-Mail-Postfach bei Gmail gesendet und zusätzlich in einer Google-Tabelle gespeichert, auf die nur der Vorstand des Vereins Zugriff hat. Anbieter ist Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland; eine Verarbeitung auf Servern in den USA ist dabei möglich. Google ist unter dem EU-US Data Privacy Framework zertifiziert. Eine Weitergabe an weitere Dritte findet nicht statt.</p>
+      <h2 id="anmeldung" data-i18n="ds.5.title">5. Anmeldeformular</h2>
+      <div data-i18n-html="ds.5.body"><p>Wenn Sie Ihr Kind über das Online-Formular der Iqraa-Schule anmelden, verarbeiten wir die von Ihnen eingegebenen personenbezogenen Daten.</p><p>Hierzu können insbesondere gehören:</p><h3>Daten des Kindes</h3><ul><li>Vorname,</li><li>Nachname,</li><li>Geburtsdatum.</li></ul><h3>Daten des Erziehungsberechtigten</h3><ul><li>Vorname,</li><li>Nachname,</li><li>Telefonnummer,</li><li>WhatsApp-Nummer,</li><li>E-Mail-Adresse, sofern angegeben.</li></ul><h3>Daten zur Organisation und Abrechnung</h3><ul><li>gewünschte Zahlungsart,</li><li>erforderliche Angaben zur Münsterlandkarte,</li><li>erforderliche Angaben im Zusammenhang mit Bildungs- und Teilhabeleistungen,</li><li>Angaben zur Kurs- und Gruppenzuordnung,</li><li>organisatorische Informationen zur Teilnahme.</li></ul><h3>Gesundheitsbezogene Angaben</h3><p>Soweit Sie Angaben zu Allergien oder anderen gesundheitlichen Besonderheiten Ihres Kindes machen, handelt es sich um Gesundheitsdaten und damit um eine besondere Kategorie personenbezogener Daten.</p><p>Gesundheitsdaten unterliegen einem erhöhten gesetzlichen Schutz nach Art. 9 DSGVO.</p><p>Wir verarbeiten solche Angaben nur, soweit eine hierfür geeignete gesetzliche Grundlage oder eine wirksame ausdrückliche Einwilligung besteht.</p></div>
 
-      <h3 data-i18n="ds.3.dauer.title">Speicherdauer</h3>
-      <p data-i18n="ds.3.dauer.text">Wir speichern die Anmeldedaten so lange, wie Ihr Kind am Unterricht teilnimmt, und löschen sie spätestens zwölf Monate nach Ende der Teilnahme. Steuerlich oder vereinsrechtlich erforderliche Aufbewahrungsfristen bleiben davon unberührt.</p>
+      <h2 data-i18n="ds.6.title">6. Zweck der Verarbeitung</h2>
+      <div data-i18n-html="ds.6.body"><p>Die Daten werden insbesondere zu folgenden Zwecken verarbeitet:</p><ul><li>Bearbeitung der Anmeldung,</li><li>Prüfung und Bestätigung des Kursplatzes,</li><li>Einteilung des Kindes in eine geeignete Gruppe,</li><li>Organisation und Durchführung des Unterrichts,</li><li>Kommunikation mit den Erziehungsberechtigten,</li><li>Verwaltung von Anwesenheiten und Fehlzeiten,</li><li>pädagogische Organisation,</li><li>Durchführung von Veranstaltungen,</li><li>Verwaltung und Abrechnung der Kursgebühren,</li><li>Bearbeitung von Münsterlandkarte und Bildungs- und Teilhabeleistungen,</li><li>Erfüllung gesetzlicher Pflichten,</li><li>Nachweis- und Aufbewahrungspflichten,</li><li>Schutz des ordnungsgemäßen Schulbetriebs.</li></ul><p>Eine Verwendung der Anmeldedaten zum Verkauf personenbezogener Daten oder zu fremden Werbezwecken erfolgt nicht.</p></div>
 
-      <h2 data-i18n="ds.4.title">Fotos im Unterricht</h2>
-      <p data-i18n="ds.4.text">Während des Unterrichts werden gelegentlich Fotos gemacht, die im Hausflur unseres Zentrums und auf unseren Social-Media-Kanälen veröffentlicht werden können. Das geschieht ausschließlich, wenn Sie bei der Anmeldung zugestimmt haben. Sie können Ihre Einwilligung jederzeit formlos widerrufen — die Rechtmäßigkeit der bis dahin erfolgten Veröffentlichung bleibt davon unberührt.</p>
+      <h2 data-i18n="ds.7.title">7. Rechtsgrundlagen</h2>
+      <div data-i18n-html="ds.7.body"><p>Soweit die Verarbeitung für die Anbahnung, Durchführung oder Verwaltung des Teilnahmeverhältnisses erforderlich ist, erfolgt sie grundsätzlich auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO.</p><p>Soweit wir gesetzlich zur Verarbeitung verpflichtet sind, erfolgt die Verarbeitung auf Grundlage von Art. 6 Abs. 1 lit. c DSGVO.</p><p>Soweit die Verarbeitung zur Wahrung berechtigter Interessen des Vereins erforderlich ist und keine überwiegenden Interessen der betroffenen Personen entgegenstehen, kann Art. 6 Abs. 1 lit. f DSGVO Anwendung finden.</p><p>Verarbeitungen auf Grundlage einer Einwilligung erfolgen nach Art. 6 Abs. 1 lit. a DSGVO.</p><p>Für Gesundheitsdaten gelten zusätzlich die besonderen Voraussetzungen des Art. 9 DSGVO.</p></div>
 
-      <h2 data-i18n="ds.5.title">Schriftarten</h2>
-      <p data-i18n="ds.5.text">Die auf dieser Seite verwendeten Schriften werden von unserem eigenen Server geladen. Es wird keine Verbindung zu Google Fonts aufgebaut, und es werden dabei keine Daten an Dritte übertragen.</p>
+      <h2 data-i18n="ds.8.title">8. Verarbeitung über das Google-Konto der Iqraa-Schule</h2>
+      <div data-i18n-html="ds.8.body"><p>Für die organisatorische Verwaltung der Iqraa-Schule verwenden wir das Google-Konto der Schule.</p><p>Über dieses Konto können insbesondere folgende Google-Dienste genutzt werden:</p><ul><li>Gmail,</li><li>Google Drive,</li><li>Google Apps Script,</li><li>gegebenenfalls weitere für den Betrieb der Anmeldung erforderliche Google-Dienste.</li></ul><p>Über Gmail können Anmeldungen und organisatorische Nachrichten empfangen und bearbeitet werden.</p><p>Über Google Drive können interne Verwaltungsdateien gespeichert und verwaltet werden.</p><p>Google weist darauf hin, dass Daten bei seinen Diensten weltweit verarbeitet werden können. Für bestimmte Google-Dienste bestehen besondere Datenschutzbedingungen und Datenverarbeitungsvereinbarungen.</p></div>
 
-      <h2 data-i18n="ds.6.title">Cookies und Reichweitenmessung</h2>
-      <p data-i18n="ds.6.text">Diese Seite setzt keine Cookies und verwendet keine Analyse- oder Trackingdienste. Ihre Sprachauswahl wird ausschließlich lokal in Ihrem Browser gespeichert (localStorage) und nicht an uns übertragen.</p>
+      <h2 data-i18n="ds.9.title">9. Speicherung der Teilnehmerdaten in Excel auf Google Drive</h2>
+      <div data-i18n-html="ds.9.body"><p>Die für die Organisation der Iqraa-Schule erforderlichen Teilnehmerdaten können in einer elektronischen Teilnehmerverwaltung gespeichert werden.</p><p>Hierfür verwenden wir unter anderem Microsoft-Excel-Dateien, die auf Google Drive des für die Iqraa-Schule verwendeten Google-Kontos gespeichert werden.</p><p>Dabei kann insbesondere eine Excel-Datei bzw. eine Excel-kompatible Datei folgende Informationen enthalten:</p><ul><li>Name des Kindes,</li><li>Geburtsdatum,</li><li>Name der Erziehungsberechtigten,</li><li>Telefonnummer,</li><li>WhatsApp-Nummer,</li><li>E-Mail-Adresse,</li><li>Gruppenzuordnung,</li><li>Anwesenheitsinformationen,</li><li>Zahlungsinformationen,</li><li>organisatorische Angaben zur Teilnahme.</li></ul><p>Gesundheitsdaten werden nur aufgenommen, soweit ihre Verarbeitung für einen konkreten Zweck erforderlich und rechtlich zulässig ist.</p></div>
 
-      <h2 data-i18n="ds.7.title">Ihre Rechte</h2>
-      <p data-i18n="ds.7.text">Sie haben das Recht auf Auskunft über die zu Ihrer Person gespeicherten Daten, auf Berichtigung, auf Löschung, auf Einschränkung der Verarbeitung, auf Datenübertragbarkeit sowie ein Widerspruchsrecht. Erteilte Einwilligungen können Sie jederzeit mit Wirkung für die Zukunft widerrufen. Wenden Sie sich dafür an die im Impressum genannten Kontaktdaten.</p>
+      <h2 data-i18n="ds.10.title">10. Zugriff auf die Excel-Dateien</h2>
+      <div data-i18n-html="ds.10.body"><p>Die Teilnehmerverwaltung wird ausschließlich für die interne Organisation der Iqraa-Schule verwendet.</p><p>Der Zugriff auf die Dateien ist auf Personen zu beschränken, die diese Daten aufgrund ihrer konkreten Aufgabe für die Organisation oder Durchführung des Unterrichts benötigen.</p><p>Die Dateien dürfen insbesondere:</p><ul><li>nicht öffentlich zugänglich gemacht werden,</li><li>nicht über öffentliche Freigabelinks bereitgestellt werden,</li><li>nicht an andere Eltern oder Schüler weitergegeben werden,</li><li>nicht ohne dienstliche bzw. organisatorische Notwendigkeit kopiert werden.</li></ul><p>Zugriffsberechtigungen sollen regelmäßig überprüft und bei Beendigung der Tätigkeit einer zugriffsberechtigten Person unverzüglich angepasst oder entzogen werden.</p><p>Der Verein setzt angemessene technische und organisatorische Maßnahmen zum Schutz der gespeicherten Daten ein.</p></div>
 
-      <h2 data-i18n="ds.8.title">Beschwerderecht</h2>
-      <p data-i18n="ds.8.text">Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren. Für Nordrhein-Westfalen ist das die Landesbeauftragte für Datenschutz und Informationsfreiheit Nordrhein-Westfalen, Kavalleriestraße 2–4, 40213 Düsseldorf.</p>
+      <h2 data-i18n="ds.11.title">11. Sicherheit des Google-Kontos</h2>
+      <div data-i18n-html="ds.11.body"><p>Das für die Schule verwendete Google-Konto ist durch geeignete Zugangssicherheitsmaßnahmen zu schützen.</p><p>Soweit technisch verfügbar und organisatorisch eingerichtet, soll insbesondere eine Zwei-Faktor-Authentifizierung verwendet werden.</p><p>Passwörter und Zugangsdaten dürfen nicht an unbefugte Personen weitergegeben werden.</p><p>Personen, die Zugriff auf das Konto oder die Teilnehmerverwaltung haben, dürfen die Daten nur für die vorgesehenen schulischen und organisatorischen Zwecke verwenden.</p></div>
 
+      <h2 data-i18n="ds.12.title">12. Verarbeitung über Gmail und Google Apps Script</h2>
+      <div data-i18n-html="ds.12.body"><p>Die über das Online-Anmeldeformular eingegebenen Daten können technisch über Google Apps Script verarbeitet und an das für die Schule verwendete Gmail-Postfach übermittelt werden.</p><p>Nach Eingang der Anmeldung können die erforderlichen Daten zur weiteren Bearbeitung in die interne Teilnehmerverwaltung übernommen werden.</p><p>Soweit hierfür Google-Dienste eingesetzt werden, kann Google personenbezogene Daten im Rahmen der jeweiligen Dienste verarbeiten.</p><p>Die konkrete Verarbeitung richtet sich nach den von uns eingesetzten Google-Diensten und deren jeweils geltenden Bedingungen.</p></div>
+
+      <h2 data-i18n="ds.13.title">13. Google Drive und mögliche Drittlandverarbeitung</h2>
+      <div data-i18n-html="ds.13.body"><p>Google betreibt Dienste und technische Infrastruktur weltweit. Eine Verarbeitung personenbezogener Daten außerhalb des Europäischen Wirtschaftsraums kann daher nicht vollständig ausgeschlossen werden.</p><p>Für internationale Datenübermittlungen gelten die gesetzlichen Anforderungen der Art. 44 ff. DSGVO.</p><p>Google stellt für bestimmte Cloud-Dienste Datenschutzvereinbarungen und Regelungen für internationale Datenübermittlungen bereit.</p></div>
+
+      <h2 data-i18n="ds.14.title">14. Kommunikation über WhatsApp</h2>
+      <div data-i18n-html="ds.14.body"><p>Die Schule kann die von den Erziehungsberechtigten angegebenen Telefonnummern bzw. WhatsApp-Nummern zur organisatorischen Kommunikation verwenden.</p><p>WhatsApp kann insbesondere für folgende Zwecke eingesetzt werden:</p><ul><li>Mitteilung von Unterrichtsterminen,</li><li>Informationen zu Unterrichtsausfällen,</li><li>organisatorische Rückfragen,</li><li>Informationen zu Veranstaltungen,</li><li>Kommunikation über Hausaufgaben,</li><li>sonstige Informationen zum Schulbetrieb.</li></ul><p>Soweit eine Kommunikation über WhatsApp nicht zwingend erforderlich ist, kann alternativ insbesondere per E-Mail kommuniziert werden.</p></div>
+
+      <h2 data-i18n="ds.15.title">15. WhatsApp-Gruppen</h2>
+      <div data-i18n-html="ds.15.body"><p>Für einzelne Klassen oder Lerngruppen können WhatsApp-Gruppen eingerichtet werden.</p><p>Bei einer Teilnahme an einer solchen Gruppe kann insbesondere die Telefonnummer eines Teilnehmers für andere Mitglieder der Gruppe sichtbar werden.</p><p>Die Teilnahme an einer solchen Gruppe erfolgt deshalb grundsätzlich freiwillig, soweit sie nicht zwingend für die Durchführung des Vertrags erforderlich ist.</p><p>Für wesentliche Informationen soll eine alternative Kommunikationsmöglichkeit zur Verfügung stehen.</p><p>In WhatsApp-Gruppen sollen insbesondere keine Informationen über Allergien, Krankheiten oder sonstige besonders geschützte persönliche Umstände einzelner Kinder veröffentlicht werden.</p></div>
+
+      <h2 data-i18n="ds.16.title">16. Gesundheitsdaten und Allergien</h2>
+      <div data-i18n-html="ds.16.body"><p>Angaben zu Allergien und sonstigen gesundheitlichen Besonderheiten werden nur verarbeitet, wenn sie für die sichere Teilnahme des Kindes am Unterricht oder an einer Veranstaltung erforderlich sind oder eine andere rechtliche Grundlage für die Verarbeitung besteht.</p><p>Gesundheitsdaten werden besonders geschützt.</p><p>Der Zugriff soll auf diejenigen Personen beschränkt werden, die diese Informationen tatsächlich benötigen, um die Sicherheit und Betreuung des Kindes zu gewährleisten.</p><p>Soweit die Verarbeitung auf einer ausdrücklichen Einwilligung beruht, kann diese jederzeit mit Wirkung für die Zukunft widerrufen werden.</p><p>Die Rechtmäßigkeit der Verarbeitung bis zum Zeitpunkt des Widerrufs bleibt unberührt.</p></div>
+
+      <h2 data-i18n="ds.17.title">17. Münsterlandkarte und Bildungs- und Teilhabeleistungen</h2>
+      <div data-i18n-html="ds.17.body"><p>Soweit die Münsterlandkarte oder Leistungen des Bildungs- und Teilhabepakets genutzt werden, verarbeiten wir nur die hierfür erforderlichen Angaben und Nachweise.</p><p>Soweit Daten zur Prüfung oder Abrechnung an zuständige Stellen übermittelt werden müssen, erfolgt dies nur im erforderlichen Umfang und auf Grundlage der jeweils einschlägigen gesetzlichen Vorschriften.</p><p>Eine vollständige Kopie eines Ausweisdokuments oder einer Karte wird nur gespeichert, wenn dies für den jeweiligen Zweck tatsächlich erforderlich und rechtlich zulässig ist.</p></div>
+
+      <h2 data-i18n="ds.18.title">18. Fotos und Bildaufnahmen</h2>
+      <div data-i18n-html="ds.18.body"><p>Während des Unterrichts und bei schulischen Aktivitäten können Fotos aufgenommen werden.</p><p>Eine Veröffentlichung identifizierbarer Fotos eines Kindes erfolgt grundsätzlich nur auf Grundlage einer entsprechenden Einwilligung, soweit eine solche erforderlich ist.</p><p>Mögliche Veröffentlichungsorte können insbesondere sein:</p><ul><li>Website des Vereins,</li><li>Social-Media-Auftritte des Vereins,</li><li>Vereins- oder Schulmaterialien.</li></ul><p>Die Fotoeinwilligung ist freiwillig.</p><p>Die Teilnahme am regulären Unterricht wird nicht davon abhängig gemacht, dass die Einwilligung erteilt wird.</p><p>Eine erteilte Einwilligung kann jederzeit mit Wirkung für die Zukunft widerrufen werden.</p></div>
+
+      <h2 data-i18n="ds.19.title">19. Empfänger personenbezogener Daten</h2>
+      <div data-i18n-html="ds.19.body"><p>Innerhalb des Vereins erhalten personenbezogene Daten nur diejenigen Personen, die diese Daten für ihre jeweilige Aufgabe benötigen.</p><p>Je nach konkreter Verarbeitung können personenbezogene Daten insbesondere verarbeitet werden durch:</p><ul><li>technische Hostinganbieter,</li><li>Google-Dienste,</li><li>Anbieter des Anmeldeverfahrens,</li><li>E-Mail-Dienste,</li><li>Cloud-Speicherdienste,</li><li>Kommunikationsdienste,</li><li>zuständige Stellen im Zusammenhang mit Bildungs- und Teilhabeleistungen.</li></ul><p>Eine Weitergabe an sonstige Dritte erfolgt nur, wenn hierfür eine gesetzliche Grundlage besteht, die Weitergabe zur Durchführung des Teilnahmeverhältnisses erforderlich ist oder eine wirksame Einwilligung vorliegt.</p></div>
+
+      <h2 data-i18n="ds.20.title">20. Speicherdauer</h2>
+      <div data-i18n-html="ds.20.body"><p>Wir speichern personenbezogene Daten nur so lange, wie dies für den jeweiligen Zweck erforderlich ist.</p><p>Anmeldedaten werden grundsätzlich während der Teilnahme des Kindes an der Iqraa-Schule verarbeitet.</p><p>Nach Beendigung der Teilnahme werden die Daten gelöscht, sobald sie für die Organisation und Durchführung des Unterrichts nicht mehr benötigt werden und keine gesetzlichen Aufbewahrungspflichten entgegenstehen.</p><p>Soweit gesetzliche Aufbewahrungspflichten bestehen, werden die betreffenden Daten für die gesetzlich vorgeschriebene Dauer aufbewahrt.</p><p>Gesundheitsdaten werden gelöscht, sobald der Zweck ihrer Verarbeitung entfällt, soweit keine andere gesetzliche Grundlage eine weitere Speicherung erlaubt oder erfordert.</p></div>
+
+      <h2 data-i18n="ds.21.title">21. Technische und organisatorische Maßnahmen</h2>
+      <div data-i18n-html="ds.21.body"><p>Wir treffen angemessene technische und organisatorische Maßnahmen zum Schutz personenbezogener Daten.</p><p>Hierzu gehören insbesondere:</p><ul><li>Beschränkung der Zugriffsrechte,</li><li>Passwortschutz,</li><li>Sicherung des Google-Kontos,</li><li>möglichst Verwendung einer Zwei-Faktor-Authentifizierung,</li><li>vertraulicher Umgang mit Zugangsdaten,</li><li>Schutz elektronischer Teilnehmerlisten,</li><li>Vermeidung unnötiger Datenkopien,</li><li>regelmäßige Überprüfung der Zugriffsberechtigungen,</li><li>Löschung nicht mehr benötigter Daten.</li></ul></div>
+
+      <h2 data-i18n="ds.22.title">22. Ihre Rechte</h2>
+      <div data-i18n-html="ds.22.body"><p>Betroffene Personen haben nach Maßgabe der gesetzlichen Vorschriften insbesondere folgende Rechte:</p><h3>Recht auf Auskunft</h3><p>Sie können Auskunft darüber verlangen, ob und welche personenbezogenen Daten über Sie verarbeitet werden.</p><h3>Recht auf Berichtigung</h3><p>Sie können die Berichtigung unrichtiger oder die Vervollständigung unvollständiger personenbezogener Daten verlangen.</p><h3>Recht auf Löschung</h3><p>Sie können unter den gesetzlichen Voraussetzungen die Löschung personenbezogener Daten verlangen.</p><h3>Recht auf Einschränkung</h3><p>Sie können unter den gesetzlichen Voraussetzungen die Einschränkung der Verarbeitung verlangen.</p><h3>Recht auf Datenübertragbarkeit</h3><p>Sie haben unter den gesetzlichen Voraussetzungen das Recht, personenbezogene Daten in einem strukturierten, gängigen und maschinenlesbaren Format zu erhalten.</p><h3>Recht auf Widerspruch</h3><p>Sie können unter den gesetzlichen Voraussetzungen gegen bestimmte Verarbeitungen Widerspruch einlegen.</p><h3>Widerruf von Einwilligungen</h3><p>Soweit eine Verarbeitung auf Ihrer Einwilligung beruht, können Sie diese jederzeit mit Wirkung für die Zukunft widerrufen.</p><p>Die Rechtmäßigkeit der aufgrund der Einwilligung bis zum Widerruf erfolgten Verarbeitung bleibt unberührt.</p></div>
+
+      <h2 data-i18n="ds.23.title">23. Beschwerderecht bei einer Aufsichtsbehörde</h2>
+      <div data-i18n-html="ds.23.body"><p>Sie haben das Recht, sich bei einer Datenschutzaufsichtsbehörde über die Verarbeitung Ihrer personenbezogenen Daten zu beschweren.</p><p>Zuständige Aufsichtsbehörde für Nordrhein-Westfalen ist insbesondere:</p><p><strong>Landesbeauftragte für Datenschutz und Informationsfreiheit Nordrhein-Westfalen (LDI NRW)</strong><br>Kavalleriestraße 2–4<br>40213 Düsseldorf</p></div>
+
+      <h2 data-i18n="ds.24.title">24. Keine automatisierte Entscheidungsfindung</h2>
+      <div data-i18n-html="ds.24.body"><p>Eine automatisierte Entscheidungsfindung einschließlich Profiling im Sinne von Art. 22 DSGVO findet im Rahmen der Anmeldung und Organisation der Iqraa-Schule nicht statt.</p></div>
+
+      <h2 data-i18n="ds.25.title">25. Aktualisierung dieser Datenschutzerklärung</h2>
+      <div data-i18n-html="ds.25.body"><p>Wir können diese Datenschutzerklärung anpassen, wenn sich unsere technischen Verfahren, eingesetzten Dienstleister, organisatorischen Abläufe oder gesetzlichen Anforderungen ändern.</p><p>Es gilt jeweils die auf unserer Website veröffentlichte aktuelle Fassung.</p></div>
+
+      <h2 data-i18n="ds.26.title">26. Schriftarten</h2>
+      <div data-i18n-html="ds.26.body"><p>Die auf dieser Seite verwendeten Schriften werden von unserem eigenen Server geladen. Es wird keine Verbindung zu Google Fonts aufgebaut, und es werden dabei keine Daten an Dritte übertragen.</p></div>
+
+      <h2 data-i18n="ds.27.title">27. Cookies und Reichweitenmessung</h2>
+      <div data-i18n-html="ds.27.body"><p>Diese Seite setzt keine Cookies und verwendet keine Analyse- oder Trackingdienste. Ihre Sprachauswahl wird ausschließlich lokal in Ihrem Browser gespeichert (localStorage) und nicht an uns übertragen.</p></div>
+
+      <p data-i18n="ds.22.kontakt">Zur Ausübung Ihrer Rechte genügt eine Mitteilung an:</p>
+      <dl>
+        <dt data-i18n="imp.verein">Verein</dt>
+        <dd><span data-cfg="impressum.verein">Arabisch-Deutscher-Verein e.V. Beckum</span></dd>
+        <dt data-i18n="imp.anschrift">Anschrift</dt>
+        <dd><span data-cfg="impressum.anschrift">Nordwall 14, 59269 Beckum</span>, <span data-i18n="imp.land">Deutschland</span></dd>
+        <dt data-i18n="imp.vertreten">Vertretungsberechtigter Vorstand</dt>
+        <dd><span data-cfg="impressum.vertreten">Ahmed Ammura (1. Vorsitzender) und Khaled Sharafi (2. Vorsitzender)</span></dd>
+        <dt data-i18n="imp.telefon">Telefon</dt>
+        <dd><a data-cfg-href="tel" href="#" class="ltr" data-cfg="telefon">0177 5883033</a></dd>
+        <dt data-i18n="imp.email">E-Mail</dt>
+        <dd><a data-cfg-href="mail" href="#" class="ltr" data-cfg="email">iqraaschulebeckum@gmail.com</a></dd>
+      </dl>
     </div>
+
   </div>
 </main>
-
 
 <footer class="site-footer">
   <div class="wrap">
@@ -117,7 +193,9 @@
       </div>
       <ul class="footer-links">
         <li><a href="index.html" data-keep-lang="index.html" data-i18n="legal.zurueck">Zurück zur Startseite</a></li>
+        <li><a href="agb.html" data-keep-lang="agb.html" data-i18n="footer.agb">AGB</a></li>
         <li><a href="impressum.html" data-keep-lang="impressum.html" data-i18n="footer.impressum">Impressum</a></li>
+        <li><a href="kuendigung.html" data-keep-lang="kuendigung.html" data-i18n="footer.kuendigung">Verträge kündigen</a></li>
       </ul>
       <div>
         <a data-cfg-href="tel" href="#" class="ltr" data-cfg="telefon">0177 5883033</a><br>

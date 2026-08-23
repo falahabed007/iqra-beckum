@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teilnahme kündigen — Iqraa-Schule Beckum</title>
+<meta name="description" content="Kündigung der Teilnahme an den Arabischkursen der Iqraa-Schule Beckum.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="assets/site.css">
+
+<!-- Reihenfolge ist wichtig: erst Daten, dann Texte, dann die Rechtstexte,
+     zuletzt das Verhalten. i18n-legal.js haengt sich in window.I18N ein und
+     muss deshalb nach i18n.js und vor site.js stehen. -->
+<script src="assets/config.js" defer></script>
+<script src="assets/i18n.js" defer></script>
+<script src="assets/i18n-legal.js" defer></script>
+<script src="assets/site.js" defer></script>
+
+<!--
+  HINWEIS ZUM DEUTSCHEN TEXT IN DIESER DATEI
+  Der deutsche Text steht hier nur als Rueckfallebene - er sorgt dafuer,
+  dass die Seite auch ohne JavaScript lesbar bleibt. Sobald JavaScript
+  laeuft, kommen ALLE Texte aus assets/i18n-legal.js. Aenderungen also
+  immer dort vornehmen.
+-->
+</head>
+
+<body data-page="kuendigung">
+
+<a class="skip" href="#inhalt" data-i18n="skip">Zum Inhalt springen</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html" data-keep-lang="index.html">
+      <img class="brand-logo" src="assets/logo.png" alt="" width="46" height="46">
+      <span class="brand-text">
+        <span class="brand-ar" lang="ar" dir="rtl">&#1605;&#1583;&#1585;&#1587;&#1577; &#1573;&#1602;&#1585;&#1571;</span>
+        <span class="brand-de" data-i18n="brand.sub">Arabischunterricht Beckum</span>
+      </span>
+    </a>
+
+    <div class="lang-switch" role="group" data-i18n-aria="lang.label" aria-label="Sprache w&auml;hlen">
+      <button type="button" data-lang="de" aria-pressed="true"  data-i18n-title="lang.de" title="Auf Deutsch anzeigen">DE</button>
+      <button type="button" data-lang="en" aria-pressed="false" data-i18n-title="lang.en" title="Show in English">EN</button>
+      <button type="button" data-lang="ar" aria-pressed="false" data-i18n-title="lang.ar" title="&#1593;&#1585;&#1590; &#1576;&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;" lang="ar">&#1593;</button>
+    </div>
+  </div>
+</header>
+
+
+<main id="inhalt" class="legal">
+  <div class="wrap">
+
+    <a class="zurueck" href="index.html" data-keep-lang="index.html">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M15 5l-7 7 7 7"/>
+      </svg>
+      <span data-i18n="legal.zurueck">Zur&uuml;ck zur Startseite</span>
+    </a>
+
+    <h1 class="section-title"><span data-i18n="kd.title">Teilnahme kündigen</span></h1>
+
+    <div class="form-intro">
+      <p data-i18n="kd.intro">Mit diesem Formular können Sie die Teilnahme Ihres Kindes an den Arabischkursen der Iqraa-Schule kündigen. Sie brauchen dafür keine Anmeldung und kein Passwort.</p>
+      <p class="formhinweis" data-i18n="kd.fristen">Zu den Laufzeiten und Fristen siehe § 3 der Teilnahmebedingungen: Die Teilnahme läuft zunächst für ein Schulhalbjahr. Wird sie nicht spätestens vier Wochen vor dessen Ablauf gekündigt, verlängert sie sich auf unbestimmte Zeit und kann danach jederzeit mit einer Frist von einem Monat gekündigt werden.</p>
+    </div>
+
+    <div class="form-erfolg" id="kd-erfolg" role="status">
+      <h3 data-i18n="kd.erfolg.title">Ihre Kündigung ist bei uns eingegangen</h3>
+      <p data-i18n="kd.erfolg.text">Vielen Dank. Wir haben Ihre Kündigung aufgenommen und schicken Ihnen die Bestätigung an die angegebene E-Mail-Adresse.</p>
+    </div>
+
+    <form class="anmeldung-form" id="kuendigung-form" novalidate>
+
+      <fieldset>
+        <legend data-i18n="kd.art.legend">Art der Kündigung</legend>
+        <div class="field">
+          <p class="fieldset-label" id="kd-art-frage"><span data-i18n="kd.art.frage">Wie möchten Sie kündigen?</span><span class="req" aria-hidden="true">*</span></p>
+          <div class="choice-list" role="radiogroup" aria-labelledby="kd-art-frage">
+            <label class="choice" for="kd-art-ordentlich">
+              <input type="radio" name="kdArt" id="kd-art-ordentlich" value="ordentlich">
+              <span class="choice-text">
+                <span data-i18n="kd.art.ordentlich">Ordentliche Kündigung</span>
+                <small data-i18n="kd.art.ordentlichSub">zum nächstmöglichen Zeitpunkt nach den Fristen in § 3</small>
+              </span>
+            </label>
+            <label class="choice" for="kd-art-ausserordentlich">
+              <input type="radio" name="kdArt" id="kd-art-ausserordentlich" value="ausserordentlich">
+              <span class="choice-text">
+                <span data-i18n="kd.art.ausser">Außerordentliche Kündigung aus wichtigem Grund</span>
+                <small data-i18n="kd.art.ausserSub">ohne Einhaltung einer Frist, mit Angabe des Grundes</small>
+              </span>
+            </label>
+          </div>
+          <p class="field-error" role="alert"></p>
+        </div>
+
+        <!-- Erscheint nur bei der ausserordentlichen Kuendigung -->
+        <div class="field field--full bedingt" id="kd-grund-feld">
+          <label for="kd-grund"><span data-i18n="kd.grund">Grund der außerordentlichen Kündigung</span><span class="req" aria-hidden="true">*</span></label>
+          <textarea id="kd-grund" name="grund" rows="3"></textarea>
+          <p class="field-hint" data-i18n="kd.grundHint">Nur bei einer außerordentlichen Kündigung nötig.</p>
+          <p class="field-error" role="alert"></p>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="kd.vertrag.legend">Um welche Teilnahme geht es?</legend>
+        <div class="form-grid">
+          <div class="field">
+            <label for="kd-kind-vorname"><span data-i18n="form.kind.vorname">Vorname</span><span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="kd-kind-vorname" name="kindVorname" autocomplete="off" required>
+            <p class="field-error" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="kd-kind-nachname"><span data-i18n="form.kind.nachname">Nachname</span><span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="kd-kind-nachname" name="kindNachname" autocomplete="off" required>
+            <p class="field-error" role="alert"></p>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="kd.person.legend">Wer kündigt?</legend>
+        <div class="form-grid">
+          <div class="field">
+            <label for="kd-eltern-vorname"><span data-i18n="form.eltern.vorname">Vorname</span><span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="kd-eltern-vorname" name="elternVorname" autocomplete="given-name" required>
+            <p class="field-error" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="kd-eltern-nachname"><span data-i18n="form.eltern.nachname">Nachname</span><span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="kd-eltern-nachname" name="elternNachname" autocomplete="family-name" required>
+            <p class="field-error" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="kd-telefon"><span data-i18n="form.eltern.telefon">Telefonnummer</span><span class="req" aria-hidden="true">*</span></label>
+            <input type="tel" id="kd-telefon" name="telefon" autocomplete="tel" required>
+            <p class="field-error" role="alert"></p>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="kd.zeitpunkt.frage">Zu welchem Zeitpunkt soll die Teilnahme enden?</legend>
+        <div class="field">
+          <p class="fieldset-label" id="kd-zeit-frage"><span data-i18n="kd.zeitpunkt.frage">Zu welchem Zeitpunkt soll die Teilnahme enden?</span><span class="req" aria-hidden="true">*</span></p>
+          <div class="choice-list" role="radiogroup" aria-labelledby="kd-zeit-frage">
+            <label class="choice" for="kd-zeit-naechst">
+              <input type="radio" name="kdZeit" id="kd-zeit-naechst" value="naechst">
+              <span class="choice-text">
+                <span data-i18n="kd.zeitpunkt.naechst">Zum nächstmöglichen Zeitpunkt</span>
+              </span>
+            </label>
+            <label class="choice" for="kd-zeit-datum">
+              <input type="radio" name="kdZeit" id="kd-zeit-datum" value="datum">
+              <span class="choice-text">
+                <span data-i18n="kd.zeitpunkt.datum">Zu einem bestimmten Datum</span>
+              </span>
+            </label>
+          </div>
+          <p class="field-error" role="alert"></p>
+        </div>
+
+        <!-- Erscheint nur, wenn ein bestimmtes Datum gewuenscht ist -->
+        <div class="field bedingt bedingt--schmal" id="kd-datum-feld">
+          <label for="kd-datum"><span data-i18n="kd.zeitpunkt.datumLabel">Gewünschtes Datum</span><span class="req" aria-hidden="true">*</span></label>
+          <input type="date" id="kd-datum" name="datum">
+          <p class="field-error" role="alert"></p>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="kd.kontakt.legend">Wohin sollen wir die Bestätigung schicken?</legend>
+        <div class="field field--full">
+          <label for="kd-email"><span data-i18n="form.eltern.email">E-Mail-Adresse</span><span class="req" aria-hidden="true">*</span></label>
+          <input type="email" id="kd-email" name="email" autocomplete="email" dir="ltr" required>
+          <p class="field-hint" data-i18n="kd.kontaktHint">Wir bestätigen Ihnen den Eingang der Kündigung unverzüglich in Textform — mit Datum, Uhrzeit und dem Zeitpunkt, zu dem die Teilnahme endet.</p>
+          <p class="field-error" role="alert"></p>
+        </div>
+      </fieldset>
+
+      <p class="formhinweis" data-i18n="kd.speichern">Bitte drucken Sie diese Seite aus oder speichern Sie sie, bevor Sie absenden — so haben Sie Ihre Erklärung mit Datum und Uhrzeit als Nachweis.</p>
+
+      <div class="hp" aria-hidden="true">
+        <label for="kd-hp">Ort</label>
+        <input type="text" id="kd-hp" name="ort" tabindex="-1" autocomplete="off">
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit" id="kd-submit" data-i18n="kd.submit">Jetzt kündigen</button>
+        <span class="form-status" id="kd-status" role="status" aria-live="polite"></span>
+      </div>
+
+      <div class="form-fehler" id="kd-fehler" role="alert">
+        <h3 data-i18n="kd.fehler.title">Das Absenden hat nicht geklappt</h3>
+        <p data-i18n="kd.fehler.text">Ihre Eingaben stehen noch im Formular. Sie können es gleich noch einmal versuchen. Eine Kündigung ist auch formlos per E-Mail oder über WhatsApp wirksam:</p>
+        <p><a class="btn btn-ghost" id="kd-fehler-mail" data-cfg-href="mail" href="#" data-i18n="kd.fehler.mail">Kündigung per E-Mail senden</a></p>
+      </div>
+
+    </form>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="assets/logo.png" alt="" width="52" height="52">
+        <span>
+          <span class="footer-name" data-i18n="footer.name">Iqraa-Schule für Arabischunterricht</span><br>
+          <small data-i18n="footer.traeger">Arabisch-Deutscher-Verein e.V. Beckum</small>
+        </span>
+      </div>
+      <ul class="footer-links">
+        <li><a href="index.html" data-keep-lang="index.html" data-i18n="legal.zurueck">Zurück zur Startseite</a></li>
+        <li><a href="agb.html" data-keep-lang="agb.html" data-i18n="footer.agb">AGB</a></li>
+        <li><a href="datenschutz.html" data-keep-lang="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a></li>
+        <li><a href="kuendigung.html" data-keep-lang="kuendigung.html" data-i18n="footer.kuendigung">Verträge kündigen</a></li>
+      </ul>
+      <div>
+        <a data-cfg-href="tel" href="#" class="ltr" data-cfg="telefon">0177 5883033</a><br>
+        <a data-cfg-href="mail" href="#" class="ltr" data-cfg="email">iqraaschulebeckum@gmail.com</a>
+      </div>
+    </div>
+    <p class="footer-note">
+      <span>&copy; <span data-jahr>2026</span> <span data-cfg="impressum.verein">Arabisch-Deutscher-Verein e.V. Beckum</span>. <span data-i18n="footer.rechte">Alle Rechte vorbehalten.</span></span>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

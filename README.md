@@ -14,19 +14,25 @@ Eine Seite, drei Sprachen, Online-Anmeldung.
 * **Online-Anmeldung** mit allen Feldern des bisherigen Papierformulars.
   Sie geht per E-Mail an den Verein und landet zugleich in einer Google-Tabelle,
   die sich als Excel-Datei herunterladen lässt.
-* **Impressum und Datenschutzerklärung**, ebenfalls dreisprachig.
+* **Impressum, Datenschutzerklärung und AGB**, ebenfalls dreisprachig.
+* **Kündigung online**: eigene Seite mit dem Formular nach § 312k BGB.
+  Der Zugang wird sofort per E-Mail in Textform bestätigt.
 * Keine Cookies, keine Analysedienste, keine externen Schriften.
 
 ## Dateien
 
 ```
 index.html            Startseite (alles auf einer Seite)
+agb.html              Teilnahmebedingungen, Widerrufsbelehrung, Musterformular
+kuendigung.html       Kündigungsformular nach § 312k BGB
 impressum.html        Pflichtangaben
 datenschutz.html      Datenschutzerklärung
 
 assets/
   config.js           ► Stammdaten — die einzige Datei zum Ausfüllen
   i18n.js             ► alle Texte in DE / EN / AR
+  i18n-legal.js       ► die Rechtstexte in DE / EN / AR
+                        (nur von den drei Rechtsseiten geladen)
   site.css            Gestaltung
   site.js             Sprachumschaltung, Menü, Formular
   fonts.css           Schriften (lokal, kein Google-Aufruf)

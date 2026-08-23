@@ -33,8 +33,18 @@ Alle Vereins- und Kontaktdaten stehen an genau einer Stelle:
 | `impressum.anschrift` | Anschrift des Vereins |
 | `impressum.vertreten` | Vorstand nach § 26 BGB, Vor- und Nachname |
 | `impressum.register` | z. B. „Amtsgericht Beckum, VR 1234" |
+| `impressum.ustId` | Umsatzsteuer-Identifikationsnummer nach § 27a UStG |
 | `impressum.verantwortlich` | Name und Anschrift der inhaltlich verantwortlichen Person |
-| `standDatenschutz` | z. B. „August 2026" |
+| `standDatenschutz`, `standAgb`, `standImpressum` | Stand des jeweiligen Rechtstextes, z. B. „August 2026" |
+
+> **Laufzeit und Fristen** stehen nicht in `config.js`, sondern im Text von
+> § 3 der Teilnahmebedingungen (`assets/i18n-legal.js`, Schlüssel `agb.3.body`)
+> und im Hinweis auf der Kündigungsseite (`kd.fristen`). Wird eine Frist
+> geändert, muss sie an beiden Stellen und in allen drei Sprachen geändert
+> werden. § 309 Nr. 9 BGB setzt die Grenzen: Erstlaufzeit höchstens zwei
+> Jahre, Kündigungsfrist vor Ablauf höchstens drei Monate, und eine
+> stillschweigende Verlängerung nur auf unbestimmte Zeit mit einem
+> Kündigungsrecht von höchstens einem Monat.
 
 Alles, was leer bleibt, erscheint auf der Seite als gelb markierter Kasten
 **BITTE ERGÄNZEN**. Solange irgendwo noch so ein Kasten steht, darf die Seite

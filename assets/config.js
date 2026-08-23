@@ -37,10 +37,16 @@ window.CONFIG = {
     anschrift:      "Nordwall 14, 59269 Beckum",
     vertreten:      "Ahmed Ammura (1. Vorsitzender) und Khaled Sharafi (2. Vorsitzender)",
     register:       "Amtsgericht Münster, VR 5079",
+    ustId:          "DE319676938",
     verantwortlich: "Ahmed Ammura, Nordwall 14, 59269 Beckum"
   },
 
-  /* ---------- Sonstiges ---------- */
+  /* ---------- Sonstiges ----------
+     Die drei "stand"-Werte erscheinen auf den Rechtsseiten als
+     "Stand: ...". Wird ein Rechtstext geaendert, gehoert hier das neue
+     Datum hinein - in allen drei Sprachen zeigt die Seite denselben Wert. */
   domain: "adv-beckum.de",
-  standDatenschutz: "August 2026"
+  standDatenschutz: "August 2026",
+  standAgb:         "August 2026",
+  standImpressum:   "August 2026"
 };

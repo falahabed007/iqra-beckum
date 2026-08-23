@@ -375,8 +375,8 @@
           <label for="kartennummer">
             <span data-i18n="form.zahlung.nummer">Nummer der Münsterlandkarte</span><span class="req" aria-hidden="true">*</span>
           </label>
-          <input type="text" id="kartennummer" name="kartennummer" maxlength="12" autocomplete="off" dir="ltr">
-          <p class="field-hint" data-i18n="form.zahlung.nummerHint">Sie steht auf der Vorderseite der Karte, höchstens 12 Zeichen.</p>
+          <input type="text" id="kartennummer" name="kartennummer" minlength="12" maxlength="12" autocomplete="off" dir="ltr">
+          <p class="field-hint" data-i18n="form.zahlung.nummerHint">Sie steht auf der Vorderseite der Karte und hat genau 12 Zeichen.</p>
           <p class="field-error" role="alert"></p>
         </div>
       </fieldset>
@@ -428,13 +428,37 @@
         </div>
       </fieldset>
 
-      <!-- ---------- Datenschutz ---------- -->
+      <!-- ---------- Teilnahmebedingungen und Datenschutz ----------
+           Bewusst zwei getrennte Haken: die Teilnahmebedingungen und die
+           Einwilligung in die Datenverarbeitung sind zwei verschiedene
+           Sachverhalte und duerfen nicht in eine Zustimmung gebuendelt
+           werden. -->
+      <div class="field">
+        <label class="choice" for="agb-ok">
+          <input type="checkbox" id="agb-ok" required>
+          <span class="choice-text" data-i18n-html="form.agb">Ich habe die <a href="agb.html" data-keep-lang="agb.html">Allgemeinen Geschäftsbedingungen und Teilnahmebedingungen</a> gelesen und erkenne sie an.</span>
+        </label>
+        <p class="field-error" role="alert"></p>
+      </div>
+
       <div class="field">
         <label class="choice" for="datenschutz-ok">
           <input type="checkbox" id="datenschutz-ok" required>
-          <span class="choice-text" data-i18n-html="form.datenschutz">Ich habe die <a href="datenschutz.html#anmeldung">Datenschutzerklärung</a> gelesen und bin damit einverstanden, dass die angegebenen Daten zur Bearbeitung der Anmeldung verarbeitet werden.</span>
+          <span class="choice-text" data-i18n-html="form.datenschutz">Ich habe die <a href="datenschutz.html#anmeldung" data-keep-lang="datenschutz.html#anmeldung">Datenschutzerklärung</a> gelesen und bin damit einverstanden, dass die angegebenen Daten zur Bearbeitung der Anmeldung verarbeitet werden.</span>
         </label>
         <p class="field-error" role="alert"></p>
+      </div>
+
+      <!-- Freiwillig. Das Verlangen nach § 356 Abs. 4 BGB darf nicht
+           erzwungen werden, dieser Haken ist deshalb bewusst kein
+           Pflichtfeld. Ohne ihn beginnt der Unterricht erst nach Ablauf
+           der Widerrufsfrist. -->
+      <div class="field">
+        <label class="choice" for="widerruf-ok">
+          <input type="checkbox" id="widerruf-ok">
+          <span class="choice-text" data-i18n="form.widerruf">Ich verlange ausdrücklich, dass die Iqraa-Schule schon vor Ablauf der Widerrufsfrist mit dem Unterricht beginnt. Mir ist bekannt, dass ich mein Widerrufsrecht verliere, sobald der Verein den Kurs vollständig erbracht hat, und dass ich bei einem Widerruf nach Unterrichtsbeginn anteiligen Wertersatz schulde.</span>
+        </label>
+        <p class="field-hint" data-i18n="form.widerrufHint">Freiwillig. Ohne dieses Häkchen kann Ihr Kind erst nach Ablauf der Widerrufsfrist von 14 Tagen am Unterricht teilnehmen; die Kursgebühr wird dann entsprechend angepasst.</p>
       </div>
 
       <!-- Für Menschen unsichtbar, fängt automatisierte Eintragungen ab -->
@@ -545,8 +569,10 @@
 
       <ul class="footer-links">
         <li><a href="#anmeldung" data-i18n="footer.anmeldung">Anmeldung</a></li>
+        <li><a href="agb.html" data-keep-lang="agb.html" data-i18n="footer.agb">AGB</a></li>
         <li><a href="impressum.html" data-keep-lang="impressum.html" data-i18n="footer.impressum">Impressum</a></li>
         <li><a href="datenschutz.html" data-keep-lang="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a></li>
+        <li><a href="kuendigung.html" data-keep-lang="kuendigung.html" data-i18n="footer.kuendigung">Verträge kündigen</a></li>
       </ul>
 
       <div>

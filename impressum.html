@@ -9,9 +9,22 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/fonts.css">
 <link rel="stylesheet" href="assets/site.css">
+
+<!-- Reihenfolge ist wichtig: erst Daten, dann Texte, dann die Rechtstexte,
+     zuletzt das Verhalten. i18n-legal.js haengt sich in window.I18N ein und
+     muss deshalb nach i18n.js und vor site.js stehen. -->
 <script src="assets/config.js" defer></script>
 <script src="assets/i18n.js" defer></script>
+<script src="assets/i18n-legal.js" defer></script>
 <script src="assets/site.js" defer></script>
+
+<!--
+  HINWEIS ZUM DEUTSCHEN TEXT IN DIESER DATEI
+  Der deutsche Text steht hier nur als Rueckfallebene - er sorgt dafuer,
+  dass die Seite auch ohne JavaScript lesbar bleibt. Sobald JavaScript
+  laeuft, kommen ALLE Texte aus assets/i18n-legal.js. Aenderungen also
+  immer dort vornehmen.
+-->
 </head>
 
 <body data-page="impressum">
@@ -23,15 +36,15 @@
     <a class="brand" href="index.html" data-keep-lang="index.html">
       <img class="brand-logo" src="assets/logo.png" alt="" width="46" height="46">
       <span class="brand-text">
-        <span class="brand-ar" lang="ar" dir="rtl">مدرسة إقرأ</span>
+        <span class="brand-ar" lang="ar" dir="rtl">&#1605;&#1583;&#1585;&#1587;&#1577; &#1573;&#1602;&#1585;&#1571;</span>
         <span class="brand-de" data-i18n="brand.sub">Arabischunterricht Beckum</span>
       </span>
     </a>
 
-    <div class="lang-switch" role="group" data-i18n-aria="lang.label" aria-label="Sprache wählen">
+    <div class="lang-switch" role="group" data-i18n-aria="lang.label" aria-label="Sprache w&auml;hlen">
       <button type="button" data-lang="de" aria-pressed="true"  data-i18n-title="lang.de" title="Auf Deutsch anzeigen">DE</button>
       <button type="button" data-lang="en" aria-pressed="false" data-i18n-title="lang.en" title="Show in English">EN</button>
-      <button type="button" data-lang="ar" aria-pressed="false" data-i18n-title="lang.ar" title="عرض بالعربية" lang="ar">ع</button>
+      <button type="button" data-lang="ar" aria-pressed="false" data-i18n-title="lang.ar" title="&#1593;&#1585;&#1590; &#1576;&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;" lang="ar">&#1593;</button>
     </div>
   </div>
 </header>
@@ -44,7 +57,7 @@
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M15 5l-7 7 7 7"/>
       </svg>
-      <span data-i18n="legal.zurueck">Zurück zur Startseite</span>
+      <span data-i18n="legal.zurueck">Zur&uuml;ck zur Startseite</span>
     </a>
 
     <h1 class="section-title"><span data-i18n="imp.title">Impressum</span></h1>
@@ -52,45 +65,54 @@
     <div class="prose">
       <p data-i18n="imp.intro">Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG).</p>
 
+      <h2 data-i18n="imp.anbieter">Anbieter</h2>
       <dl>
         <dt data-i18n="imp.verein">Verein</dt>
-        <dd data-cfg="impressum.verein">Arabisch-Deutscher-Verein e.V. Beckum</dd>
-
+        <dd><span data-cfg="impressum.verein">Arabisch-Deutscher-Verein e.V. Beckum</span></dd>
         <dt data-i18n="imp.anschrift">Anschrift</dt>
-        <dd data-cfg="impressum.anschrift">Nordwall 14, 59269 Beckum</dd>
-
-        <dt data-i18n="imp.vertreten">Vertreten durch</dt>
-        <dd data-cfg="impressum.vertreten">Ahmed Ammura (1. Vorsitzender) und Khaled Sharafi (2. Vorsitzender)</dd>
-
-        <dt data-i18n="imp.register">Registereintrag</dt>
-        <dd data-cfg="impressum.register">Amtsgericht Münster, VR 5079</dd>
-
+        <dd><span data-cfg="impressum.anschrift">Nordwall 14, 59269 Beckum</span>, <span data-i18n="imp.land">Deutschland</span></dd>
+        <dt data-i18n="imp.vertreten">Vertretungsberechtigter Vorstand</dt>
+        <dd><span data-cfg="impressum.vertreten">Ahmed Ammura (1. Vorsitzender) und Khaled Sharafi (2. Vorsitzender)</span></dd>
+        <dt data-i18n="imp.register">Vereinsregister</dt>
+        <dd><span data-cfg="impressum.register">Amtsgericht M&uuml;nster, VR 5079</span></dd>
+        <dt data-i18n="imp.ustid">Umsatzsteuer-Identifikationsnummer</dt>
+        <dd><span class="ltr" data-cfg="impressum.ustId">DE319676938</span> <small data-i18n="imp.ustidHinweis">gemäß § 27a Umsatzsteuergesetz</small></dd>
         <dt data-i18n="imp.telefon">Telefon</dt>
         <dd><a data-cfg-href="tel" href="#" class="ltr" data-cfg="telefon">0177 5883033</a></dd>
-
         <dt data-i18n="imp.email">E-Mail</dt>
         <dd><a data-cfg-href="mail" href="#" class="ltr" data-cfg="email">iqraaschulebeckum@gmail.com</a></dd>
-
-        <dt data-i18n="imp.verantwortlich">Verantwortlich für den Inhalt</dt>
-        <dd data-cfg="impressum.verantwortlich">Ahmed Ammura, Nordwall 14, 59269 Beckum</dd>
+        <dt data-i18n="imp.verantwortlich">Verantwortlich für redaktionelle Inhalte</dt>
+        <dd><span data-cfg="impressum.verantwortlich">Ahmed Ammura, Nordwall 14, 59269 Beckum</span></dd>
       </dl>
 
-      <h2 data-i18n="imp.haftung.title">Haftung für Inhalte</h2>
-      <p data-i18n="imp.haftung.text">Als Diensteanbieter sind wir für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Wir sind jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Sobald uns eine konkrete Rechtsverletzung bekannt wird, entfernen wir die betreffenden Inhalte umgehend.</p>
+      <h2 data-i18n="imp.haftung.title">Haftung für eigene Inhalte</h2>
+      <div data-i18n-html="imp.haftung.body"><p>Die Inhalte unserer Website wurden nach bestem Wissen und mit größtmöglicher Sorgfalt erstellt.</p><p>Als Diensteanbieter sind wir nach den allgemeinen gesetzlichen Vorschriften für eigene Inhalte auf dieser Website verantwortlich.</p><p>Wir sind jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder ohne konkreten Anlass nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.</p><p>Gesetzliche Verpflichtungen zur Entfernung oder Sperrung rechtswidriger Inhalte bleiben unberührt.</p><p>Sollten uns konkrete Rechtsverletzungen bekannt werden, prüfen wir die betreffenden Inhalte und entfernen oder sperren sie, soweit dies gesetzlich erforderlich ist.</p></div>
 
-      <h2 data-i18n="imp.links.title">Haftung für Links</h2>
-      <p data-i18n="imp.links.text">Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Für diese fremden Inhalte ist stets der jeweilige Anbieter verantwortlich. Bei Bekanntwerden von Rechtsverletzungen entfernen wir solche Links umgehend.</p>
+      <h2 data-i18n="imp.links.title">Haftung für externe Links</h2>
+      <div data-i18n-html="imp.links.body"><p>Unsere Website kann Links zu externen Internetseiten Dritter enthalten.</p><p>Auf die Inhalte dieser externen Seiten haben wir keinen Einfluss. Für die Inhalte der verlinkten Seiten ist grundsätzlich der jeweilige Betreiber verantwortlich.</p><p>Zum Zeitpunkt der Verlinkung waren für uns keine Rechtsverstöße erkennbar.</p><p>Eine dauerhafte inhaltliche Kontrolle externer Seiten ist ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Sollten uns konkrete Rechtsverletzungen bekannt werden, werden wir die betreffenden Links prüfen und gegebenenfalls entfernen.</p></div>
 
       <h2 data-i18n="imp.urheber.title">Urheberrecht</h2>
-      <p data-i18n="imp.urheber.text">Die auf dieser Seite erstellten Inhalte unterliegen dem deutschen Urheberrecht. Das Logo ist Eigentum des Arabisch-Deutschen-Vereins e.V. Beckum. Die verwendeten Schriften (Bitter, Karla, Cairo, Noto Naskh Arabic) stehen unter der SIL Open Font License 1.1.</p>
+      <div data-i18n-html="imp.urheber.body"><p>Die auf dieser Website veröffentlichten Inhalte, Texte, Grafiken, Bilder und sonstigen Werke unterliegen dem deutschen Urheberrecht, soweit sie nicht ausdrücklich unter einer anderen Lizenz stehen.</p><p>Das Logo des Arabisch-Deutschen-Vereins e.V. Beckum ist Eigentum des Vereins.</p><p>Eine Vervielfältigung, Bearbeitung, Verbreitung oder sonstige Verwertung urheberrechtlich geschützter Inhalte außerhalb der gesetzlichen Grenzen bedarf der vorherigen Zustimmung des jeweiligen Rechteinhabers.</p><p>Die auf der Website verwendeten Schriftarten werden unter den jeweils geltenden Lizenzbedingungen verwendet. Die Schriften Bitter, Karla, Cairo und Noto Naskh Arabic stehen unter der SIL Open Font License 1.1.</p></div>
 
       <h2 data-i18n="imp.streit.title">Streitbeilegung</h2>
-      <p data-i18n="imp.streit.text">Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+      <div data-i18n-html="imp.streit.body"><p>Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen, soweit keine gesetzliche Verpflichtung hierzu besteht.</p></div>
+
+      <h2 data-i18n="imp.datenschutz.title">Datenschutz</h2>
+      <div data-i18n-html="imp.datenschutz.body"><p>Informationen über die Verarbeitung personenbezogener Daten finden Sie in unserer gesonderten <a href="datenschutz.html" data-keep-lang="datenschutz.html">Datenschutzerklärung</a>.</p></div>
+
+      <h2 data-i18n="imp.traeger.title">Verantwortlichkeit des Vereins</h2>
+      <div data-i18n-html="imp.traeger.body"><p>Soweit auf dieser Website Informationen über die Iqraa-Schule, den Arabisch-Deutschen-Verein e.V. Beckum, Unterrichtsangebote oder Veranstaltungen bereitgestellt werden, erfolgt dies im Verantwortungsbereich des oben genannten Vereins.</p></div>
+
+      <p class="rechtshinweis">
+        <span data-i18n="legal.massgeblich">Rechtlich maßgeblich ist die deutsche Fassung dieser Seite. Die englische und die arabische Übersetzung dienen dem besseren Verständnis.</span>
+        <br>
+        <small><span data-i18n="imp.stand">Stand:</span>
+        <span data-cfg="standImpressum">August 2026</span></small>
+      </p>
     </div>
 
   </div>
 </main>
-
 
 <footer class="site-footer">
   <div class="wrap">
@@ -104,7 +126,9 @@
       </div>
       <ul class="footer-links">
         <li><a href="index.html" data-keep-lang="index.html" data-i18n="legal.zurueck">Zurück zur Startseite</a></li>
+        <li><a href="agb.html" data-keep-lang="agb.html" data-i18n="footer.agb">AGB</a></li>
         <li><a href="datenschutz.html" data-keep-lang="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a></li>
+        <li><a href="kuendigung.html" data-keep-lang="kuendigung.html" data-i18n="footer.kuendigung">Verträge kündigen</a></li>
       </ul>
       <div>
         <a data-cfg-href="tel" href="#" class="ltr" data-cfg="telefon">0177 5883033</a><br>

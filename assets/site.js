@@ -4,6 +4,7 @@
      2. Stammdaten aus config.js in die Seite schreiben
      3. Menue auf schmalen Bildschirmen
      4. Anmeldeformular: Pruefung, Versand, Ausweichweg ueber WhatsApp
+     5. Kuendigungsformular nach § 312k BGB
 
    Kein Framework, keine externen Abhaengigkeiten.
    ========================================================================== */
@@ -22,6 +23,39 @@
    * ------------------------------------------------------------------ */
   function alle(sel, wurzel) { return Array.prototype.slice.call((wurzel || document).querySelectorAll(sel)); }
   function eins(sel, wurzel) { return (wurzel || document).querySelector(sel); }
+
+  /* --- Nur lateinische Schrift ---
+     Erlaubt sind die lateinischen Unicode-Bloecke, also auch ä, ö, ü, ß
+     und franzoesische Akzente, dazu Ziffern, Satz- und Leerzeichen.
+     Arabisch, Kyrillisch und alles andere faellt durch. */
+  var NICHT_LATEIN = /[^\s\u0020-\u024F\u1E00-\u1EFF\u2010-\u2027]/;
+
+  /* --- Fehler am Feld anzeigen und wieder loeschen ---
+     Beide Formulare der Seite - Anmeldung und Kuendigung - benutzen das. */
+  function fehlerZeigen(feld, meldung) {
+    var huelle = feld.closest(".field");
+    if (!huelle) return;
+    huelle.classList.add("has-error");
+    var ausgabe = eins(".field-error", huelle);
+    if (ausgabe) ausgabe.textContent = meldung;
+    if (feld.type !== "radio" && feld.type !== "checkbox") feld.setAttribute("aria-invalid", "true");
+  }
+
+  function fehlerLoeschen(feld) {
+    var huelle = feld.closest(".field");
+    if (!huelle) return;
+    huelle.classList.remove("has-error");
+    feld.removeAttribute("aria-invalid");
+  }
+
+  /** Meldet jede Eingabe zurueck, damit ein Fehler verschwindet, sobald
+   *  der Mensch etwas aendert. */
+  function fehlerBeiEingabeLoeschen(form) {
+    alle("input, select, textarea", form).forEach(function (feld) {
+      feld.addEventListener("input", function () { fehlerLoeschen(feld); });
+      feld.addEventListener("change", function () { fehlerLoeschen(feld); });
+    });
+  }
 
   function t(schluessel, sprache) {
     var tabelle = I18N[sprache || aktuell] || I18N.de || {};
@@ -95,8 +129,21 @@
     // stimmt, wenn localStorage im Browser gesperrt ist.
     alle("a[data-keep-lang]").forEach(function (a) {
       var ziel = a.getAttribute("data-keep-lang");
-      a.setAttribute("href", sprache === "de" ? ziel : ziel + "?lang=" + sprache);
+      if (sprache === "de") { a.setAttribute("href", ziel); return; }
+      // Ein Sprungziel muss hinten stehen: "seite.html?lang=ar#abschnitt".
+      // Andersherum steckte "?lang=ar" im Sprungziel - die Seite waere weder
+      // an die richtige Stelle gesprungen noch in der richtigen Sprache
+      // aufgegangen.
+      var teile = ziel.split("#");
+      a.setAttribute("href", teile[0] + "?lang=" + sprache
+                             + (teile[1] ? "#" + teile[1] : ""));
     });
+
+    // Zum Schluss die Stammdaten nachziehen: der Sprachwechsel hat gerade
+    // den Inhalt aller [data-i18n-html] neu geschrieben. Stehen darin
+    // [data-cfg]-Stellen - etwa die Anschrift in der Widerrufsbelehrung -,
+    // waeren sie sonst wieder leer.
+    stammdatenEinsetzen();
 
     if (merken) {
       try { window.localStorage.setItem(SPEICHER, sprache); } catch (e) { /* egal */ }
@@ -243,9 +290,13 @@
        eine Beschreibung, aus der sich alles Weitere ergibt. */
     var karteHinweis = eins("#zahlung-hinweis");
 
+    // "laenge" verlangt eine genaue Zeichenzahl; die Nummer der
+    // Muensterlandkarte hat immer genau zwoelf Zeichen. Leerzeichen zaehlen
+    // nicht mit, damit eine gruppiert eingetippte Nummer nicht durchfaellt.
     var bedingte = [
       { gruppe: "ehemalig",     wert: "ja",                huelle: eins("#gruppe-feld"),       feld: eins("#gruppe") },
-      { gruppe: "zahlung",      wert: "muensterlandkarte", huelle: eins("#kartennummer-feld"), feld: eins("#kartennummer") },
+      { gruppe: "zahlung",      wert: "muensterlandkarte", huelle: eins("#kartennummer-feld"), feld: eins("#kartennummer"),
+        laenge: 12, laengeMeldung: "form.zahlung.nummerLaenge" },
       { gruppe: "hatAllergien", wert: "ja",                huelle: eins("#allergien-feld"),    feld: eins("#allergien") }
     ];
 
@@ -336,34 +387,9 @@
       });
     }
 
-    /* --- Nur lateinische Schrift ---
-       Erlaubt sind die lateinischen Unicode-Bloecke, also auch ä, ö, ü, ß
-       und franzoesische Akzente, dazu Ziffern, Satz- und Leerzeichen.
-       Arabisch, Kyrillisch und alles andere faellt durch. */
-    var NICHT_LATEIN = /[^\s\u0020-\u024F\u1E00-\u1EFF\u2010-\u2027]/;
+    fehlerBeiEingabeLoeschen(form);
 
     /* --- Pruefung --- */
-    function fehlerZeigen(feld, meldung) {
-      var huelle = feld.closest(".field");
-      if (!huelle) return;
-      huelle.classList.add("has-error");
-      var ausgabe = eins(".field-error", huelle);
-      if (ausgabe) ausgabe.textContent = meldung;
-      if (feld.type !== "radio" && feld.type !== "checkbox") feld.setAttribute("aria-invalid", "true");
-    }
-
-    function fehlerLoeschen(feld) {
-      var huelle = feld.closest(".field");
-      if (!huelle) return;
-      huelle.classList.remove("has-error");
-      feld.removeAttribute("aria-invalid");
-    }
-
-    alle("input, select, textarea", form).forEach(function (feld) {
-      feld.addEventListener("input", function () { fehlerLoeschen(feld); });
-      feld.addEventListener("change", function () { fehlerLoeschen(feld); });
-    });
-
     function pruefen() {
       var ersterFehler = null;
 
@@ -411,21 +437,31 @@
         // Ein Feld, das diese Auswahl aufgeklappt hat, ist dann Pflicht.
         bedingte.forEach(function (b) {
           if (b.gruppe !== name || !b.feld || !istGewaehlt(b)) return;
-          if (!b.feld.value.trim()) {
+          var wert = b.feld.value.trim();
+          if (!wert) {
             fehlerZeigen(b.feld, t("form.fehlt"));
+            if (!ersterFehler) ersterFehler = b.feld;
+          } else if (b.laenge && wert.replace(/\s/g, "").length !== b.laenge) {
+            fehlerZeigen(b.feld, t(b.laengeMeldung));
             if (!ersterFehler) ersterFehler = b.feld;
           }
         });
       });
 
-      // Datenschutz-Haken
-      var haken = eins("#datenschutz-ok");
-      if (haken && !haken.checked) {
-        fehlerZeigen(haken, t("form.fehltHaken"));
-        if (!ersterFehler) ersterFehler = haken;
-      } else if (haken) {
-        fehlerLoeschen(haken);
-      }
+      // Die beiden Haken - Teilnahmebedingungen und Datenschutz - in der
+      // Reihenfolge, in der sie im Formular stehen, damit der Sprung zum
+      // ersten Fehler von oben nach unten laeuft.
+      [["#agb-ok", "form.fehltHakenAgb"],
+       ["#datenschutz-ok", "form.fehltHaken"]].forEach(function (paar) {
+        var haken = eins(paar[0]);
+        if (!haken) return;
+        if (!haken.checked) {
+          fehlerZeigen(haken, t(paar[1]));
+          if (!ersterFehler) ersterFehler = haken;
+        } else {
+          fehlerLoeschen(haken);
+        }
+      });
 
       return ersterFehler;
     }
@@ -435,6 +471,10 @@
       var gewaehlt = function (name) {
         var r = eins('input[name="' + name + '"]:checked', form);
         return r ? r.value : "";
+      };
+      var angehakt = function (auswahl) {
+        var h = eins(auswahl);
+        return (h && h.checked) ? "ja" : "nein";
       };
       return {
         kindVorname:      eins("#kind-vorname").value.trim(),
@@ -452,6 +492,13 @@
         hatAllergien:     gewaehlt("hatAllergien"),
         allergien:        bedingterWert("hatAllergien"),
         fotos:            gewaehlt("fotos"),
+        // Beide Einwilligungen werden mitgeschickt und in der Tabelle
+        // festgehalten - der Verein muss sie im Zweifel nachweisen koennen.
+        agb:              angehakt("#agb-ok"),
+        datenschutz:      angehakt("#datenschutz-ok"),
+        // Freiwillig: das Verlangen nach § 356 Abs. 4 BGB, schon vor Ablauf
+        // der Widerrufsfrist mit dem Unterricht zu beginnen.
+        widerruf:         angehakt("#widerruf-ok"),
         sprache:          aktuell,
         seite:            window.location.href,
         // Spamschutz
@@ -493,6 +540,11 @@
       if (d.allergien) zeilen.push(t("form.allergien.text") + " " + d.allergien);
 
       zeilen.push("", fotos);
+      // Der Ausweichweg soll dieselbe Bestaetigung tragen wie das Formular.
+      // Der Satz steht in i18n.js mit einem Link darin; fuer WhatsApp bleibt
+      // davon nur der Text uebrig.
+      if (d.agb === "ja") zeilen.push(t("form.agb").replace(/<[^>]+>/g, ""));
+
       return "https://wa.me/" + (CFG.whatsapp || "") + "?text=" + encodeURIComponent(zeilen.join("\n"));
     }
 
@@ -583,6 +635,188 @@
   }
 
 
+
+  /* ------------------------------------------------------------------ *
+   * 5. Kuendigungsformular
+   *
+   * Aufbau und Beschriftung folgen § 312k BGB: Art der Kuendigung, Grund
+   * bei der ausserordentlichen, Bezeichnung des Vertrags, eindeutige
+   * Zuordnung der Person, Zeitpunkt der Beendigung und Kontaktdaten fuer
+   * die Bestaetigung. Die E-Mail-Adresse ist hier Pflicht - ohne sie
+   * koennten wir den Zugang nicht in Textform bestaetigen.
+   * ------------------------------------------------------------------ */
+  function kuendigungVorbereiten() {
+    var form = eins("#kuendigung-form");
+    if (!form) return;
+
+    var geoeffnetUm = Date.now();
+    var statusZeile = eins("#kd-status");
+    var erfolgKasten = eins("#kd-erfolg");
+    var fehlerKasten = eins("#kd-fehler");
+    var absendeKnopf = eins("#kd-submit");
+
+    // Ein Kuendigungstermin in der Vergangenheit ergibt keinen Sinn.
+    var datumFeld = eins("#kd-datum");
+    if (datumFeld) datumFeld.min = new Date().toISOString().slice(0, 10);
+
+    /* --- Felder, die erst nach einer Auswahl erscheinen --- */
+    var bedingte = [
+      { gruppe: "kdArt",  wert: "ausserordentlich", huelle: eins("#kd-grund-feld"), feld: eins("#kd-grund") },
+      { gruppe: "kdZeit", wert: "datum",            huelle: eins("#kd-datum-feld"), feld: datumFeld }
+    ];
+
+    function istGewaehlt(b) {
+      var r = eins('input[name="' + b.gruppe + '"]:checked', form);
+      return !!r && r.value === b.wert;
+    }
+
+    function bedingteSpiegeln() {
+      bedingte.forEach(function (b) {
+        var an = istGewaehlt(b);
+        if (b.huelle) b.huelle.classList.toggle("is-visible", an);
+        if (!an && b.feld) { b.feld.value = ""; fehlerLoeschen(b.feld); }
+      });
+    }
+
+    bedingte.forEach(function (b) {
+      alle('input[name="' + b.gruppe + '"]', form).forEach(function (r) {
+        r.addEventListener("change", bedingteSpiegeln);
+      });
+    });
+    bedingteSpiegeln();
+    fehlerBeiEingabeLoeschen(form);
+
+    function pruefen() {
+      var ersterFehler = null;
+      function melden(feld, schluessel) {
+        fehlerZeigen(feld, t(schluessel));
+        if (!ersterFehler) ersterFehler = feld;
+      }
+
+      ["kdArt", "kdZeit"].forEach(function (name) {
+        var gruppe = alle('input[name="' + name + '"]', form);
+        if (!gruppe.length) return;
+        if (!gruppe.some(function (r) { return r.checked; })) {
+          melden(gruppe[0], "form.fehltAuswahl");
+          return;
+        }
+        fehlerLoeschen(gruppe[0]);
+        bedingte.forEach(function (b) {
+          if (b.gruppe !== name || !b.feld || !istGewaehlt(b)) return;
+          if (!b.feld.value.trim()) melden(b.feld, "form.fehlt");
+        });
+      });
+
+      alle("input[required], textarea[required]", form).forEach(function (feld) {
+        if (feld.type === "radio" || feld.type === "checkbox") return;
+        if (!feld.value.trim()) { melden(feld, "form.fehlt"); }
+        else { fehlerLoeschen(feld); }
+      });
+
+      alle('input[type="text"], textarea', form).forEach(function (feld) {
+        if (feld.id === "kd-hp" || !feld.value.trim()) return;
+        if (NICHT_LATEIN.test(feld.value)) melden(feld, "form.nurLatein");
+      });
+
+      // Ohne gueltige Adresse kaeme die Bestaetigung nirgends an.
+      var mail = eins("#kd-email");
+      if (mail && mail.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail.value.trim())) {
+        melden(mail, "form.emailUngueltig");
+      }
+
+      return ersterFehler;
+    }
+
+    function daten() {
+      var gewaehlt = function (name) {
+        var r = eins('input[name="' + name + '"]:checked', form);
+        return r ? r.value : "";
+      };
+      var bedingterWert = function (name) {
+        for (var i = 0; i < bedingte.length; i++) {
+          var b = bedingte[i];
+          if (b.gruppe === name) return (b.feld && istGewaehlt(b)) ? b.feld.value.trim() : "";
+        }
+        return "";
+      };
+      return {
+        art:            "kuendigung",
+        kuendigungsart: gewaehlt("kdArt"),
+        grund:          bedingterWert("kdArt"),
+        kindVorname:    eins("#kd-kind-vorname").value.trim(),
+        kindNachname:   eins("#kd-kind-nachname").value.trim(),
+        elternVorname:  eins("#kd-eltern-vorname").value.trim(),
+        elternNachname: eins("#kd-eltern-nachname").value.trim(),
+        telefon:        eins("#kd-telefon").value.trim(),
+        email:          eins("#kd-email").value.trim(),
+        zeitpunktArt:   gewaehlt("kdZeit"),
+        zeitpunkt:      bedingterWert("kdZeit"),
+        sprache:        aktuell,
+        seite:          window.location.href,
+        hp:             eins("#kd-hp") ? eins("#kd-hp").value : "",
+        dauer:          Math.round((Date.now() - geoeffnetUm) / 1000)
+      };
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      var ersterFehler = pruefen();
+      if (ersterFehler) {
+        statusZeile.textContent = t("form.pruefen");
+        statusZeile.setAttribute("data-state", "error");
+        ersterFehler.focus();
+        return;
+      }
+
+      var d = daten();
+
+      // Ohne eingerichteten Endpoint bleibt der Weg ueber E-Mail. Eine
+      // Kuendigung ist auch formlos wirksam, es geht also nichts verloren.
+      if (!CFG.anmeldungEndpoint) { zeigeFehler(); return; }
+
+      absendeKnopf.disabled = true;
+      statusZeile.setAttribute("data-state", "sending");
+      statusZeile.textContent = t("form.sending");
+      if (fehlerKasten) fehlerKasten.classList.remove("is-visible");
+
+      fetch(CFG.anmeldungEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(d)
+      })
+        .then(function (r) { return r.json().catch(function () { return { ok: r.ok }; }); })
+        .then(function (antwort) {
+          if (antwort && antwort.ok) { zeigeErfolg(); } else { zeigeFehler(); }
+        })
+        .catch(function () { zeigeFehler(); })
+        .then(function () {
+          absendeKnopf.disabled = false;
+          statusZeile.textContent = "";
+          statusZeile.removeAttribute("data-state");
+        });
+    });
+
+    function zeigeErfolg() {
+      form.hidden = true;
+      if (fehlerKasten) fehlerKasten.classList.remove("is-visible");
+      if (erfolgKasten) {
+        erfolgKasten.classList.add("is-visible");
+        erfolgKasten.setAttribute("tabindex", "-1");
+        erfolgKasten.focus();
+        erfolgKasten.scrollIntoView({ block: "center" });
+      }
+    }
+
+    function zeigeFehler() {
+      if (fehlerKasten) {
+        fehlerKasten.classList.add("is-visible");
+        fehlerKasten.setAttribute("tabindex", "-1");
+        fehlerKasten.focus();
+      }
+    }
+  }
+
   /* ------------------------------------------------------------------ *
    * Start
    * ------------------------------------------------------------------ */
@@ -590,6 +824,7 @@
     stammdatenEinsetzen();
     menueVorbereiten();
     formularVorbereiten();
+    kuendigungVorbereiten();
 
     alle(".lang-switch button").forEach(function (b) {
       b.addEventListener("click", function () {
