@@ -114,7 +114,9 @@ var SPALTEN = [
   'Sprache',
   'AGB bestätigt',
   'Datenschutz bestätigt',
-  'Vorzeitiger Unterrichtsbeginn'
+  'Vorzeitiger Unterrichtsbeginn',
+  'Mail an Verein',
+  'Mail an Eltern'
 ];
 
 
@@ -239,10 +241,11 @@ function doPost(e) {
     // --- In die Tabelle schreiben -------------------------------------
     // Die Sperre verhindert, dass zwei gleichzeitige Anmeldungen in
     // dieselbe Zeile schreiben.
+    var zeile;
     var sperre = LockService.getScriptLock();
     sperre.waitLock(20000);
     try {
-      inTabelleSchreiben(d, sprache);
+      zeile = inTabelleSchreiben(d, sprache);
     } finally {
       sperre.releaseLock();
     }
@@ -258,7 +261,16 @@ function doPost(e) {
     var mailVerein = versucheStill(function () { mailAnVerein(d, sprache); });
     var mailEltern = versucheStill(function () { mailAnEltern(d, sprache); });
 
-    return antwort({ ok: true, mailVerein: mailVerein, mailEltern: mailEltern });
+    // Das Ergebnis gehoert in die Tabelle, nicht nur in die Antwort - sonst
+    // ist spaeter nicht mehr nachvollziehbar, welche Mail gefehlt hat.
+    versucheStill(function () { mailStatusEintragen(zeile, mailVerein, mailEltern); });
+
+    return antwort({
+      ok: true,
+      mailVerein: mailVerein,
+      mailEltern: mailEltern,
+      kontingentRest: mailKontingent()
+    });
 
   } catch (fehler) {
     return antwort({ ok: false, fehler: String(fehler) });
@@ -391,6 +403,25 @@ function inTabelleSchreiben(d, sprache) {
     b.getRange(zeile, 4).setNumberFormat('dd.mm.yyyy');
     SpreadsheetApp.flush();
   });
+
+  return zeile;
+}
+
+
+/**
+ * Haelt fest, ob die beiden E-Mails rausgegangen sind.
+ *
+ * Ohne das bleibt eine gescheiterte Mail unsichtbar: die Anmeldung steht in
+ * der Tabelle, aber niemand weiss, dass der Verein nie benachrichtigt wurde
+ * oder die Familie ihre Widerrufsbelehrung nie bekommen hat.
+ */
+function mailStatusEintragen(zeile, anVerein, anEltern) {
+  if (!zeile) return;
+  var b = blatt();
+  var spalte = SPALTEN.indexOf('Mail an Verein') + 1;
+  b.getRange(zeile, spalte).setValue(anVerein ? 'ja' : 'FEHLGESCHLAGEN');
+  b.getRange(zeile, spalte + 1).setValue(anEltern ? 'ja' : 'FEHLGESCHLAGEN');
+  SpreadsheetApp.flush();
 }
 
 
@@ -904,6 +935,23 @@ function antwort(objekt) {
     .createTextOutput(JSON.stringify(objekt))
     .setMimeType(ContentService.MimeType.JSON);
 }
+
+/**
+ * Wie viele Empfaenger heute noch uebrig sind. Ein Gmail-Konto darf ueber
+ * Apps Script nur eine begrenzte Zahl von E-Mails pro Tag verschicken; ist
+ * das Kontingent aufgebraucht, wirft MailApp und die Mail geht nicht raus.
+ * Jede Anmeldung kostet zwei Empfaenger, jede Kuendigung ebenfalls.
+ */
+function mailKontingent() {
+  try { return MailApp.getRemainingDailyQuota(); } catch (e) { return null; }
+}
+
+
+/** Im Editor ausfuehren: zeigt, wie viele E-Mails heute noch moeglich sind. */
+function testKontingent() {
+  console.log('Heute noch moegliche Empfaenger: ' + mailKontingent());
+}
+
 
 /** Fuehrt etwas aus und schluckt einen moeglichen Fehler, damit eine
  *  fehlgeschlagene E-Mail die schon gespeicherte Anmeldung nicht kippt.
