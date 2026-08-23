@@ -167,11 +167,18 @@ function doPost(e) {
     // --- Pflichtangaben ----------------------------------------------
     var pflicht = ['kindVorname', 'kindNachname', 'kindGeburtsdatum',
                    'elternVorname', 'elternNachname', 'telefon', 'whatsapp',
-                   'ehemalig', 'zahlung', 'hatAllergien', 'fotos'];
+                   'email', 'ehemalig', 'zahlung', 'hatAllergien', 'fotos'];
     for (var i = 0; i < pflicht.length; i++) {
       if (!String(d[pflicht[i]] || '').trim()) {
         return antwort({ ok: false, fehler: 'Feld fehlt: ' + pflicht[i] });
       }
+    }
+
+    // Ohne brauchbare Adresse erreicht die Bestaetigung mitsamt der
+    // Widerrufsbelehrung die Eltern nicht - und die muss ihnen in Textform
+    // zugehen.
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(d.email).trim())) {
+      return antwort({ ok: false, fehler: 'E-Mail-Adresse ist ungültig.' });
     }
 
     // Alter: die Schule nimmt Kinder erst ab MINDESTALTER Jahren auf.
@@ -244,12 +251,14 @@ function doPost(e) {
     // Falls der Mailversand scheitert (z.B. Tageskontingent erschoepft),
     // ist die Anmeldung trotzdem schon in der Tabelle. Deshalb faengt
     // jeder Versand seinen Fehler einzeln ab.
-    versucheStill(function () { mailAnVerein(d, sprache); });
-    if (String(d.email || '').trim()) {
-      versucheStill(function () { mailAnEltern(d, sprache); });
-    }
+    //
+    // Das Ergebnis steht aber in der Antwort. Vorher war ein gescheiterter
+    // Versand von aussen nicht zu erkennen - der Verein haette von einer
+    // Anmeldung nichts erfahren und es nicht gemerkt.
+    var mailVerein = versucheStill(function () { mailAnVerein(d, sprache); });
+    var mailEltern = versucheStill(function () { mailAnEltern(d, sprache); });
 
-    return antwort({ ok: true });
+    return antwort({ ok: true, mailVerein: mailVerein, mailEltern: mailEltern });
 
   } catch (fehler) {
     return antwort({ ok: false, fehler: String(fehler) });
@@ -608,12 +617,13 @@ function kuendigungVerarbeiten(d) {
     sperre.releaseLock();
   }
 
-  versucheStill(function () { kuendigungAnVerein(d, sprache, eingang); });
+  var mailVerein = versucheStill(function () { kuendigungAnVerein(d, sprache, eingang); });
   // Die Bestaetigung ist Pflicht, nicht Hoeflichkeit - deshalb wird ein
-  // Fehlschlag hier zurueckgemeldet, damit die Seite den Ausweichweg zeigt.
+  // Fehlschlag hier NICHT geschluckt, sondern faellt in den catch von
+  // doPost. Die Seite zeigt dann den Ausweichweg.
   kuendigungAnEltern(d, sprache, eingang);
 
-  return antwort({ ok: true });
+  return antwort({ ok: true, mailVerein: mailVerein, mailEltern: true });
 }
 
 
@@ -845,9 +855,10 @@ function antwort(objekt) {
 }
 
 /** Fuehrt etwas aus und schluckt einen moeglichen Fehler, damit eine
- *  fehlgeschlagene E-Mail die schon gespeicherte Anmeldung nicht kippt. */
+ *  fehlgeschlagene E-Mail die schon gespeicherte Anmeldung nicht kippt.
+ *  Meldet zurueck, ob es geklappt hat. */
 function versucheStill(fn) {
-  try { fn(); } catch (e) { console.error(e); }
+  try { fn(); return true; } catch (e) { console.error(e); return false; }
 }
 
 
@@ -862,7 +873,7 @@ function testAnmeldung() {
       contents: JSON.stringify({
         kindVorname: 'Test', kindNachname: 'Kind', kindGeburtsdatum: '2018-03-12',
         elternVorname: 'Test', elternNachname: 'Elternteil',
-        telefon: '0177 5883033', whatsapp: '0177 5883033', email: '',
+        telefon: '0177 5883033', whatsapp: '0177 5883033', email: EMPFAENGER,
         ehemalig: 'ja', gruppe: '3',
         zahlung: 'muensterlandkarte', kartennummer: 'ML0012345678',
         hatAllergien: 'ja', allergien: 'Nuesse', fotos: 'ja',

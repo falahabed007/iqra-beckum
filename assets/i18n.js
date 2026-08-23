@@ -114,7 +114,7 @@ de: {
   "form.eltern.whatsapp": "WhatsApp",
   "form.eltern.whatsappSame": "WhatsApp-Nummer ist dieselbe wie die Telefonnummer",
   "form.eltern.email": "E-Mail-Adresse",
-  "form.eltern.emailHint": "Freiwillig — nur, damit Sie eine Bestätigung der Anmeldung bekommen.",
+  "form.eltern.emailHint": "Wir schicken Ihnen dorthin die Bestätigung der Anmeldung und die Widerrufsbelehrung.",
 
   "form.zahlung.legend": "Zahlung",
   "form.zahlung.frage": "Wie möchten Sie bezahlen?",
@@ -289,7 +289,7 @@ en: {
   "form.eltern.whatsapp": "WhatsApp",
   "form.eltern.whatsappSame": "WhatsApp number is the same as the phone number",
   "form.eltern.email": "Email address",
-  "form.eltern.emailHint": "Optional — only so that you receive a confirmation of the registration.",
+  "form.eltern.emailHint": "We will send the registration confirmation and the withdrawal instructions to this address.",
 
   "form.zahlung.legend": "Payment",
   "form.zahlung.frage": "How would you like to pay?",
@@ -465,7 +465,7 @@ ar: {
   "form.eltern.whatsapp": "رقم واتساب",
   "form.eltern.whatsappSame": "رقم واتساب هو نفسه رقم الهاتف المحمول",
   "form.eltern.email": "البريد الإلكتروني",
-  "form.eltern.emailHint": "اختياري – يُستخدم للتواصل معكم وإرسال تأكيد التسجيل عند الحاجة.",
+  "form.eltern.emailHint": "سنرسل إلى هذا العنوان تأكيد التسجيل وإرشادات العدول.",
 
   "form.zahlung.legend": "طريقة الدفع",
   "form.zahlung.frage": "كيف تفضلون دفع الرسوم؟",
