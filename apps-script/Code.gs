@@ -530,21 +530,32 @@ function mailAnEltern(d, sprache) {
       gruss2: 'Kind regards',
       absender: 'Iqraa School for Arabic Lessons\nArabisch-Deutscher IQRA e.V. Beckum'
     },
+    // Wortlaut vom Verein vorgegeben. Die arabische Fassung kommt ohne
+    // Eckdaten-Kasten und ohne Zwischenueberschrift aus - beide Felder
+    // bleiben deshalb leer und werden unten uebersprungen.
     ar: {
       betreff: 'تسجيلكم في مدرسة إقرأ',
-      gruss: 'السلام عليكم ' + d.elternVorname + ' ' + d.elternNachname + '،',
-      dank: 'شكراً لكم على تسجيل ' + name + '.',
-      info: 'لقد وصلنا طلب التسجيل، وسنتواصل معكم عبر الواتس اب.',
-      eckdaten: 'الدروس: كل يوم أحد من الساعة 12:00 إلى الساعة 14:30. الرسوم: 100 يورو لنصف السنة الأولى.',
-      widerrufTitel: 'حق العدول',
-      widerruf: 'يحق لكم العدول خلال أربعة عشر يوماً من إبرام العقد دون ذكر الأسباب. ويكفي لذلك '
-              + 'إعلان واضح إلى ' + EMPFAENGER + '. وتجدون إرشادات العدول الكاملة ونموذج العدول '
-              + 'في البندين 4 و5 من شروط المشاركة.',
-      widerrufBeginn: 'لقد طلبتم صراحةً أن تبدأ الدروس قبل انتهاء مدة العدول. وفي حال العدول بعد ذلك '
-              + 'تدينون بتعويض متناسب.',
-      widerrufOhne: 'لم تطلبوا البدء المبكر. ولذلك يمكن لطفلكم المشاركة في الدروس بعد انتهاء مدة '
-              + 'العدول البالغة أربعة عشر يوماً.',
-      gruss2: 'مع أطيب التحيات',
+      gruss: 'السلام عليكم ورحمة الله وبركاته،\n'
+           + 'ولي أمر الطالب/ة ' + name + '،',
+      dank: 'لقد تم استلام طلب تسجيل الطالب/ة ' + name + '، وسيتم العمل على معالجته.',
+      info: 'نود التنويه إلى أن الطالب لا يُعتبر مسجّلًا بشكل نهائي إلا بعد استكمال دفع الرسوم.\n'
+          + 'وسيتم التواصل معكم قريبًا بعد الانتهاء من معالجة الطلب.',
+      eckdaten: '',
+      widerrufTitel: '',
+      widerruf: 'يحق لكم التراجع عن العقد خلال مدة أربعة عشر يومًا من تاريخ إبرام العقد، دون '
+              + 'الحاجة إلى ذكر أي سبب. ولممارسة هذا الحق، يكفي إرسال إشعار واضح إلى البريد '
+              + 'الإلكتروني:\n' + EMPFAENGER + '\n'
+              + 'لمزيد من التفاصيل حول حق التراجع، يمكنكم الرجوع إلى § 4 و§ 5 من شروط المشاركة، '
+              + 'حيث تجدون أيضًا نموذج التراجع.',
+      // Diese Zeile haengt am freiwilligen Haken im Anmeldeformular und
+      // muss beide Faelle treffen - sonst stuende in der Mail das Gegenteil
+      // dessen, was die Familie erklaert hat.
+      widerrufBeginn: 'وبما أنكم طلبتم صراحةً بدء الدروس قبل انتهاء مدة التراجع، يمكن لطفلكم '
+              + 'المشاركة في الدروس مباشرةً. وفي حال التراجع بعد بدء الدروس، تدفعون تكلفة '
+              + 'الدروس التي تم تقديمها حتى تاريخ التراجع.',
+      widerrufOhne: 'وبما أنكم لم تطلبوا بدء الدروس قبل انتهاء مدة التراجع، فسيتمكن طفلكم من '
+              + 'المشاركة في الدروس بعد انتهاء مدة الأربعة عشر يومًا.',
+      gruss2: 'مع خالص التحية والتقدير',
       absender: 'مدرسة إقرأ لتعليم اللغة العربية\nالجمعية العربية الألمانية في بيكوم'
     }
   };
@@ -556,22 +567,34 @@ function mailAnEltern(d, sprache) {
   // diese E-Mail ist der Ort dafuer.
   var widerrufLage = d.widerruf === 'ja' ? t.widerrufBeginn : t.widerrufOhne;
 
-  var text = [t.gruss, '', t.dank, t.info, '', t.eckdaten, '',
-              t.widerrufTitel, t.widerruf, widerrufLage, '',
-              t.gruss2, t.absender].join('\n');
+  // Leere Felder fallen raus - nicht jede Sprachfassung hat einen
+  // Eckdaten-Kasten oder eine Zwischenueberschrift.
+  var absaetze = [t.gruss, '', t.dank];
+  if (t.info) absaetze.push(t.info);
+  if (t.eckdaten) absaetze.push('', t.eckdaten);
+  absaetze.push('');
+  if (t.widerrufTitel) absaetze.push(t.widerrufTitel);
+  absaetze.push(t.widerruf, widerrufLage, '', t.gruss2, t.absender);
+  var text = absaetze.join('\n');
 
   var html = '<div dir="' + (rtl ? 'rtl' : 'ltr') + '" style="font-family:Arial,sans-serif;'
            + 'font-size:15px;line-height:1.7;color:#1A1614;text-align:' + (rtl ? 'right' : 'left') + '">'
-           + '<p>' + escapeHtml(t.gruss) + '</p>'
-           + '<p>' + escapeHtml(t.dank) + '<br>' + escapeHtml(t.info) + '</p>'
-           + '<p style="background:#EDF4F0;border-' + (rtl ? 'right' : 'left') + ':4px solid #1B6B4F;'
-           + 'padding:10px 14px">' + escapeHtml(t.eckdaten) + '</p>'
-           + '<h3 style="font-size:15px;margin:22px 0 4px">' + escapeHtml(t.widerrufTitel) + '</h3>'
-           + '<p style="font-size:13px;color:#6B6259">' + escapeHtml(t.widerruf) + '<br>'
-           + escapeHtml(widerrufLage) + '</p>'
-           + '<p style="color:#6B6259">' + escapeHtml(t.gruss2) + '<br>'
-           + escapeHtml(t.absender).replace(/\n/g, '<br>') + '</p>'
-           + '</div>';
+           + '<p>' + mitUmbruch(t.gruss) + '</p>'
+           + '<p>' + mitUmbruch(t.dank) + (t.info ? '<br>' + mitUmbruch(t.info) : '') + '</p>';
+
+  if (t.eckdaten) {
+    html += '<p style="background:#EDF4F0;border-' + (rtl ? 'right' : 'left') + ':4px solid #1B6B4F;'
+          + 'padding:10px 14px">' + escapeHtml(t.eckdaten) + '</p>';
+  }
+  if (t.widerrufTitel) {
+    html += '<h3 style="font-size:15px;margin:22px 0 4px">' + escapeHtml(t.widerrufTitel) + '</h3>';
+  }
+
+  html += '<p style="font-size:13px;color:#6B6259">' + mitUmbruch(t.widerruf) + '<br>'
+        + mitUmbruch(widerrufLage) + '</p>'
+        + '<p style="color:#6B6259">' + mitUmbruch(t.gruss2) + '<br>'
+        + mitUmbruch(t.absender) + '</p>'
+        + '</div>';
 
   MailApp.sendEmail({
     to: String(d.email).trim(),
@@ -863,6 +886,11 @@ function allergietext(d) {
 function datumLesbar(iso) {
   var teile = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/);
   return teile ? teile[3] + '.' + teile[2] + '.' + teile[1] : iso;
+}
+
+/** Wie escapeHtml, uebernimmt aber Zeilenumbrueche als <br>. */
+function mitUmbruch(s) {
+  return escapeHtml(String(s)).replace(/\n/g, '<br>');
 }
 
 function escapeHtml(s) {
