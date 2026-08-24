@@ -10,9 +10,10 @@
  *      aber darauf allein darf man sich nie verlassen)
  *   2. es haengt die Anmeldung als neue Zeile an das Tabellenblatt
  *      "Anmeldungen" an  ->  daraus wird spaeter die Excel-Datei
- *   3. es schickt eine E-Mail an den Verein
- *   4. es schickt, falls die Eltern eine E-Mail-Adresse angegeben haben,
- *      eine kurze Bestaetigung in DEREN Sprache
+ *   3. es schickt der Familie sofort eine Bestaetigung in IHRER Sprache,
+ *      mitsamt Widerrufsbelehrung
+ *   4. es merkt die Anmeldung fuer die taegliche Sammelmail an den Verein
+ *      vor - siehe sammelmailAnVerein() weiter unten
  *
  * EINRICHTEN: siehe SETUP.md im Projektordner, Schritt 2.
  * Kurzfassung: Google-Tabelle anlegen -> Erweiterungen -> Apps Script ->
@@ -48,6 +49,13 @@ var ABSENDER_NAME = 'Iqraa-Schule Beckum';
 
 /** Fuer Datum und Uhrzeit in der Kuendigungsbestaetigung. */
 var ZEITZONE = 'Europe/Berlin';
+
+/**
+ * Zu dieser vollen Stunde geht die taegliche Sammelmail an den Verein raus.
+ * Google haelt sich nicht auf die Minute daran, sondern trifft die Stunde.
+ * Einzurichten mit sammelmailEinrichten() - siehe unten.
+ */
+var SAMMELMAIL_STUNDE = 20;
 
 /** Mindestzeit in Sekunden zwischen Oeffnen und Absenden des Formulars. */
 var MINDESTDAUER = 3;
@@ -258,16 +266,19 @@ function doPost(e) {
     // Das Ergebnis steht aber in der Antwort. Vorher war ein gescheiterter
     // Versand von aussen nicht zu erkennen - der Verein haette von einer
     // Anmeldung nichts erfahren und es nicht gemerkt.
-    var mailVerein = versucheStill(function () { mailAnVerein(d, sprache); });
+    // Die Bestaetigung an die Familie geht sofort raus - sie traegt die
+    // Widerrufsbelehrung und muss zeitnah zugehen.
     var mailEltern = versucheStill(function () { mailAnEltern(d, sprache); });
 
-    // Das Ergebnis gehoert in die Tabelle, nicht nur in die Antwort - sonst
-    // ist spaeter nicht mehr nachvollziehbar, welche Mail gefehlt hat.
-    versucheStill(function () { mailStatusEintragen(zeile, mailVerein, mailEltern); });
+    // Der Verein wird NICHT einzeln benachrichtigt, sondern einmal am Tag
+    // gesammelt. Das halbiert den Verbrauch am Tageskontingent, das bei
+    // einem Gmail-Konto bei 100 Empfaengern liegt. Die Zeile wird dafuer
+    // als "offen" vorgemerkt; sammelmailAnVerein() holt sie spaeter ab.
+    versucheStill(function () { mailStatusEintragen(zeile, 'offen', mailEltern); });
 
     return antwort({
       ok: true,
-      mailVerein: mailVerein,
+      vereinVorgemerkt: true,
       mailEltern: mailEltern,
       kontingentRest: mailKontingent()
     });
@@ -415,13 +426,19 @@ function inTabelleSchreiben(d, sprache) {
  * der Tabelle, aber niemand weiss, dass der Verein nie benachrichtigt wurde
  * oder die Familie ihre Widerrufsbelehrung nie bekommen hat.
  */
-function mailStatusEintragen(zeile, anVerein, anEltern) {
+function mailStatusEintragen(zeile, vereinStand, anEltern) {
   if (!zeile) return;
   var b = blatt();
   var spalte = SPALTEN.indexOf('Mail an Verein') + 1;
-  b.getRange(zeile, spalte).setValue(anVerein ? 'ja' : 'FEHLGESCHLAGEN');
+  b.getRange(zeile, spalte).setValue(vereinStand);
   b.getRange(zeile, spalte + 1).setValue(anEltern ? 'ja' : 'FEHLGESCHLAGEN');
   SpreadsheetApp.flush();
+}
+
+
+/** Die Position einer Spalte, 1-basiert wie Google Sheets sie zaehlt. */
+function spalteVon(name) {
+  return SPALTEN.indexOf(name) + 1;
 }
 
 
@@ -529,7 +546,9 @@ function mailAnEltern(d, sprache) {
       betreff: 'Ihre Anmeldung bei der Iqraa-Schule',
       gruss: 'Guten Tag ' + d.elternVorname + ' ' + d.elternNachname + ',',
       dank: 'vielen Dank für die Anmeldung von ' + name + '.',
-      info: 'Wir haben die Anmeldung erhalten und melden uns über WhatsApp bei Ihnen.',
+      info: 'Wir haben die Anmeldung erhalten und melden uns über WhatsApp bei Ihnen.\n'
+          + 'Bitte beachten Sie: Ihr Kind gilt erst dann als endgültig angemeldet, wenn '
+          + 'der Beitrag vollständig beglichen ist.',
       eckdaten: 'Unterricht: sonntags von 12:00 bis 14:30 Uhr. Beitrag: 100 € für das erste Halbjahr.',
       widerrufTitel: 'Ihr Widerrufsrecht',
       widerruf: 'Sie haben das Recht, binnen vierzehn Tagen ab Vertragsschluss ohne Angabe von '
@@ -541,13 +560,15 @@ function mailAnEltern(d, sprache) {
       widerrufOhne: 'Sie haben den vorzeitigen Unterrichtsbeginn nicht verlangt. Ihr Kind kann '
               + 'deshalb nach Ablauf der vierzehntägigen Widerrufsfrist am Unterricht teilnehmen.',
       gruss2: 'Herzliche Grüße',
-      absender: 'Iqraa-Schule für Arabischunterricht\nArabisch-Deutscher IQRA e.V. Beckum'
+      absender: 'Iqraa-Schule für Arabischunterricht\nArabisch-Deutscher-Verein e.V. Beckum'
     },
     en: {
       betreff: 'Your registration at the Iqraa School',
       gruss: 'Hello ' + d.elternVorname + ' ' + d.elternNachname + ',',
       dank: 'thank you for registering ' + name + '.',
-      info: 'We have received the registration and will contact you on WhatsApp.',
+      info: 'We have received the registration and will contact you on WhatsApp.\n'
+          + 'Please note: your child is only finally registered once the fee has been '
+          + 'paid in full.',
       eckdaten: 'Lessons: Sundays from 12:00 to 14:30. Fee: €100 for the first half-year.',
       widerrufTitel: 'Your right of withdrawal',
       widerruf: 'You have the right to withdraw within fourteen days of concluding the contract '
@@ -559,7 +580,7 @@ function mailAnEltern(d, sprache) {
       widerrufOhne: 'You did not request an early start. Your child can therefore take part in '
               + 'lessons once the fourteen-day withdrawal period has expired.',
       gruss2: 'Kind regards',
-      absender: 'Iqraa School for Arabic Lessons\nArabisch-Deutscher IQRA e.V. Beckum'
+      absender: 'Iqraa School for Arabic Lessons\nArabisch-Deutscher-Verein e.V. Beckum'
     },
     // Wortlaut vom Verein vorgegeben. Die arabische Fassung kommt ohne
     // Eckdaten-Kasten und ohne Zwischenueberschrift aus - beide Felder
@@ -637,6 +658,166 @@ function mailAnEltern(d, sprache) {
   });
 }
 
+
+
+
+/* --------------------------------------------------------------------------
+   Sammelmail an den Verein
+
+   Statt einer E-Mail je Anmeldung geht einmal am Tag eine Uebersicht raus.
+   Das halbiert den Verbrauch am Tageskontingent: eine Anmeldung kostet nur
+   noch einen Empfaenger statt zwei.
+
+   In der Tabelle steht in der Spalte "Mail an Verein", wo eine Zeile steht:
+     offen           -> noch nicht gemeldet, kommt in die naechste Sammelmail
+     ja              -> gemeldet
+     FEHLGESCHLAGEN  -> Versand hat nicht geklappt
+
+   Scheitert eine Sammelmail, bleiben die Zeilen auf "offen" und sind am
+   naechsten Tag wieder dabei. Es geht also nichts verloren.
+   -------------------------------------------------------------------------- */
+
+/**
+ * EINMAL im Editor ausfuehren: richtet den taeglichen Ausloeser ein.
+ * Ein zweiter Aufruf ersetzt einen schon vorhandenen, es entstehen also
+ * keine Doppelungen.
+ */
+function sammelmailEinrichten() {
+  sammelmailAbschalten();
+  ScriptApp.newTrigger('sammelmailAnVerein')
+    .timeBased()
+    .atHour(SAMMELMAIL_STUNDE)
+    .everyDays(1)
+    .inTimezone(ZEITZONE)
+    .create();
+  console.log('Sammelmail eingerichtet: taeglich gegen ' + SAMMELMAIL_STUNDE + ' Uhr.');
+}
+
+
+/** Nimmt den taeglichen Ausloeser wieder weg. */
+function sammelmailAbschalten() {
+  var weg = 0;
+  ScriptApp.getProjectTriggers().forEach(function (a) {
+    if (a.getHandlerFunction() === 'sammelmailAnVerein') {
+      ScriptApp.deleteTrigger(a);
+      weg++;
+    }
+  });
+  console.log(weg ? weg + ' Ausloeser entfernt.' : 'Es war keiner eingerichtet.');
+}
+
+
+/**
+ * Sammelt alle noch nicht gemeldeten Anmeldungen und schickt sie als eine
+ * E-Mail an den Verein. Gibt es nichts zu melden, passiert nichts - der
+ * Verein bekommt keine leeren Mails.
+ */
+function sammelmailAnVerein() {
+  var b = blatt();
+  var letzte = b.getLastRow();
+  if (letzte < 2) return 0;
+
+  var spalte = spalteVon('Mail an Verein');
+  var werte = b.getRange(2, 1, letzte - 1, SPALTEN.length).getValues();
+
+  var offen = [];
+  for (var i = 0; i < werte.length; i++) {
+    if (String(werte[i][spalte - 1]).trim() === 'offen') {
+      offen.push({ zeile: i + 2, felder: werte[i] });
+    }
+  }
+  if (!offen.length) return 0;
+
+  sammelmailVerschicken(offen);
+
+  // Erst nach erfolgreichem Versand abhaken. Wirft der Versand, bleiben die
+  // Zeilen auf "offen" und kommen morgen wieder dran.
+  offen.forEach(function (e) {
+    b.getRange(e.zeile, spalte).setValue('ja');
+  });
+  SpreadsheetApp.flush();
+
+  return offen.length;
+}
+
+
+function sammelmailVerschicken(offen) {
+  var wert = function (felder, name) { return felder[spalteVon(name) - 1]; };
+  var anzahl = offen.length;
+  var betreff = anzahl === 1
+    ? 'Eine neue Anmeldung'
+    : anzahl + ' neue Anmeldungen';
+
+  var kopf = ['Kind', 'Geburtsdatum', 'Elternteil', 'Telefon', 'Zahlung',
+              'Allergien', 'Beginn'];
+
+  var text = betreff + ' für die Iqraa-Schule\n\n';
+  var html = '<div style="font-family:Arial,sans-serif;font-size:15px;color:#1A1614">'
+           + '<h2 style="color:#1B6B4F;margin:0 0 4px">' + escapeHtml(betreff) + '</h2>'
+           + '<p style="margin:0 0 16px;color:#6B6259">Iqraa-Schule für Arabischunterricht</p>'
+           + '<table cellpadding="6" cellspacing="0" border="0" style="border-collapse:collapse">'
+           + '<tr>';
+  kopf.forEach(function (k) {
+    html += '<td style="border-bottom:2px solid #1B6B4F;color:#6B6259;'
+          + 'font-size:13px;white-space:nowrap">' + escapeHtml(k) + '</td>';
+  });
+  html += '</tr>';
+
+  offen.forEach(function (e) {
+    var f = e.felder;
+    var zeile = [
+      wert(f, 'Kind Vorname') + ' ' + wert(f, 'Kind Nachname'),
+      datumZelle(wert(f, 'Geburtsdatum')),
+      wert(f, 'Elternteil Vorname') + ' ' + wert(f, 'Elternteil Nachname'),
+      String(wert(f, 'Telefon')),
+      String(wert(f, 'Zahlungsweise')),
+      String(wert(f, 'Allergien')) || '—',
+      // Ohne das ausdrueckliche Verlangen darf das Kind erst nach Ablauf
+      // der Widerrufsfrist kommen. Der Verein muss das beim Einteilen wissen.
+      String(wert(f, 'Vorzeitiger Unterrichtsbeginn')).indexOf('ja') === 0
+        ? 'sofort' : 'nach 14 Tagen'
+    ];
+    text += '\n' + zeile.join(' | ');
+    html += '<tr>';
+    zeile.forEach(function (z) {
+      html += '<td style="border-bottom:1px solid #E4DACA">' + escapeHtml(z) + '</td>';
+    });
+    html += '</tr>';
+  });
+
+  html += '</table>'
+        + '<p style="margin-top:18px;color:#6B6259;font-size:13px">'
+        + 'Alle Angaben - auch Einwilligungen, Kartennummer und Fotoerlaubnis - '
+        + 'stehen in der Tabelle.</p>'
+        + '<p><a href="' + tabelle().getUrl() + '" style="color:#1B6B4F">'
+        + 'Anmeldungen öffnen</a></p></div>';
+
+  text += '\n\nAlle Anmeldungen: ' + tabelle().getUrl();
+
+  MailApp.sendEmail({
+    to: EMPFAENGER,
+    subject: betreff + ': Iqraa-Schule',
+    body: text,
+    htmlBody: html,
+    name: ABSENDER_NAME
+  });
+}
+
+
+/** Sheets liefert das Geburtsdatum als Datum zurueck, nicht als Text. */
+function datumZelle(wert) {
+  if (wert instanceof Date) {
+    return Utilities.formatDate(wert, ZEITZONE, 'dd.MM.yyyy');
+  }
+  return String(wert);
+}
+
+
+/** Im Editor ausfuehren: schickt die Sammelmail sofort, ohne zu warten. */
+function testSammelmail() {
+  var n = sammelmailAnVerein();
+  console.log(n ? n + ' Anmeldung(en) gemeldet.' : 'Nichts offen - keine Mail verschickt.');
+}
 
 
 /* --------------------------------------------------------------------------
