@@ -1,6 +1,6 @@
 /**
  * ===========================================================================
- * Iqraa-Schule Beckum — Empfaenger fuer das Anmeldeformular
+ * Iqraa-Schule Beckum \u2014 Empfaenger fuer das Anmeldeformular
  * ===========================================================================
  *
  * Was dieses Skript tut, sobald jemand auf der Webseite "Anmeldung absenden"
@@ -35,7 +35,7 @@ var EMPFAENGER = 'iqraaschulebeckum@gmail.com';
 var BLATT_NAME = 'Anmeldungen';
 
 /** Zweites Blatt fuer Kuendigungen ueber die Kuendigungsseite. */
-var BLATT_KUENDIGUNGEN = 'Kündigungen';
+var BLATT_KUENDIGUNGEN = 'K\u00fcndigungen';
 
 /**
  * Nur noetig, wenn das Skript NICHT direkt in der Tabelle liegt
@@ -71,10 +71,10 @@ var MINDESTALTER = 6;
 
 /** Die Gruppen der Iqraa-Schule, fuer Tabelle und E-Mail ausgeschrieben. */
 var GRUPPEN = {
-  '1': 'Gruppe 1 — Frau Janan',
-  '2': 'Gruppe 2 — Frau Dua',
-  '3': 'Gruppe 3 — Herr Yaser',
-  '4': 'Gruppe 4 — Dr. Feras Hasan'
+  '1': 'Gruppe 1 \u2014 Frau Janan',
+  '2': 'Gruppe 2 \u2014 Frau Dua',
+  '3': 'Gruppe 3 \u2014 Herr Yaser',
+  '4': 'Gruppe 4 \u2014 Dr. Feras Hasan'
 };
 
 /**
@@ -91,7 +91,7 @@ var LATEIN_FELDER = ['kindVorname', 'kindNachname', 'elternVorname',
 
 var SPALTEN_KUENDIGUNG = [
   'Eingegangen am',
-  'Art der Kündigung',
+  'Art der K\u00fcndigung',
   'Grund',
   'Kind Vorname',
   'Kind Nachname',
@@ -120,8 +120,8 @@ var SPALTEN = [
   'Allergien',
   'Fotos erlaubt',
   'Sprache',
-  'AGB bestätigt',
-  'Datenschutz bestätigt',
+  'AGB best\u00e4tigt',
+  'Datenschutz best\u00e4tigt',
   'Vorzeitiger Unterrichtsbeginn',
   'Mail an Verein',
   'Mail an Eltern'
@@ -188,7 +188,7 @@ function doPost(e) {
     // Widerrufsbelehrung die Eltern nicht - und die muss ihnen in Textform
     // zugehen.
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(d.email).trim())) {
-      return antwort({ ok: false, fehler: 'E-Mail-Adresse ist ungültig.' });
+      return antwort({ ok: false, fehler: 'E-Mail-Adresse ist ung\u00fcltig.' });
     }
 
     // Alter: die Schule nimmt Kinder erst ab MINDESTALTER Jahren auf.
@@ -197,7 +197,7 @@ function doPost(e) {
     if (!altGenug(d.kindGeburtsdatum)) {
       return antwort({
         ok: false,
-        fehler: 'Kind ist jünger als ' + MINDESTALTER + ' Jahre.'
+        fehler: 'Kind ist j\u00fcnger als ' + MINDESTALTER + ' Jahre.'
       });
     }
 
@@ -484,7 +484,7 @@ function mailAnVerein(d, sprache) {
     ['Elternteil', d.elternVorname + ' ' + d.elternNachname],
     ['Telefon', d.telefon],
     ['WhatsApp', d.whatsapp],
-    ['E-Mail', d.email || '—'],
+    ['E-Mail', d.email || '\u2014'],
     ['Zahlung', zahlungText(d.zahlung, 'de')]
   ]);
 
@@ -496,17 +496,17 @@ function mailAnVerein(d, sprache) {
   zeilen.push(
     ['Fotos erlaubt', d.fotos === 'ja' ? 'ja' : 'NEIN'],
     ['Sprache des Formulars', { de: 'Deutsch', en: 'Englisch', ar: 'Arabisch' }[sprache]],
-    ['Teilnahmebedingungen', d.agb === 'ja' ? 'bestätigt' : 'NICHT bestätigt'],
-    ['Datenschutzerklärung', d.datenschutz === 'ja' ? 'bestätigt' : 'NICHT bestätigt'],
+    ['Teilnahmebedingungen', d.agb === 'ja' ? 'best\u00e4tigt' : 'NICHT best\u00e4tigt'],
+    ['Datenschutzerkl\u00e4rung', d.datenschutz === 'ja' ? 'best\u00e4tigt' : 'NICHT best\u00e4tigt'],
     ['Unterrichtsbeginn vor Ablauf der Widerrufsfrist',
-     d.widerruf === 'ja' ? 'ausdrücklich verlangt'
-                         : 'NICHT verlangt — Beginn erst nach 14 Tagen']
+     d.widerruf === 'ja' ? 'ausdr\u00fccklich verlangt'
+                         : 'NICHT verlangt \u2014 Beginn erst nach 14 Tagen']
   );
 
-  var text = 'Neue Anmeldung für die Iqraa-Schule\n\n';
+  var text = 'Neue Anmeldung f\u00fcr die Iqraa-Schule\n\n';
   var html = '<div style="font-family:Arial,sans-serif;font-size:15px;color:#1A1614">'
            + '<h2 style="color:#1B6B4F;margin:0 0 4px">Neue Anmeldung</h2>'
-           + '<p style="margin:0 0 16px;color:#6B6259">Iqraa-Schule für Arabischunterricht</p>'
+           + '<p style="margin:0 0 16px;color:#6B6259">Iqraa-Schule f\u00fcr Arabischunterricht</p>'
            + '<table cellpadding="6" cellspacing="0" border="0" style="border-collapse:collapse">';
 
   zeilen.forEach(function (z) {
@@ -519,7 +519,7 @@ function mailAnVerein(d, sprache) {
 
   html += '</table>'
         + '<p style="margin-top:18px"><a href="' + tabelle().getUrl() + '" '
-        + 'style="color:#1B6B4F">Alle Anmeldungen in der Tabelle öffnen</a></p>'
+        + 'style="color:#1B6B4F">Alle Anmeldungen in der Tabelle \u00f6ffnen</a></p>'
         + '</div>';
 
   text += '\nAlle Anmeldungen: ' + tabelle().getUrl();
@@ -545,22 +545,22 @@ function mailAnEltern(d, sprache) {
     de: {
       betreff: 'Ihre Anmeldung bei der Iqraa-Schule',
       gruss: 'Guten Tag ' + d.elternVorname + ' ' + d.elternNachname + ',',
-      dank: 'vielen Dank für die Anmeldung von ' + name + '.',
-      info: 'Wir haben die Anmeldung erhalten und melden uns über WhatsApp bei Ihnen.\n'
-          + 'Bitte beachten Sie: Ihr Kind gilt erst dann als endgültig angemeldet, wenn '
-          + 'der Beitrag vollständig beglichen ist.',
-      eckdaten: 'Unterricht: sonntags von 12:00 bis 14:30 Uhr. Beitrag: 100 € für das erste Halbjahr.',
+      dank: 'vielen Dank f\u00fcr die Anmeldung von ' + name + '.',
+      info: 'Wir haben die Anmeldung erhalten und melden uns \u00fcber WhatsApp bei Ihnen.\n'
+          + 'Bitte beachten Sie: Ihr Kind gilt erst dann als endg\u00fcltig angemeldet, wenn '
+          + 'der Beitrag vollst\u00e4ndig beglichen ist.',
+      eckdaten: 'Unterricht: sonntags von 12:00 bis 14:30 Uhr. Beitrag: 100 \u20ac f\u00fcr das erste Halbjahr.',
       widerrufTitel: 'Ihr Widerrufsrecht',
       widerruf: 'Sie haben das Recht, binnen vierzehn Tagen ab Vertragsschluss ohne Angabe von '
-              + 'Gründen zu widerrufen. Dafür genügt eine eindeutige Erklärung an '
-              + EMPFAENGER + '. Die vollständige Widerrufsbelehrung und das '
-              + 'Muster-Widerrufsformular finden Sie in § 4 und § 5 der Teilnahmebedingungen.',
-      widerrufBeginn: 'Sie haben ausdrücklich verlangt, dass der Unterricht schon vor Ablauf der '
+              + 'Gr\u00fcnden zu widerrufen. Daf\u00fcr gen\u00fcgt eine eindeutige Erkl\u00e4rung an '
+              + EMPFAENGER + '. Die vollst\u00e4ndige Widerrufsbelehrung und das '
+              + 'Muster-Widerrufsformular finden Sie in \u00a7 4 und \u00a7 5 der Teilnahmebedingungen.',
+      widerrufBeginn: 'Sie haben ausdr\u00fccklich verlangt, dass der Unterricht schon vor Ablauf der '
               + 'Widerrufsfrist beginnt. Bei einem Widerruf danach schulden Sie anteiligen Wertersatz.',
       widerrufOhne: 'Sie haben den vorzeitigen Unterrichtsbeginn nicht verlangt. Ihr Kind kann '
-              + 'deshalb nach Ablauf der vierzehntägigen Widerrufsfrist am Unterricht teilnehmen.',
-      gruss2: 'Herzliche Grüße',
-      absender: 'Iqraa-Schule für Arabischunterricht\nArabisch-Deutscher-Verein e.V. Beckum'
+              + 'deshalb nach Ablauf der vierzehnt\u00e4gigen Widerrufsfrist am Unterricht teilnehmen.',
+      gruss2: 'Herzliche Gr\u00fc\u00dfe',
+      absender: 'Iqraa-Schule f\u00fcr Arabischunterricht\nArabisch-Deutscher-Verein e.V. Beckum'
     },
     en: {
       betreff: 'Your registration at the Iqraa School',
@@ -569,7 +569,7 @@ function mailAnEltern(d, sprache) {
       info: 'We have received the registration and will contact you on WhatsApp.\n'
           + 'Please note: your child is only finally registered once the fee has been '
           + 'paid in full.',
-      eckdaten: 'Lessons: Sundays from 12:00 to 14:30. Fee: €100 for the first half-year.',
+      eckdaten: 'Lessons: Sundays from 12:00 to 14:30. Fee: \u20ac100 for the first half-year.',
       widerrufTitel: 'Your right of withdrawal',
       widerruf: 'You have the right to withdraw within fourteen days of concluding the contract '
               + 'without giving any reason. A clear statement to ' + EMPFAENGER + ' is sufficient. '
@@ -586,29 +586,29 @@ function mailAnEltern(d, sprache) {
     // Eckdaten-Kasten und ohne Zwischenueberschrift aus - beide Felder
     // bleiben deshalb leer und werden unten uebersprungen.
     ar: {
-      betreff: 'تسجيلكم في مدرسة إقرأ',
-      gruss: 'السلام عليكم ورحمة الله وبركاته،\n'
-           + 'ولي أمر الطالب/ة ' + name + '،',
-      dank: 'لقد تم استلام طلب تسجيل الطالب/ة ' + name + '، وسيتم العمل على معالجته.',
-      info: 'نود التنويه إلى أن الطالب لا يُعتبر مسجّلًا بشكل نهائي إلا بعد استكمال دفع الرسوم.\n'
-          + 'وسيتم التواصل معكم قريبًا بعد الانتهاء من معالجة الطلب.',
+      betreff: '\u062a\u0633\u062c\u064a\u0644\u0643\u0645 \u0641\u064a \u0645\u062f\u0631\u0633\u0629 \u0625\u0642\u0631\u0623',
+      gruss: '\u0627\u0644\u0633\u0644\u0627\u0645 \u0639\u0644\u064a\u0643\u0645 \u0648\u0631\u062d\u0645\u0629 \u0627\u0644\u0644\u0647 \u0648\u0628\u0631\u0643\u0627\u062a\u0647\u060c\n'
+           + '\u0648\u0644\u064a \u0623\u0645\u0631 \u0627\u0644\u0637\u0627\u0644\u0628/\u0629 ' + name + '\u060c',
+      dank: '\u0644\u0642\u062f \u062a\u0645 \u0627\u0633\u062a\u0644\u0627\u0645 \u0637\u0644\u0628 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0637\u0627\u0644\u0628/\u0629 ' + name + '\u060c \u0648\u0633\u064a\u062a\u0645 \u0627\u0644\u0639\u0645\u0644 \u0639\u0644\u0649 \u0645\u0639\u0627\u0644\u062c\u062a\u0647.',
+      info: '\u0646\u0648\u062f \u0627\u0644\u062a\u0646\u0648\u064a\u0647 \u0625\u0644\u0649 \u0623\u0646 \u0627\u0644\u0637\u0627\u0644\u0628 \u0644\u0627 \u064a\u064f\u0639\u062a\u0628\u0631 \u0645\u0633\u062c\u0651\u0644\u064b\u0627 \u0628\u0634\u0643\u0644 \u0646\u0647\u0627\u0626\u064a \u0625\u0644\u0627 \u0628\u0639\u062f \u0627\u0633\u062a\u0643\u0645\u0627\u0644 \u062f\u0641\u0639 \u0627\u0644\u0631\u0633\u0648\u0645.\n'
+          + '\u0648\u0633\u064a\u062a\u0645 \u0627\u0644\u062a\u0648\u0627\u0635\u0644 \u0645\u0639\u0643\u0645 \u0642\u0631\u064a\u0628\u064b\u0627 \u0628\u0639\u062f \u0627\u0644\u0627\u0646\u062a\u0647\u0627\u0621 \u0645\u0646 \u0645\u0639\u0627\u0644\u062c\u0629 \u0627\u0644\u0637\u0644\u0628.',
       eckdaten: '',
       widerrufTitel: '',
-      widerruf: 'يحق لكم التراجع عن العقد خلال مدة أربعة عشر يومًا من تاريخ إبرام العقد، دون '
-              + 'الحاجة إلى ذكر أي سبب. ولممارسة هذا الحق، يكفي إرسال إشعار واضح إلى البريد '
-              + 'الإلكتروني:\n' + EMPFAENGER + '\n'
-              + 'لمزيد من التفاصيل حول حق التراجع، يمكنكم الرجوع إلى § 4 و§ 5 من شروط المشاركة، '
-              + 'حيث تجدون أيضًا نموذج التراجع.',
+      widerruf: '\u064a\u062d\u0642 \u0644\u0643\u0645 \u0627\u0644\u062a\u0631\u0627\u062c\u0639 \u0639\u0646 \u0627\u0644\u0639\u0642\u062f \u062e\u0644\u0627\u0644 \u0645\u062f\u0629 \u0623\u0631\u0628\u0639\u0629 \u0639\u0634\u0631 \u064a\u0648\u0645\u064b\u0627 \u0645\u0646 \u062a\u0627\u0631\u064a\u062e \u0625\u0628\u0631\u0627\u0645 \u0627\u0644\u0639\u0642\u062f\u060c \u062f\u0648\u0646 '
+              + '\u0627\u0644\u062d\u0627\u062c\u0629 \u0625\u0644\u0649 \u0630\u0643\u0631 \u0623\u064a \u0633\u0628\u0628. \u0648\u0644\u0645\u0645\u0627\u0631\u0633\u0629 \u0647\u0630\u0627 \u0627\u0644\u062d\u0642\u060c \u064a\u0643\u0641\u064a \u0625\u0631\u0633\u0627\u0644 \u0625\u0634\u0639\u0627\u0631 \u0648\u0627\u0636\u062d \u0625\u0644\u0649 \u0627\u0644\u0628\u0631\u064a\u062f '
+              + '\u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a:\n' + EMPFAENGER + '\n'
+              + '\u0644\u0645\u0632\u064a\u062f \u0645\u0646 \u0627\u0644\u062a\u0641\u0627\u0635\u064a\u0644 \u062d\u0648\u0644 \u062d\u0642 \u0627\u0644\u062a\u0631\u0627\u062c\u0639\u060c \u064a\u0645\u0643\u0646\u0643\u0645 \u0627\u0644\u0631\u062c\u0648\u0639 \u0625\u0644\u0649 \u00a7 4 \u0648\u00a7 5 \u0645\u0646 \u0634\u0631\u0648\u0637 \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0629\u060c '
+              + '\u062d\u064a\u062b \u062a\u062c\u062f\u0648\u0646 \u0623\u064a\u0636\u064b\u0627 \u0646\u0645\u0648\u0630\u062c \u0627\u0644\u062a\u0631\u0627\u062c\u0639.',
       // Diese Zeile haengt am freiwilligen Haken im Anmeldeformular und
       // muss beide Faelle treffen - sonst stuende in der Mail das Gegenteil
       // dessen, was die Familie erklaert hat.
-      widerrufBeginn: 'وبما أنكم طلبتم صراحةً بدء الدروس قبل انتهاء مدة التراجع، يمكن لطفلكم '
-              + 'المشاركة في الدروس مباشرةً. وفي حال التراجع بعد بدء الدروس، تدفعون تكلفة '
-              + 'الدروس التي تم تقديمها حتى تاريخ التراجع.',
-      widerrufOhne: 'وبما أنكم لم تطلبوا بدء الدروس قبل انتهاء مدة التراجع، فسيتمكن طفلكم من '
-              + 'المشاركة في الدروس بعد انتهاء مدة الأربعة عشر يومًا.',
-      gruss2: 'مع خالص التحية والتقدير',
-      absender: 'مدرسة إقرأ لتعليم اللغة العربية\nالجمعية العربية الألمانية في بيكوم'
+      widerrufBeginn: '\u0648\u0628\u0645\u0627 \u0623\u0646\u0643\u0645 \u0637\u0644\u0628\u062a\u0645 \u0635\u0631\u0627\u062d\u0629\u064b \u0628\u062f\u0621 \u0627\u0644\u062f\u0631\u0648\u0633 \u0642\u0628\u0644 \u0627\u0646\u062a\u0647\u0627\u0621 \u0645\u062f\u0629 \u0627\u0644\u062a\u0631\u0627\u062c\u0639\u060c \u064a\u0645\u0643\u0646 \u0644\u0637\u0641\u0644\u0643\u0645 '
+              + '\u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0629 \u0641\u064a \u0627\u0644\u062f\u0631\u0648\u0633 \u0645\u0628\u0627\u0634\u0631\u0629\u064b. \u0648\u0641\u064a \u062d\u0627\u0644 \u0627\u0644\u062a\u0631\u0627\u062c\u0639 \u0628\u0639\u062f \u0628\u062f\u0621 \u0627\u0644\u062f\u0631\u0648\u0633\u060c \u062a\u062f\u0641\u0639\u0648\u0646 \u062a\u0643\u0644\u0641\u0629 '
+              + '\u0627\u0644\u062f\u0631\u0648\u0633 \u0627\u0644\u062a\u064a \u062a\u0645 \u062a\u0642\u062f\u064a\u0645\u0647\u0627 \u062d\u062a\u0649 \u062a\u0627\u0631\u064a\u062e \u0627\u0644\u062a\u0631\u0627\u062c\u0639.',
+      widerrufOhne: '\u0648\u0628\u0645\u0627 \u0623\u0646\u0643\u0645 \u0644\u0645 \u062a\u0637\u0644\u0628\u0648\u0627 \u0628\u062f\u0621 \u0627\u0644\u062f\u0631\u0648\u0633 \u0642\u0628\u0644 \u0627\u0646\u062a\u0647\u0627\u0621 \u0645\u062f\u0629 \u0627\u0644\u062a\u0631\u0627\u062c\u0639\u060c \u0641\u0633\u064a\u062a\u0645\u0643\u0646 \u0637\u0641\u0644\u0643\u0645 \u0645\u0646 '
+              + '\u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0629 \u0641\u064a \u0627\u0644\u062f\u0631\u0648\u0633 \u0628\u0639\u062f \u0627\u0646\u062a\u0647\u0627\u0621 \u0645\u062f\u0629 \u0627\u0644\u0623\u0631\u0628\u0639\u0629 \u0639\u0634\u0631 \u064a\u0648\u0645\u064b\u0627.',
+      gruss2: '\u0645\u0639 \u062e\u0627\u0644\u0635 \u0627\u0644\u062a\u062d\u064a\u0629 \u0648\u0627\u0644\u062a\u0642\u062f\u064a\u0631',
+      absender: '\u0645\u062f\u0631\u0633\u0629 \u0625\u0642\u0631\u0623 \u0644\u062a\u0639\u0644\u064a\u0645 \u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629\n\u0627\u0644\u062c\u0645\u0639\u064a\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629 \u0627\u0644\u0623\u0644\u0645\u0627\u0646\u064a\u0629 \u0641\u064a \u0628\u064a\u0643\u0648\u0645'
     }
   };
 
@@ -751,10 +751,10 @@ function sammelmailVerschicken(offen) {
   var kopf = ['Kind', 'Geburtsdatum', 'Elternteil', 'Telefon', 'Zahlung',
               'Allergien', 'Beginn'];
 
-  var text = betreff + ' für die Iqraa-Schule\n\n';
+  var text = betreff + ' f\u00fcr die Iqraa-Schule\n\n';
   var html = '<div style="font-family:Arial,sans-serif;font-size:15px;color:#1A1614">'
            + '<h2 style="color:#1B6B4F;margin:0 0 4px">' + escapeHtml(betreff) + '</h2>'
-           + '<p style="margin:0 0 16px;color:#6B6259">Iqraa-Schule für Arabischunterricht</p>'
+           + '<p style="margin:0 0 16px;color:#6B6259">Iqraa-Schule f\u00fcr Arabischunterricht</p>'
            + '<table cellpadding="6" cellspacing="0" border="0" style="border-collapse:collapse">'
            + '<tr>';
   kopf.forEach(function (k) {
@@ -771,7 +771,7 @@ function sammelmailVerschicken(offen) {
       wert(f, 'Elternteil Vorname') + ' ' + wert(f, 'Elternteil Nachname'),
       String(wert(f, 'Telefon')),
       String(wert(f, 'Zahlungsweise')),
-      String(wert(f, 'Allergien')) || '—',
+      String(wert(f, 'Allergien')) || '\u2014',
       // Ohne das ausdrueckliche Verlangen darf das Kind erst nach Ablauf
       // der Widerrufsfrist kommen. Der Verein muss das beim Einteilen wissen.
       String(wert(f, 'Vorzeitiger Unterrichtsbeginn')).indexOf('ja') === 0
@@ -790,7 +790,7 @@ function sammelmailVerschicken(offen) {
         + 'Alle Angaben - auch Einwilligungen, Kartennummer und Fotoerlaubnis - '
         + 'stehen in der Tabelle.</p>'
         + '<p><a href="' + tabelle().getUrl() + '" style="color:#1B6B4F">'
-        + 'Anmeldungen öffnen</a></p></div>';
+        + 'Anmeldungen \u00f6ffnen</a></p></div>';
 
   text += '\n\nAlle Anmeldungen: ' + tabelle().getUrl();
 
@@ -827,7 +827,7 @@ function testSammelmail() {
 /**
  * Nimmt eine Kuendigung von der Kuendigungsseite entgegen.
  *
- * § 312k BGB verlangt zweierlei: der Verbraucher muss die Kuendigung ueber
+ * \u00a7 312k BGB verlangt zweierlei: der Verbraucher muss die Kuendigung ueber
  * die Website erklaeren koennen, und der Zugang muss ihm unverzueglich in
  * Textform bestaetigt werden - mit Inhalt, Datum und Uhrzeit der Abgabe
  * sowie dem Zeitpunkt, zu dem das Vertragsverhaeltnis enden soll.
@@ -855,7 +855,7 @@ function kuendigungVerarbeiten(d) {
     return antwort({ ok: false, fehler: 'Feld fehlt: zeitpunkt' });
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(d.email).trim())) {
-    return antwort({ ok: false, fehler: 'E-Mail-Adresse ist ungültig.' });
+    return antwort({ ok: false, fehler: 'E-Mail-Adresse ist ung\u00fcltig.' });
   }
 
   var sprache = ['de', 'en', 'ar'].indexOf(d.sprache) > -1 ? d.sprache : 'de';
@@ -903,7 +903,7 @@ function kuendigungInTabelle(d, sprache, eingang) {
   var b = kuendigungsBlatt();
   b.appendRow([
     eingang,
-    d.kuendigungsart === 'ausserordentlich' ? 'außerordentlich' : 'ordentlich',
+    d.kuendigungsart === 'ausserordentlich' ? 'au\u00dferordentlich' : 'ordentlich',
     String(d.grund || ''),
     d.kindVorname,
     d.kindNachname,
@@ -928,9 +928,9 @@ function kuendigungInTabelle(d, sprache, eingang) {
  *  Verbraucher angegeben hat. */
 function beendigungText(d, sprache) {
   if (d.zeitpunktArt === 'datum' && d.zeitpunkt) return datumLesbar(d.zeitpunkt);
-  return { de: 'zum nächstmöglichen Zeitpunkt',
+  return { de: 'zum n\u00e4chstm\u00f6glichen Zeitpunkt',
            en: 'at the earliest possible date',
-           ar: 'في أقرب موعد ممكن' }[sprache] || 'zum nächstmöglichen Zeitpunkt';
+           ar: '\u0641\u064a \u0623\u0642\u0631\u0628 \u0645\u0648\u0639\u062f \u0645\u0645\u0643\u0646' }[sprache] || 'zum n\u00e4chstm\u00f6glichen Zeitpunkt';
 }
 
 
@@ -938,7 +938,7 @@ function kuendigungAnVerein(d, sprache, eingang) {
   var name = d.kindVorname + ' ' + d.kindNachname;
   var zeilen = [
     ['Eingegangen am', zeitLesbar(eingang)],
-    ['Art der Kündigung', d.kuendigungsart === 'ausserordentlich' ? 'außerordentlich' : 'ordentlich'],
+    ['Art der K\u00fcndigung', d.kuendigungsart === 'ausserordentlich' ? 'au\u00dferordentlich' : 'ordentlich'],
     ['Kind', name],
     ['Elternteil', d.elternVorname + ' ' + d.elternNachname],
     ['Telefon', d.telefon],
@@ -947,10 +947,10 @@ function kuendigungAnVerein(d, sprache, eingang) {
   ];
   if (String(d.grund || '').trim()) zeilen.push(['Grund', d.grund]);
 
-  var text = 'Kündigung über die Website\n\n';
+  var text = 'K\u00fcndigung \u00fcber die Website\n\n';
   var html = '<div style="font-family:Arial,sans-serif;font-size:15px;color:#1A1614">'
-           + '<h2 style="color:#8A3324;margin:0 0 4px">Kündigung eingegangen</h2>'
-           + '<p style="margin:0 0 16px;color:#6B6259">Iqraa-Schule für Arabischunterricht</p>'
+           + '<h2 style="color:#8A3324;margin:0 0 4px">K\u00fcndigung eingegangen</h2>'
+           + '<p style="margin:0 0 16px;color:#6B6259">Iqraa-Schule f\u00fcr Arabischunterricht</p>'
            + '<table cellpadding="6" cellspacing="0" border="0" style="border-collapse:collapse">';
   zeilen.forEach(function (z) {
     text += z[0] + ': ' + z[1] + '\n';
@@ -962,7 +962,7 @@ function kuendigungAnVerein(d, sprache, eingang) {
 
   MailApp.sendEmail({
     to: EMPFAENGER,
-    subject: 'Kündigung: ' + name,
+    subject: 'K\u00fcndigung: ' + name,
     body: text,
     htmlBody: html,
     name: ABSENDER_NAME,
@@ -974,7 +974,7 @@ function kuendigungAnVerein(d, sprache, eingang) {
 /**
  * Die Bestaetigung an den Verbraucher. Inhalt, Datum und Uhrzeit der Abgabe
  * sowie der Zeitpunkt der Beendigung muessen darin stehen - so schreibt es
- * § 312k Abs. 4 BGB vor.
+ * \u00a7 312k Abs. 4 BGB vor.
  */
 function kuendigungAnEltern(d, sprache, eingang) {
   var name = d.kindVorname + ' ' + d.kindNachname;
@@ -982,20 +982,20 @@ function kuendigungAnEltern(d, sprache, eingang) {
 
   var texte = {
     de: {
-      betreff: 'Bestätigung Ihrer Kündigung — Iqraa-Schule',
+      betreff: 'Best\u00e4tigung Ihrer K\u00fcndigung \u2014 Iqraa-Schule',
       gruss: 'Guten Tag ' + d.elternVorname + ' ' + d.elternNachname + ',',
-      dank: 'wir bestätigen Ihnen den Eingang Ihrer Kündigung.',
-      felder: [['Kündigung eingegangen am', zeitLesbar(eingang)],
-               ['Art der Kündigung', ausser ? 'außerordentlich aus wichtigem Grund' : 'ordentlich'],
+      dank: 'wir best\u00e4tigen Ihnen den Eingang Ihrer K\u00fcndigung.',
+      felder: [['K\u00fcndigung eingegangen am', zeitLesbar(eingang)],
+               ['Art der K\u00fcndigung', ausser ? 'au\u00dferordentlich aus wichtigem Grund' : 'ordentlich'],
                ['Teilnahme von', name],
                ['Beendigung zum', beendigungText(d, 'de')]],
       grundLabel: 'Angegebener Grund',
-      schluss: 'Sollte der genannte Zeitpunkt nach den Fristen in § 3 der Teilnahmebedingungen nicht möglich sein, melden wir uns bei Ihnen und nennen Ihnen den nächstmöglichen Termin.',
-      gruss2: 'Herzliche Grüße',
-      absender: 'Iqraa-Schule für Arabischunterricht\nArabisch-Deutscher-Verein e.V. Beckum'
+      schluss: 'Sollte der genannte Zeitpunkt nach den Fristen in \u00a7 3 der Teilnahmebedingungen nicht m\u00f6glich sein, melden wir uns bei Ihnen und nennen Ihnen den n\u00e4chstm\u00f6glichen Termin.',
+      gruss2: 'Herzliche Gr\u00fc\u00dfe',
+      absender: 'Iqraa-Schule f\u00fcr Arabischunterricht\nArabisch-Deutscher-Verein e.V. Beckum'
     },
     en: {
-      betreff: 'Confirmation of your termination — Iqraa School',
+      betreff: 'Confirmation of your termination \u2014 Iqraa School',
       gruss: 'Hello ' + d.elternVorname + ' ' + d.elternNachname + ',',
       dank: 'we confirm that we have received your termination.',
       felder: [['Termination received on', zeitLesbar(eingang)],
@@ -1008,17 +1008,17 @@ function kuendigungAnEltern(d, sprache, eingang) {
       absender: 'Iqraa School for Arabic Lessons\nArabisch-Deutscher-Verein e.V. Beckum'
     },
     ar: {
-      betreff: 'تأكيد إنهاء المشاركة — مدرسة إقرأ',
-      gruss: 'السلام عليكم ' + d.elternVorname + ' ' + d.elternNachname + '،',
-      dank: 'نؤكد لكم وصول طلب إنهاء المشاركة.',
-      felder: [['وصل الإنهاء بتاريخ', zeitLesbar(eingang)],
-               ['نوع الإنهاء', ausser ? 'استثنائي لسبب مهم' : 'اعتيادي'],
-               ['مشاركة', name],
-               ['تنتهي في', beendigungText(d, 'ar')]],
-      grundLabel: 'السبب المذكور',
-      schluss: 'وإذا تعذّر الموعد المذكور وفقاً للمهل الواردة في البند 3 من شروط المشاركة، فسنتواصل معكم ونذكر لكم أقرب موعد ممكن.',
-      gruss2: 'مع أطيب التحيات',
-      absender: 'مدرسة إقرأ لتعليم اللغة العربية\nالجمعية العربية الألمانية في بيكوم'
+      betreff: '\u062a\u0623\u0643\u064a\u062f \u0625\u0646\u0647\u0627\u0621 \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0629 \u2014 \u0645\u062f\u0631\u0633\u0629 \u0625\u0642\u0631\u0623',
+      gruss: '\u0627\u0644\u0633\u0644\u0627\u0645 \u0639\u0644\u064a\u0643\u0645 ' + d.elternVorname + ' ' + d.elternNachname + '\u060c',
+      dank: '\u0646\u0624\u0643\u062f \u0644\u0643\u0645 \u0648\u0635\u0648\u0644 \u0637\u0644\u0628 \u0625\u0646\u0647\u0627\u0621 \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0629.',
+      felder: [['\u0648\u0635\u0644 \u0627\u0644\u0625\u0646\u0647\u0627\u0621 \u0628\u062a\u0627\u0631\u064a\u062e', zeitLesbar(eingang)],
+               ['\u0646\u0648\u0639 \u0627\u0644\u0625\u0646\u0647\u0627\u0621', ausser ? '\u0627\u0633\u062a\u062b\u0646\u0627\u0626\u064a \u0644\u0633\u0628\u0628 \u0645\u0647\u0645' : '\u0627\u0639\u062a\u064a\u0627\u062f\u064a'],
+               ['\u0645\u0634\u0627\u0631\u0643\u0629', name],
+               ['\u062a\u0646\u062a\u0647\u064a \u0641\u064a', beendigungText(d, 'ar')]],
+      grundLabel: '\u0627\u0644\u0633\u0628\u0628 \u0627\u0644\u0645\u0630\u0643\u0648\u0631',
+      schluss: '\u0648\u0625\u0630\u0627 \u062a\u0639\u0630\u0651\u0631 \u0627\u0644\u0645\u0648\u0639\u062f \u0627\u0644\u0645\u0630\u0643\u0648\u0631 \u0648\u0641\u0642\u0627\u064b \u0644\u0644\u0645\u0647\u0644 \u0627\u0644\u0648\u0627\u0631\u062f\u0629 \u0641\u064a \u0627\u0644\u0628\u0646\u062f 3 \u0645\u0646 \u0634\u0631\u0648\u0637 \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0629\u060c \u0641\u0633\u0646\u062a\u0648\u0627\u0635\u0644 \u0645\u0639\u0643\u0645 \u0648\u0646\u0630\u0643\u0631 \u0644\u0643\u0645 \u0623\u0642\u0631\u0628 \u0645\u0648\u0639\u062f \u0645\u0645\u0643\u0646.',
+      gruss2: '\u0645\u0639 \u0623\u0637\u064a\u0628 \u0627\u0644\u062a\u062d\u064a\u0627\u062a',
+      absender: '\u0645\u062f\u0631\u0633\u0629 \u0625\u0642\u0631\u0623 \u0644\u062a\u0639\u0644\u064a\u0645 \u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629\n\u0627\u0644\u062c\u0645\u0639\u064a\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629 \u0627\u0644\u0623\u0644\u0645\u0627\u0646\u064a\u0629 \u0641\u064a \u0628\u064a\u0643\u0648\u0645'
     }
   };
 
@@ -1055,7 +1055,7 @@ function kuendigungAnEltern(d, sprache, eingang) {
 }
 
 
-/** "23.08.2026 um 14:07 Uhr" - fuer die Bestaetigung nach § 312k BGB. */
+/** "23.08.2026 um 14:07 Uhr" - fuer die Bestaetigung nach \u00a7 312k BGB. */
 function zeitLesbar(datum) {
   return Utilities.formatDate(datum, ZEITZONE, 'dd.MM.yyyy') + ' um '
        + Utilities.formatDate(datum, ZEITZONE, 'HH:mm') + ' Uhr';
@@ -1068,7 +1068,7 @@ function zeitLesbar(datum) {
 
 function zahlungText(wert, sprache) {
   if (sprache === 'de') {
-    return wert === 'bar' ? 'bar (100 €)' : 'Münsterlandkarte';
+    return wert === 'bar' ? 'bar (100 \u20ac)' : 'M\u00fcnsterlandkarte';
   }
   return wert;
 }
@@ -1144,7 +1144,7 @@ function versucheStill(fn) {
 
 
 /* --------------------------------------------------------------------------
-   Testlauf — im Apps-Script-Editor oben auswaehlen und auf "Ausfuehren"
+   Testlauf \u2014 im Apps-Script-Editor oben auswaehlen und auf "Ausfuehren"
    klicken. Legt eine Testanmeldung an und verschickt die Vereins-E-Mail.
    Die Testzeile danach einfach in der Tabelle loeschen.
    -------------------------------------------------------------------------- */
@@ -1168,7 +1168,7 @@ function testAnmeldung() {
 
 
 /** Dasselbe fuer die Kuendigungsseite. Legt eine Zeile im Blatt
- *  "Kündigungen" an und verschickt beide E-Mails. */
+ *  "K\u00fcndigungen" an und verschickt beide E-Mails. */
 function testKuendigung() {
   var ergebnis = doPost({
     postData: {
