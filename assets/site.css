@@ -492,12 +492,10 @@ legend{
 /* Honigtopf gegen automatisierte Eintraege - fuer Menschen unsichtbar,
    fuer einfache Ausfuellprogramme aber ganz normal vorhanden.
    Auch hier kein seitlicher Versatz, siehe .skip weiter oben. */
-.hp{
-  position:absolute;
-  inline-size:1px; block-size:1px;
-  overflow:hidden; clip-path:inset(50%);
-  opacity:0; pointer-events:none;
-}
+/* Die Spamfalle wird vollstaendig ausgeblendet, nicht nur optisch
+   versteckt. Ein bloss durchsichtiges Feld steht weiterhin im Formular
+   und wird von der Adressverwaltung des Browsers mitausgefuellt. */
+.hp{ display:none; }
 
 .form-actions{ display:flex; flex-wrap:wrap; align-items:center; gap:16px; margin-top:.6rem; }
 .form-status{ font-size:.95rem; font-weight:700; }

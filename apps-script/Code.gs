@@ -124,7 +124,8 @@ var SPALTEN = [
   'Datenschutz bestätigt',
   'Vorzeitiger Unterrichtsbeginn',
   'Mail an Verein',
-  'Mail an Eltern'
+  'Mail an Eltern',
+  'Spamverdacht'
 ];
 
 
@@ -166,13 +167,16 @@ function doPost(e) {
     if (d.art === 'kuendigung') return kuendigungVerarbeiten(d);
 
     // --- Spamschutz ---------------------------------------------------
-    // Das Feld "hp" ist auf der Webseite unsichtbar. Fuellt es jemand aus,
-    // war es kein Mensch. Wir antworten trotzdem freundlich, damit ein
-    // Bot nicht merkt, dass er erkannt wurde - speichern aber nichts.
-    if (d.hp) return antwort({ ok: true });
-    if (typeof d.dauer === 'number' && d.dauer < MINDESTDAUER) {
-      return antwort({ ok: true });
-    }
+    // Frueher wurde eine verdaechtige Anmeldung stillschweigend verworfen
+    // und trotzdem Erfolg gemeldet. Das ist echten Familien zum Verhaengnis
+    // geworden: die Adressverwaltung des Browsers hat das unsichtbare Feld
+    // von selbst ausgefuellt, und die Anmeldung verschwand spurlos - mit
+    // Erfolgsmeldung auf dem Bildschirm.
+    //
+    // Deshalb wird jetzt nur noch markiert. Rutscht ein Bot durch, kostet
+    // das eine Zeile in der Tabelle. Eine verworfene Familie kostet eine
+    // Anmeldung, die niemand vermisst.
+    var verdacht = spamverdacht(d);
 
     // --- Pflichtangaben ----------------------------------------------
     var pflicht = ['kindVorname', 'kindNachname', 'kindGeburtsdatum',
@@ -253,7 +257,7 @@ function doPost(e) {
     var sperre = LockService.getScriptLock();
     sperre.waitLock(20000);
     try {
-      zeile = inTabelleSchreiben(d, sprache);
+      zeile = inTabelleSchreiben(d, sprache, verdacht);
     } finally {
       sperre.releaseLock();
     }
@@ -368,7 +372,7 @@ function spaltenAngleichen(b) {
 }
 
 
-function inTabelleSchreiben(d, sprache) {
+function inTabelleSchreiben(d, sprache, verdacht) {
   var b = blatt();
 
   b.appendRow([
@@ -391,7 +395,10 @@ function inTabelleSchreiben(d, sprache) {
     sprache,
     d.agb === 'ja' ? 'ja' : 'nein',
     d.datenschutz === 'ja' ? 'ja' : 'nein',
-    d.widerruf === 'ja' ? 'ja verlangt' : 'nein'
+    d.widerruf === 'ja' ? 'ja verlangt' : 'nein',
+    '',                 // Mail an Verein - wird nach dem Versand gefuellt
+    '',                 // Mail an Eltern
+    verdacht || ''
   ]);
 
   // Die Zeile sofort festschreiben, bevor irgendetwas anderes passiert.
@@ -433,6 +440,26 @@ function mailStatusEintragen(zeile, vereinStand, anEltern) {
   b.getRange(zeile, spalte).setValue(vereinStand);
   b.getRange(zeile, spalte + 1).setValue(anEltern ? 'ja' : 'FEHLGESCHLAGEN');
   SpreadsheetApp.flush();
+}
+
+
+/**
+ * Woran eine Einsendung verdaechtig aussieht - als Text, oder leer.
+ *
+ * Das unsichtbare Fuellfeld sollte niemand ausfuellen; frueher hiess es
+ * "ort" und wurde von der Adressverwaltung mancher Browser automatisch
+ * befuellt. Der Name ist inzwischen neutral und das Feld ganz ausgeblendet,
+ * aber verlassen sollte man sich darauf nicht.
+ */
+function spamverdacht(d) {
+  var gruende = [];
+  if (String(d.hp || '').trim()) {
+    gruende.push('Fuellfeld ausgefuellt ("' + String(d.hp).trim() + '")');
+  }
+  if (typeof d.dauer === 'number' && d.dauer < MINDESTDAUER) {
+    gruende.push('in ' + d.dauer + ' s abgeschickt');
+  }
+  return gruende.join('; ');
 }
 
 
@@ -785,8 +812,24 @@ function sammelmailVerschicken(offen) {
     html += '</tr>';
   });
 
-  html += '</table>'
-        + '<p style="margin-top:18px;color:#6B6259;font-size:13px">'
+  html += '</table>';
+
+  // Markierte Anmeldungen gehen sonst in der Tabelle unter.
+  var markiert = offen.filter(function (e) {
+    return String(wert(e.felder, 'Spamverdacht') || '').trim();
+  }).length;
+  if (markiert) {
+    var satz = markiert === 1
+      ? 'Bei einer Anmeldung hat die Spampruefung angeschlagen.'
+      : 'Bei ' + markiert + ' Anmeldungen hat die Spampruefung angeschlagen.';
+    satz += ' Sie wurden trotzdem gespeichert und bestaetigt - bitte in der '
+          + 'Tabelle in der Spalte "Spamverdacht" nachsehen.';
+    text += '\n\n' + satz;
+    html += '<p style="background:#FBF0E4;border-left:4px solid #8A3324;'
+          + 'padding:10px 14px;font-size:13px">' + escapeHtml(satz) + '</p>';
+  }
+
+  html += '<p style="margin-top:18px;color:#6B6259;font-size:13px">'
         + 'Alle Angaben - auch Einwilligungen, Kartennummer und Fotoerlaubnis - '
         + 'stehen in der Tabelle.</p>'
         + '<p><a href="' + tabelle().getUrl() + '" style="color:#1B6B4F">'
@@ -833,10 +876,10 @@ function testSammelmail() {
  * sowie dem Zeitpunkt, zu dem das Vertragsverhaeltnis enden soll.
  */
 function kuendigungVerarbeiten(d) {
-  if (d.hp) return antwort({ ok: true });
-  if (typeof d.dauer === 'number' && d.dauer < MINDESTDAUER) {
-    return antwort({ ok: true });
-  }
+  // Siehe doPost: markieren statt verwerfen. Eine weggeworfene Kuendigung
+  // waere noch misslicher als eine weggeworfene Anmeldung - sie hat
+  // Fristen.
+  var verdacht = spamverdacht(d);
 
   var pflicht = ['kuendigungsart', 'kindVorname', 'kindNachname',
                  'elternVorname', 'elternNachname', 'telefon', 'email',
@@ -864,7 +907,7 @@ function kuendigungVerarbeiten(d) {
   var sperre = LockService.getScriptLock();
   sperre.waitLock(20000);
   try {
-    kuendigungInTabelle(d, sprache, eingang);
+    kuendigungInTabelle(d, sprache, eingang, verdacht);
   } finally {
     sperre.releaseLock();
   }
@@ -899,7 +942,7 @@ function kuendigungsBlatt() {
 }
 
 
-function kuendigungInTabelle(d, sprache, eingang) {
+function kuendigungInTabelle(d, sprache, eingang, verdacht) {
   var b = kuendigungsBlatt();
   b.appendRow([
     eingang,
@@ -912,7 +955,7 @@ function kuendigungInTabelle(d, sprache, eingang) {
     "'" + String(d.telefon).trim(),
     String(d.email).trim(),
     beendigungText(d, 'de'),
-    sprache
+    sprache + (verdacht ? '  [Spamverdacht: ' + verdacht + ']' : '')
   ]);
   // Siehe inTabelleSchreiben: das Format ist Beiwerk, die Kuendigung nicht.
   SpreadsheetApp.flush();

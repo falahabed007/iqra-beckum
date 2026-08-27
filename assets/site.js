@@ -435,7 +435,7 @@
       // Schrift: alles, was von Hand getippt wird, muss lateinisch sein.
       // Das Honigtopf-Feld bleibt aussen vor - es soll nichts melden.
       alle('input[type="text"], textarea', form).forEach(function (feld) {
-        if (feld.id === "hp-feld" || !feld.value.trim()) return;
+        if (feld.id === "fuellfeld" || !feld.value.trim()) return;
         if (NICHT_LATEIN.test(feld.value)) {
           fehlerZeigen(feld, t("form.nurLatein"));
           if (!ersterFehler) ersterFehler = feld;
@@ -530,7 +530,7 @@
         sprache:          aktuell,
         seite:            window.location.href,
         // Spamschutz
-        hp:               eins("#hp-feld") ? eins("#hp-feld").value : "",
+        hp:               eins("#fuellfeld") ? eins("#fuellfeld").value : "",
         dauer:            Math.round((Date.now() - geoeffnetUm) / 1000)
       };
     }
@@ -748,7 +748,7 @@
       });
 
       alle('input[type="text"], textarea', form).forEach(function (feld) {
-        if (feld.id === "kd-hp" || !feld.value.trim()) return;
+        if (feld.id === "kd-fuellfeld" || !feld.value.trim()) return;
         if (NICHT_LATEIN.test(feld.value)) melden(feld, "form.nurLatein");
       });
 
@@ -787,7 +787,7 @@
         zeitpunkt:      bedingterWert("kdZeit"),
         sprache:        aktuell,
         seite:          window.location.href,
-        hp:             eins("#kd-hp") ? eins("#kd-hp").value : "",
+        hp:             eins("#kd-fuellfeld") ? eins("#kd-fuellfeld").value : "",
         dauer:          Math.round((Date.now() - geoeffnetUm) / 1000)
       };
     }

@@ -462,10 +462,14 @@
         <p class="field-hint" data-i18n="form.widerrufHint">Freiwillig. Ohne dieses Häkchen kann Ihr Kind erst nach Ablauf der Widerrufsfrist von 14 Tagen am Unterricht teilnehmen; die Kursgebühr wird dann entsprechend angepasst.</p>
       </div>
 
-      <!-- Für Menschen unsichtbar, fängt automatisierte Eintragungen ab -->
+      <!-- Fuer Menschen unsichtbar, faengt automatisierte Eintragungen ab.
+           Weder Name noch Beschriftung duerfen nach einer Adresse klingen:
+           ein Feld namens "ort" mit der Beschriftung "Ort" fuellt die
+           Adressverwaltung des Browsers von selbst aus - die Anmeldung galt
+           dann als Bot und wurde verworfen. -->
       <div class="hp" aria-hidden="true">
-        <label for="hp-feld">Ort</label>
-        <input type="text" id="hp-feld" name="ort" tabindex="-1" autocomplete="off">
+        <label for="fuellfeld">Dieses Feld bitte leer lassen</label>
+        <input type="text" id="fuellfeld" name="fuellfeld" tabindex="-1" autocomplete="off">
       </div>
 
       <div class="form-actions">
